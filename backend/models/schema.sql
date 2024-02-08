@@ -4,7 +4,11 @@ CREATE TABLE roles (
     role VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
-
+CREATE TABLE permissions (
+    id SERIAL NOT NULL,
+    permission VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+    );
 
 CREATE TABLE role_permission (
     id SERIAL NOT NULL,

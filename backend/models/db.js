@@ -23,8 +23,11 @@ const createTable = () => {
       role VARCHAR(255) NOT NULL,
       PRIMARY KEY (id)
   );
-  
-  
+  CREATE TABLE permissions (
+    id SERIAL NOT NULL,
+    permission VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+    );
   CREATE TABLE role_permission (
       id SERIAL NOT NULL,
       role_id INT,
@@ -33,8 +36,6 @@ const createTable = () => {
       FOREIGN KEY (permission_id) REFERENCES permissions (id),
       PRIMARY KEY (id)
   );
-  
-  
   CREATE TABLE users(
       id SERIAL NOT NULL,
       firstName VARCHAR(255),
@@ -48,8 +49,6 @@ const createTable = () => {
       is_deleted SMALLINT DEFAULT 0,
       PRIMARY KEY (id)
   );
-  
-  
   CREATE TABLE user_info (
       id SERIAL NOT NULL,
       weight VARCHAR(255),
