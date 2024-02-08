@@ -39,9 +39,34 @@ const addNewUserInGym = (req,res)=>{
     });
 }
 
-
+const addNewCoachInGym = (req,res) =>{
+    const {gym_id, coach_id} = req.body;
+    const provider = [gym_id, coach_id];
+    pool.query(`DELETE FROM gym_user WHERE user_id = $2`,provider).then((result) => {
+        pool.query(`INSERT INTO gym_coach (gym_id, user_id) VALUES ($1,$2)`, provider).then((result) => {
+            res.status(201).json({
+                success : true,
+                message : `Coach Add Successfully In Gym`,
+                result : result.rows
+            });
+        }).catch((err) => {
+            res.status(500).json({
+                success : false,
+                message : `Server Error`,
+                error : err.message
+            });
+        });
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err.message
+        });
+    });
+}
 
 module.exports = {
     createGym,
-    addNewUserInGym,
+    addNewCoachInGym,
+    addNewUserInGym
 }
