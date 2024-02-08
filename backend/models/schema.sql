@@ -1,22 +1,5 @@
-const { Pool } = require("pg");
-const connectionString = process.env.DB_URL;
-const pool = new Pool({
-  connectionString,
-});
-pool
-  .connect()
-  .then((res) => {
-    console.log(`DB connected to ${res.database}`);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
-module.exports = pool;
-
-// this function will create new Table in the database
-const createTable = () => {
-  pool.query(`CREATE TABLE roles (
+CREATE TABLE roles (
     id SERIAL NOT NULL,
     role VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
@@ -91,11 +74,4 @@ CREATE TABLE gym_coach(
     FOREIGN KEY (gym_id) REFERENCES gyms(id),
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
-);`
-).then((result) => {
-    console.log("result", result);
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-};
+);
