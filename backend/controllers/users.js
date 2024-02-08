@@ -23,7 +23,74 @@ const register = async (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  const password = req.body.password;
+  const email = req.body.email;
+  const query = `SELECT * FROM users WHERE email = $1`;
+  const data = [email.toLowerCase()];
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length) {
+        bcrypt.compare(password, result.rows[0].password, (err, response) => {
+          if (err) res.json(err);
+          if (response) {
+            const payload = {
+              userId: result.rows[0].id,
+              country: result.rows[0].country,
+              role: result.rows[0].role_id,
+            };
+            const options = { expiresIn: "1d" };
+            const secret = process.env.SECRET;
+            const token = jwt.sign(payload, secret, options);
+            if (token) {
+              return res.status(200).json({
+                token,
+                success: true,
+                message: `Valid login credentials`,
+                userId:result.rows[0].id
+              });
+            } else {
+              throw Error;
+            }
+          } else {
+            res.status(403).json({
+              success: false,
+              message: `The email doesn’t exist or the password you’ve entered is incorrect`,
+            });
+          }
+        });
+      } else throw Error;
+    })
+    .catch((err) => {
+      res.status(403).json({
+        success: false,
+        message:
+          "The email doesn’t exist or the password you’ve entered is incorrect",
+        err,
+      });
+    });
+};
 
+const Add_User_info =(req,res)=>{
+    const { weight, height,goal } = req.body;
+    const user_id = req.token.user_id; 
+    pool.query( `INSERT INTO users (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,[weight, height,goal, user_id])
+      .then((result) => {
+        res.status(200).json({
+          success: true,
+          message: "user_info created successfully",
+          result: result.rows[0],
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: "Server error",
+          err: err,
+        });
+      });
+  };
 
 module.exports = {
   register,
