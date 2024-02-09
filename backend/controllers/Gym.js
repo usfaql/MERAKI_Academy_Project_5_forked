@@ -136,7 +136,25 @@ const getAllCoachInGym = (req,res)=>{
     });
 }
 
+const deleteCoachInGym = async(req,res)=>{
+    const {gym_id, coach_id} = req.body;
+    const provider = [gym_id,coach_id];
+    await pool.query(`DELETE FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then(async(result) => {
+        res.status(201).json({
+            success : true,
+            message : `Coach Delete Successfully In Gym`,
+            result : result
+        });
 
+        
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err.message
+        });
+    });
+}
 
 module.exports = {
     createGym,
@@ -145,5 +163,6 @@ module.exports = {
     getAllGym,
     getAllUserInGym,
     getAllCoachInGym,
-    deleteUserInGym
+    deleteUserInGym,
+    deleteCoachInGym
 }
