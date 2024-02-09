@@ -12,7 +12,13 @@ const roleRouter = require("./routes/Roles");
 app.use("/gyms", gymsRouter)
 app.use("/roles", roleRouter)
 // Handles any other endpoints [unassigned - endpoints]
+const usersRouter = require("./routes/users");
+app.use("/users",usersRouter)
+
+
+
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
+
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
