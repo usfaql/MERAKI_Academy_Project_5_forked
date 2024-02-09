@@ -21,6 +21,21 @@ const createGym = (req,res)=>{
     
 }
 
+const getAllGym = (req, res)=>{
+    pool.query(`SELECT * FROM gyms`).then((result) => {
+        res.status(201).json({
+            success : true,
+            message : `All Gym`,
+            gym : result.rows
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : "Server error",
+            error : err.message
+        })
+    });
+}
 const addNewUserInGym = (req,res)=>{
     const {gym_id, user_id} = req.body;
     const provider = [user_id, gym_id];
@@ -65,13 +80,11 @@ const addNewCoachInGym = (req,res) =>{
     });
 }
 
-const getAllUserInGym = (req,res)=>{
 
-}
 
 module.exports = {
     createGym,
     addNewCoachInGym,
     addNewUserInGym,
-    getAllUserInGym
+    getAllGym
 }
