@@ -9,12 +9,14 @@ app.use(cors());
 app.use(express.json());
 const gymsRouter = require("./routes/Gym");
 const roleRouter = require("./routes/Roles");
+const permissionRouter=require('./routes/permissions')
+const rolePermissionRouter=require('./routes/role_permission')
+const usersRouter = require("./routes/users");
 app.use("/gyms", gymsRouter)
 app.use("/roles", roleRouter)
-// Handles any other endpoints [unassigned - endpoints]
-const usersRouter = require("./routes/users");
 app.use("/users",usersRouter)
-
+app.use("/permissions",permissionRouter)
+app.use("/role_permission",rolePermissionRouter)
 
 
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
