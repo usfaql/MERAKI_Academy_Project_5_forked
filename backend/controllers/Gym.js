@@ -71,6 +71,27 @@ const getAllUserInGym = (req,res)=>{
         });
     });
 }
+
+const deleteUserInGym = async(req,res)=>{
+    const {gym_id, user_id} = req.body;
+    const provider = [gym_id,user_id];
+    await pool.query(`DELETE FROM gym_user WHERE user_id = $2 AND gym_id = $1`, provider).then(async(result) => {
+        res.status(201).json({
+            success : true,
+            message : `Coach Delete Successfully In Gym`,
+            result : result
+        });
+
+        
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err.message
+        });
+    });
+}
+
 const addNewCoachInGym = (req,res) =>{
     const {gym_id, coach_id} = req.body;
     const provider = [gym_id, coach_id];
@@ -123,5 +144,6 @@ module.exports = {
     addNewUserInGym,
     getAllGym,
     getAllUserInGym,
-    getAllCoachInGym
+    getAllCoachInGym,
+    deleteUserInGym
 }
