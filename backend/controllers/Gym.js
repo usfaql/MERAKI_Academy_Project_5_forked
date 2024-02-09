@@ -97,6 +97,24 @@ const addNewCoachInGym = (req,res) =>{
     });
 }
 
+const getAllCoachInGym = (req,res)=>{
+    const gym_id = 2;
+    const provider = [gym_id]
+    pool.query(`SELECT * FROM gym_coach INNER JOIN users ON gym_coach.coach_id = users.id WHERE gym_id = $1`, provider).then((result) => {
+        res.status(200).json({
+            success : true,
+            message : `All Coach In Gym`,
+            result : result.rows
+        });
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Error server`,
+            err
+        });
+    });
+}
+
 
 
 module.exports = {
@@ -104,5 +122,6 @@ module.exports = {
     addNewCoachInGym,
     addNewUserInGym,
     getAllGym,
-    getAllUserInGym
+    getAllUserInGym,
+    getAllCoachInGym
 }
