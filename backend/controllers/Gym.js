@@ -65,8 +65,13 @@ const addNewCoachInGym = (req,res) =>{
     });
 }
 
+const getAllUserInGym = (req,res)=>{
+
+}
+
 module.exports = {
     createGym,
     addNewCoachInGym,
-    addNewUserInGym
+    addNewUserInGym,
+    getAllUserInGym
 }
