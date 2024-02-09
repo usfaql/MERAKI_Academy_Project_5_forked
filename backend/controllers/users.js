@@ -75,7 +75,8 @@ const login = (req, res) => {
 const Add_User_info =(req,res)=>{
     const { weight, height,goal } = req.body;
     const user_id = req.token.user_id; 
-    pool.query( `INSERT INTO users (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,[weight, height,goal, user_id])
+    const value = [weight, height,goal, user_id]
+    pool.query( `INSERT INTO users (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,value)
       .then((result) => {
         res.status(200).json({
           success: true,
