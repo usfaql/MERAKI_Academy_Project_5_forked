@@ -63,8 +63,10 @@ CREATE TABLE gym_user(
     id SERIAL NOT NULL,
     user_id INT,
     gym_id INT,
+    plan_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (gym_id) REFERENCES gyms(id),
+    FOREIGN KEY (plan_id) REFERENCES gym_plan(id),
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
 );
@@ -110,6 +112,17 @@ CREATE TABLE coach_plan(
     price INT,
     coach_id INT,
     FOREIGN KEY (coach_id) REFERENCES users(id),
+    is_deleted SMALLINT DEFAULT 0,
+   
+);
+CREATE TABLE gym_plan(
+    id SERIAL NOT NULL PRIMARY KEY (id),
+    name VARCHAR(255),
+    description TEXT,
+    numOfMonth INT,
+    price INT,
+    gym_id INT,
+    FOREIGN KEY (gym_id) REFERENCES gyms(id),
     is_deleted SMALLINT DEFAULT 0,
    
 );
