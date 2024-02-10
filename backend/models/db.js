@@ -89,6 +89,24 @@ const createTable = () => {
       is_deleted SMALLINT DEFAULT 0,
       PRIMARY KEY (id)
   );
+  CREATE TABLE requests(
+    id SERIAL NOT NULL,
+    user_id INT,
+    gym_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (gym_id) REFERENCES gyms(id),
+    is_deleted SMALLINT DEFAULT 0,
+    PRIMARY KEY (id)
+);
+CREATE TABLE coach_user(
+  id SERIAL NOT NULL,
+  user_id INT,
+  coach_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (coach_id) REFERENCES users(id),
+  is_deleted SMALLINT DEFAULT 0,
+  PRIMARY KEY (id)
+);
     `
     )
     .then((result) => {

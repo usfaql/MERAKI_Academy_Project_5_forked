@@ -32,6 +32,7 @@ CREATE TABLE users(
     FOREIGN KEY (role_id) REFERENCES roles(id),
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
+     created_at TIMESTAMP DEFAULT NOW()
 );
 
 
@@ -75,3 +76,40 @@ CREATE TABLE gym_coach(
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE requests(
+    id SERIAL NOT NULL,
+    user_id INT,
+    gym_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (gym_id) REFERENCES gyms(id),
+    is_deleted SMALLINT DEFAULT 0,
+    PRIMARY KEY (id)
+);
+CREATE TABLE coach_user(
+    id SERIAL NOT NULL,
+    name VARCHAR(255),
+    plan_id INT,
+    user_id INT,
+    coach_id INT,
+    endSub TIMESTAMP DEFAULT NULL
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (coach_id) REFERENCES users(id),
+    FOREIGN KEY (plan_id) REFERENCES coach_plan(id),
+    is_deleted SMALLINT DEFAULT 0,
+    PRIMARY KEY (id)
+    created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE TABLE coach_plan(
+    id SERIAL NOT NULL PRIMARY KEY (id),
+    name VARCHAR(255),
+    description TEXT,
+    numOfMonth INT,
+    price INT,
+    coach_id INT,
+    FOREIGN KEY (coach_id) REFERENCES users(id),
+    is_deleted SMALLINT DEFAULT 0,
+   
+);
+
+CREATE TABLE 
