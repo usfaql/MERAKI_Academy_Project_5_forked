@@ -24,6 +24,7 @@ const createTable = () => {
         role VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
     );
+
     CREATE TABLE permissions (
         id SERIAL NOT NULL,
         permission VARCHAR(255) NOT NULL,
@@ -52,10 +53,9 @@ const createTable = () => {
         role_id INT,
         FOREIGN KEY (role_id) REFERENCES roles(id),
         is_deleted SMALLINT DEFAULT 0,
-        PRIMARY KEY (id)
-         created_at TIMESTAMP DEFAULT NOW()
+        PRIMARY KEY (id),
+        created_at TIMESTAMP DEFAULT NOW()
     );
-    
     
     CREATE TABLE user_info (
         id SERIAL NOT NULL,
@@ -108,31 +108,33 @@ const createTable = () => {
         is_deleted SMALLINT DEFAULT 0,
         PRIMARY KEY (id)
     );
+
+    CREATE TABLE coach_plan(
+      id SERIAL NOT NULL,
+      name VARCHAR(255),
+      description VARCHAR(255),
+      numOfMonth INT,
+      price INT,
+      coach_id INT,
+      FOREIGN KEY (coach_id) REFERENCES users(id),
+      is_deleted SMALLINT DEFAULT 0,
+      PRIMARY KEY (id)
+  );
     CREATE TABLE room_user(
         id SERIAL NOT NULL,
         plan_id INT,
         user_id INT,
         coach_id INT,
-        private_room_id INT
-        endSub TIMESTAMP DEFAULT NULL
+        private_room_id INT,
+        endSub TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (coach_id) REFERENCES users(id),
         FOREIGN KEY (plan_id) REFERENCES coach_plan(id),
         is_deleted SMALLINT DEFAULT 0,
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
         created_at TIMESTAMP DEFAULT NOW()
     );
-    CREATE TABLE coach_plan(
-        id SERIAL NOT NULL PRIMARY KEY (id),
-        name VARCHAR(255),
-        description TEXT,
-        numOfMonth INT,
-        price INT,
-        coach_id INT,
-        FOREIGN KEY (coach_id) REFERENCES users(id),
-        is_deleted SMALLINT DEFAULT 0,
-       
-    );
+
     
     `
     )
@@ -143,4 +145,29 @@ const createTable = () => {
       console.log(err);
     });
 };
-  // createTable();
+
+
+const insertData = () => {
+  pool
+    .query(`
+    INSERT INTO roles(role) VALUES ('USER');
+    INSERT INTO roles(role) VALUES ('COACH');
+    INSERT INTO roles(role) VALUES ('ADMIN');
+    
+    
+    
+    INSERT INTO users(firstName, lastName, age, email, password,role_id) VALUES ('Yousef', 'Abuaqel', 23, 'usfaql@gmail.com', '1234@', 2);
+    INSERT INTO users(firstName, lastName, age, email, password,role_id) VALUES ('Mohammed', 'Odat', 26, 'mohammed@gmail.com', '1234@', 1);
+    INSERT INTO users(firstName, lastName, age, email, password,role_id) VALUES ('Hamzeh', 'Odeh', 25, 'hamzeh@gmail.com', '1234@', 3);
+    `
+    )
+    .then((result) => {
+      console.log("result", result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+  //createTable();
+  //insertData();

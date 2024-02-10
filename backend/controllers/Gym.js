@@ -5,7 +5,7 @@ const createGym = (req,res)=>{
     const userId = 1;
     const {name, description} = req.body;
     const provider = [name, description, userId];
-    pool.query(`INSERT INTO gyms (name , description, owner_id, created_at) VALUES ($1, $2, $3)`, provider).then((result) => {
+    pool.query(`INSERT INTO gyms (name , description, owner_id) VALUES ($1, $2, $3)`, provider).then((result) => {
         res.status(201).json({
             success : true,
             message : "Gym created successfully",
@@ -36,6 +36,52 @@ const getAllGym = (req, res)=>{
         })
     });
 }
+
+const getGymByOwner = (req,res)=>{
+    const user_id = req.params.ownerId;
+    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [user_id]).then((result)=>{
+        if(result.rows.length === 0){
+            return res.status(201).json({
+                success : true,
+                message : `The User Does not have Gym`
+            })
+        }
+        res.status(201).json({
+            success : true,
+            message : `All Gym By Owner`,
+            result : result.rows
+        })
+    }).catch((err)=>{
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    })
+}
+
+const createPlan = (req,res)=>{
+    const gym_id = req.params.gymid;
+    const {name, description, numOfMonth, price} = req.body;
+    const provider = [name,description, numOfMonth,price, gym_id];
+
+    pool.query(`INSERT INTO gym_plan (name,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
+        res.status(201).json({
+            success : true,
+            message : `Created Plan For Gym Successfully`,
+            plan : result.rows
+        })
+    }).catch((err)=>{
+        res.status(500).json({
+            success : false,
+            message : `Server error`,
+            erorr : err.message
+        })
+        
+    })
+}
+
+
 const addNewUserInGym = (req,res)=>{
     const {gym_id, user_id} = req.body;
     const provider = [user_id, gym_id];
@@ -54,7 +100,7 @@ const addNewUserInGym = (req,res)=>{
                         message : `The User Already Exist Coach In Gym`
                     })
                 }else{
-                    pool.query(`INSERT INTO gym_user(user_id, gym_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
+                    pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id) VALUES ($1,$2,plan_id) RETURNING *`, provider).then((result) => {
                         res.status(201).json({
                             success : true,
                             message : "User Add Successfully In Gym",
@@ -75,15 +121,7 @@ const addNewUserInGym = (req,res)=>{
     })
 
 }
-const userRequestToJoinInGym =(req,res)=>{
 
-}
-const acceptUserRequest=(req,res)=>{
-
-}
-const rejectUserRequest=(req,res)=>{
-    
-}
 const getAllUserInGym = (req,res)=>{
     const gym_id = 2;
     const provider = [gym_id]
@@ -195,7 +233,6 @@ module.exports = {
     getAllCoachInGym,
     deleteUserInGym,
     deleteCoachInGym,
-    userRequestToJoinInGym,
-acceptUserRequest,
-rejectUserRequest
+    createPlan,
+    getGymByOwner
 }
