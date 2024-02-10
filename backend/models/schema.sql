@@ -26,6 +26,7 @@ CREATE TABLE users(
     lastName VARCHAR(255),
     age INT,
     gender VARCHAR(255),
+    image VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     role_id INT,
@@ -51,6 +52,7 @@ CREATE TABLE gyms(
     id SERIAL NOT NULL,
     name VARCHAR(255),
     description TEXT,
+    image VARCHAR(255),
     owner_id INT,
     FOREIGN KEY (owner_id) REFERENCES users(id),
     is_deleted SMALLINT DEFAULT 0,
@@ -86,12 +88,12 @@ CREATE TABLE requests(
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
 );
-CREATE TABLE coach_user(
+CREATE TABLE room_user(
     id SERIAL NOT NULL,
-    name VARCHAR(255),
     plan_id INT,
     user_id INT,
     coach_id INT,
+    private_room_id INT
     endSub TIMESTAMP DEFAULT NULL
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coach_id) REFERENCES users(id),
@@ -111,5 +113,3 @@ CREATE TABLE coach_plan(
     is_deleted SMALLINT DEFAULT 0,
    
 );
-
-CREATE TABLE 

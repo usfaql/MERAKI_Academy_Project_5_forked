@@ -194,5 +194,8 @@ module.exports = {
     getAllUserInGym,
     getAllCoachInGym,
     deleteUserInGym,
-    deleteCoachInGym
+    deleteCoachInGym,
+    userRequestToJoinInGym,
+acceptUserRequest,
+rejectUserRequest
 }
