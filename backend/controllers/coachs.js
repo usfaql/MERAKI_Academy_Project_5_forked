@@ -20,7 +20,7 @@ const cteateNewPlane =(req,res)=>{
     });
     
 }
-const AddUserToPrivte=(req,res)=>{
+const AddUserToPrivate=(req,res)=>{
     const {plan_id,coach_id,private_room_id}=req.body
     const user_id=req.token.userId
     const value=[plan_id,coach_id,private_room_id,user_id]
@@ -39,11 +39,26 @@ const AddUserToPrivte=(req,res)=>{
       });
     });
 }
-const removeUserFromPrivte=(req,res)=>{
-
+const removeUserFromPrivate=(req,res)=>{
+    const user_id=req.body;
+    const value=[user_id];
+    const query=`UPDATE room_user SET is_delete=1 WHERE user_id=$1`
+    pool.query(query,value).then((result)=>{
+        res.status(201).json({
+          success: true,
+          message: "User Deleted successfully",
+          user: result.rows,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          success: false,
+          message: "Server error",
+        });
+      });
 }
 module.exports={
     cteateNewPlane,
-    AddUserToPrivte,
-removeUserFromPrivte
+    AddUserToPrivate,
+removeUserFromPrivate
 }
