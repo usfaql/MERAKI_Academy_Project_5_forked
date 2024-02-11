@@ -24,7 +24,7 @@ const cteateNewPlane = (req, res) => {
       });
     });
     }else{
-      res.status(400).json({
+      res.status(201).json({
         success: false,
         message: "You Can't Add More Than 3 Plans",
       })
@@ -68,10 +68,18 @@ const AddUserToPrivate = (req, res) => {
   const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
   const user_id =req.token.userId;
   const value = [plan_id, coach_id, user_id];
-
   const query = `INSERT INTO room_user (plan_id, coach_id, user_id, endSub) 
-  VALUES ($1, $2, $3, $4,${endSub}) 
+  VALUES ($1, $2, $3,${endSub}) 
   RETURNING *;`;
+  const query_1=`SELECT user_id FROM room_user 
+  WHERE user_id=$3 AND plan_id=$1`
+  pool.query(query_1,value).then((result)=>{
+if(!result.rows.length){
+  res.status(201).json({
+    success : false,
+    message : `The User Already Exist In This Plan`
+})
+}else{
   pool
     .query(query, value)
     .then((result) => {
@@ -81,7 +89,8 @@ const AddUserToPrivate = (req, res) => {
         user: result.rows,
       });
     })
-    .catch((err) => {
+}
+  }).catch((err) => {
       res.status(400).json({
         success: false,
         message: "Server error",
