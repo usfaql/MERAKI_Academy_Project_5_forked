@@ -6,5 +6,5 @@ coachRouter.post('/plan',authentication,cteateNewPlane)
 coachRouter.post('/user',authentication,AddUserToPrivate)
 coachRouter.put('/remove_user',authentication,removeUserFromPrivate)
 coachRouter.get('/plan',authentication,getAllPlanByCoachId)
-coachRouter.get('/user',getAllUserByPlanId)
+coachRouter.get('/user',authentication,getAllUserByPlanId)
 module.exports=coachRouter

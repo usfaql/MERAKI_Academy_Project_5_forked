@@ -75,9 +75,10 @@ const AddUserToPrivate = (req, res) => {
 const getAllUserByPlanId=(req,res)=>{
   const plan_id=req.body;
   const value=[plan_id];
-  const query=`SELECT user_id.room_user,firstName.users ,endSub.room_user  FROM room_user 
-  JOIN users ON room_user.user_id=users.id
-  WHERE room_user.plan_id=$1 RETURNING *;
+  const query=`SELECT room_user.user_id, users.firstName, room_user.endSub
+  FROM room_user
+  JOIN users ON room_user.user_id = users.id
+  WHERE room_user.plan_id = 1;
   `
   pool.query(query,value).then((result)=>{
     if(!result.rows.length){
