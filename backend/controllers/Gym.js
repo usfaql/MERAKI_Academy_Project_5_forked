@@ -78,9 +78,25 @@ const createPlan = (req,res)=>{
             erorr : err.message
         })
         
-    })
+    });
 }
 
+const getPlanByGymId = (req,res) =>{
+    const gymId = req.params.gymid;
+    pool.query(`SELECT * FROM gym_plan INNER JOIN gyms ON gym_plan.gym_id = gyms.id WHERE gym_plan.gym_id = $1`,[gymId]).then((result) => {
+        res.status(201).json({
+            success : true,
+            message : `All Plan For Gym`,
+            plans : result.rows
+        })
+    }).catch((err) => {
+        res.status(201).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    });
+}   
 
 const addNewUserInGym = (req,res)=>{
     const {gym_id, user_id} = req.body;
@@ -143,7 +159,7 @@ const getAllUserInGym = (req,res)=>{
 const deleteUserInGym = async(req,res)=>{
     const {gym_id, user_id} = req.body;
     const provider = [gym_id,user_id];
-    await pool.query(`DELETE FROM gym_user WHERE user_id = $2 AND gym_id = $1`, provider).then(async(result) => {
+    await pool.query(`UPDATE gym_user SET is_delete=1 WHERE user_id = $2 AND gym_id = $1`, provider).then(async(result) => {
         res.status(201).json({
             success : true,
             message : `User Delete Successfully In Gym`,
@@ -207,7 +223,7 @@ const getAllCoachInGym = (req,res)=>{
 const deleteCoachInGym = async(req,res)=>{
     const {gym_id, coach_id} = req.body;
     const provider = [gym_id,coach_id];
-    await pool.query(`DELETE FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then(async(result) => {
+    await pool.query(`UPDATE gym_coach SET is_delete=1 WHERE coach_id = $2 AND gym_id = $1`, provider).then(async(result) => {
         res.status(201).json({
             success : true,
             message : `Coach Delete Successfully In Gym`,
@@ -234,5 +250,6 @@ module.exports = {
     deleteUserInGym,
     deleteCoachInGym,
     createPlan,
-    getGymByOwner
+    getGymByOwner,
+    getPlanByGymId
 }
