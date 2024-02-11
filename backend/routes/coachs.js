@@ -1,8 +1,9 @@
 const express = require("express");
 const coachRouter = express.Router();
-const {cteateNewPlane,AddUserToPrivate,removeUserFromPrivate}=require('../controllers/coachs')
+const {cteateNewPlane,AddUserToPrivate,removeUserFromPrivate,getAllPlanByCoachId}=require('../controllers/coachs')
 const authentication=require('../middleware/authentication')
-coachRouter.post('/plan',cteateNewPlane)
-coachRouter.post('/user',AddUserToPrivate)
-coachRouter.put('/remove_user',removeUserFromPrivate)
+coachRouter.post('/plan',authentication,cteateNewPlane)
+coachRouter.post('/user',authentication,AddUserToPrivate)
+coachRouter.put('/remove_user',authentication,removeUserFromPrivate)
+coachRouter.get('/plan',authentication,getAllPlanByCoachId)
 module.exports=coachRouter

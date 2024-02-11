@@ -21,12 +21,37 @@ const cteateNewPlane = (req, res) => {
       });
     });
 };
+const getAllPlanByCoachId =(req,res)=>{
+  const coach_id=req.token.userId
+  const value=[coach_id]
+  const query=`SELECT * FROM coach_plan WHERE coach_id=$1 RETURNING *; `
+  pool.query(query,value).then((result)=>{
+    if(!result.rows.length){
+      res.status(201).json({
+        success:true,
+        message:`All Plans For Coach_id=${coach_id}`,
+        plans:result.rows
+      })
+    }else{
+      res.status(404).json({
+        success:false,
+        message:`NO Plans For Coach_id=${coach_id} Yet`
+      })
+    }
+  }) .catch((err) => {
+    res.status(400).json({
+      success: false,
+      message: "Server error",
+    });
+  });
+
+}
 const AddUserToPrivate = (req, res) => {
   const { plan_id, coach_id, private_room_id,numOfMonth} = req.body;
   const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
-  const user_id = 3;
+  const user_id =req.token.userId;
   const value = [plan_id, coach_id, private_room_id, user_id];
-  
+
   const query = `INSERT INTO room_user (plan_id, coach_id, private_room_id, user_id, endSub) 
   VALUES ($1, $2, $3, $4,${endSub}) 
   RETURNING *;`;
@@ -71,4 +96,5 @@ module.exports = {
   cteateNewPlane,
   AddUserToPrivate,
   removeUserFromPrivate,
+  getAllPlanByCoachId
 };
