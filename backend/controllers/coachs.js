@@ -5,7 +5,10 @@ const cteateNewPlane = (req, res) => {
   const coach_id = req.token.userId;
   const value = [name, description, numOfMonth, coach_id];
   const query = `INSERT INTO coach_plan (name,description,numOfMonth,coach_id) VALUES ($1,$2,$3,$4) RETURNING *;`;
-  pool
+  const query_1=`SELECT * FROM coach_plan WHERE coach_id=$4 RETURNING *;`
+  pool.query(query_1,value).then((result)=>{
+    if(result.rows.length<3){
+       pool
     .query(query, value)
     .then((result) => {
       res.status(201).json({
@@ -20,6 +23,20 @@ const cteateNewPlane = (req, res) => {
         message: "Server error",
       });
     });
+    }else{
+      res.status(400).json({
+        success: false,
+        message: "You Can't Add More Than 3 Plans",
+      })
+    }
+  }).catch((err) => {
+    res.status(400).json({
+      success: false,
+      message: "Server error",
+    });
+  });
+
+ 
 };
 const getAllPlanByCoachId =(req,res)=>{
   const coach_id=req.token.userId
