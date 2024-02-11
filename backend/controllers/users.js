@@ -120,11 +120,34 @@ const Add_User_info =(req,res)=>{
   
 
   const getAllCoachs =(req,res)=>{
-    
+    const  id= req.params.id;
+    //console.log('user id',id);
+    if (!id) {
+      res.status(404).json({
+        success:false,
+        message: "User ID is required"
+      });
+    }
+    pool.query(`SELECT * FROM users WHERE role='coach'`).then((result)=>{
+      res.status(200).json({
+        success :true ,
+        message:'Showing All Coaches',
+        data:result.rows
+      })
+    }).catch((error)=> {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error'
+      });
+      
+    })
+
   }
 
-  const getUserInfoById =(req,res)=>{
-    
+  const getUser_InfoById =(req,res)=>{
+    const  id= req.params.id;
+
   }
 
 module.exports = {
