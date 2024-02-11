@@ -94,8 +94,30 @@ const Add_User_info =(req,res)=>{
   };
 
   const getAllUsers =(req,res)=>{
-
-  }
+    pool.query(`SELECT * FROM users`)
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: "No users found",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message:"getting all users",
+          data: result.rows,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("Error getting all users");
+      res.status(500).json({
+        success: false,
+        message: "Server Error"
+      });
+    });
+  };
+  
 
   const getAllCoachs =(req,res)=>{
     
