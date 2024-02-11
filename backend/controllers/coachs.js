@@ -47,12 +47,12 @@ const getAllPlanByCoachId =(req,res)=>{
 
 }
 const AddUserToPrivate = (req, res) => {
-  const { plan_id, coach_id, private_room_id,numOfMonth} = req.body;
+  const { plan_id, coach_id,numOfMonth} = req.body;
   const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
   const user_id =req.token.userId;
-  const value = [plan_id, coach_id, private_room_id, user_id];
+  const value = [plan_id, coach_id, user_id];
 
-  const query = `INSERT INTO room_user (plan_id, coach_id, private_room_id, user_id, endSub) 
+  const query = `INSERT INTO room_user (plan_id, coach_id, user_id, endSub) 
   VALUES ($1, $2, $3, $4,${endSub}) 
   RETURNING *;`;
   pool
@@ -72,6 +72,33 @@ const AddUserToPrivate = (req, res) => {
       });
     });
 };
+const getAllUserByPlanId=(req,res)=>{
+  const plan_id=req.body;
+  const value=[plan_id];
+  const query=`SELECT user_id.room_user,firstName.users ,endSub.room_user  FROM room_user 
+  JOIN users ON room_user.user_id=users.id
+  WHERE room_user.plan_id=$1 RETURNING *;
+  `
+  pool.query(query,value).then((result)=>{
+    if(!result.rows.length){
+      res.status(201).json({
+        success:true,
+        message:`All Users IN Plan_id=${plan_id}`,
+        users:result.rows
+      })
+    }else{
+      res.status(404).json({
+        success:false,
+        message:`NO Users IN Plan_id=${plan_id} Yet`
+      })
+    }
+  }) .catch((err) => {
+    res.status(400).json({
+      success: false,
+      message: "Server error",
+    });
+  });
+}
 const removeUserFromPrivate = (req, res) => {
   const {user_id,coach_id} = req.body;
   const value = [user_id,coach_id];
@@ -96,5 +123,6 @@ module.exports = {
   cteateNewPlane,
   AddUserToPrivate,
   removeUserFromPrivate,
-  getAllPlanByCoachId
+  getAllPlanByCoachId,
+  getAllUserByPlanId
 };
