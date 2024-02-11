@@ -147,11 +147,29 @@ const Add_User_info =(req,res)=>{
 
   const getUser_InfoById =(req,res)=>{
     const  id= req.params.id;
-
+    //console.log('user info by Id ',id);
+    pool.query(`SELECT * FROM user_info WHERE id=$1`,[id]).then((response)=>{
+      res.status(200).json({
+        success : true ,
+        data: response.rows
+      })
+    }).catch((err)=>{
+      console.log(err);
+      res.status(400).json({
+        success: false,
+        err:err
+      })
+    })
   }
+
+
+  
 
 module.exports = {
   register,
   login,
-  Add_User_info
+  getAllUsers,
+  getAllCoachs,
+  Add_User_info,
+  getUser_InfoById
 };
