@@ -94,19 +94,82 @@ const Add_User_info =(req,res)=>{
   };
 
   const getAllUsers =(req,res)=>{
-
-  }
+    pool.query(`SELECT * FROM users`)
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: "No users found",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message:"getting all users",
+          data: result.rows,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("Error getting all users");
+      res.status(500).json({
+        success: false,
+        message: "Server Error"
+      });
+    });
+  };
+  
 
   const getAllCoachs =(req,res)=>{
-    
+    const  id= req.params.id;
+    //console.log('user id',id);
+    if (!id) {
+      res.status(404).json({
+        success:false,
+        message: "User ID is required"
+      });
+    }
+    pool.query(`SELECT * FROM users WHERE role='coach'`).then((result)=>{
+      res.status(200).json({
+        success :true ,
+        message:'Showing All Coaches',
+        data:result.rows
+      })
+    }).catch((error)=> {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error'
+      });
+      
+    })
+
   }
 
-  const getUserInfoById =(req,res)=>{
-    
+  const getUser_InfoById =(req,res)=>{
+    const  id= req.params.id;
+    //console.log('user info by Id ',id);
+    pool.query(`SELECT * FROM user_info WHERE id=$1`,[id]).then((response)=>{
+      res.status(200).json({
+        success : true ,
+        data: response.rows
+      })
+    }).catch((err)=>{
+      console.log(err);
+      res.status(400).json({
+        success: false,
+        err:err
+      })
+    })
   }
+
+
+  
 
 module.exports = {
   register,
   login,
-  Add_User_info
+  getAllUsers,
+  getAllCoachs,
+  Add_User_info,
+  getUser_InfoById
 };
