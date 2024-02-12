@@ -38,7 +38,7 @@ const getAllGym = (req, res)=>{
 }
 const addNewUserInGym = (req,res)=>{
     const {gym_id, user_id} = req.body;
-    const provider = [user_id, gym_id];
+    const provider = [user_id, gym_id]; //////////
     pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,provider).then((result)=>{
         if(result.rows.length !== 0 ){
             res.status(201).json({
