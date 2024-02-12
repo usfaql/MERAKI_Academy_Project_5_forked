@@ -72,11 +72,14 @@ const login = (req, res) => {
     });
 };
 
-const Add_User_info =(req,res)=>{
+const AddUserinfo =(req,res)=>{
     const { weight, height,goal } = req.body;
     const user_id = req.token.user_id; 
     const value = [weight, height,goal, user_id]
-    pool.query( `INSERT INTO user_info (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,value)
+    pool.query(`SELECT user_id  FROM user_info WHERE user_id=$4`,value).then ((result)=>{
+      if (!result.rows.length) {
+        pool.query( `INSERT INTO user_info (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,value)
+   
       .then((result) => {
         res.status(200).json({
           success: true,
@@ -91,7 +94,70 @@ const Add_User_info =(req,res)=>{
           err: err,
         });
       });
+      } else {
+        res.status(201).json({
+          success:false,
+          message:"user have information ",
+        })
+
+      }
+    }).catch((error)=>{
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: error,
+    })
+  })
   };
+
+  const getUserInfoByUserId=(req,res)=> {
+const user_id=req.params.userId;
+const value=[user_id]
+const query=`SELECT * FROM user_info WHERE user_id=$1 RETURNING *;`
+pool.query(query,value).then((result)=>{
+  if(!result.rows.length){
+    res.status(201).json({
+      success:true,
+      message:`All Info For user_id=${user_id}`,
+      info:result.rows[0]
+    })
+  }else{
+    res.status(201).json({
+      success:false,
+      message:`No Info For User_id=${user_id}`
+})
+}
+}) .catch((err) => {
+  res.status(500).json({
+    success: false,
+    message: "Server error",
+    err: err,
+  });
+});
+  }
+  const  updateUserInfo= (req,res) =>{
+    const user_id = req.token.userId;
+    const {height,weight,goal} = req.body
+    const value  =[height||null,weight||null,goal||null,user_id]
+    console.log(value);
+    const query  ="UPDATE user_info SET height=COALESCE($1,height) , weight=COALESCE($2,weight) , goal=COALESCE($3,goal) WHERE user_id=$4 RETURNING *";
+   pool.query(query,value).then((result)=>{
+res.status(200).json({
+success :true ,
+message :"Update Successfully",
+updatedUserInfo:result.rows[0]
+})
+   }).catch((err)=>{
+     return res.status(500).json({
+         success:false,
+         message: "server error ",
+         err: err     
+
+   })
+  })
+  }
+
+
 
   const getAllUsers =(req,res)=>{
     pool.query(`SELECT * FROM users`)
@@ -145,7 +211,7 @@ const Add_User_info =(req,res)=>{
 
   }
 
-  const getUser_InfoById =(req,res)=>{
+  /*const getUserInfoById =(req,res)=>{
     const  id= req.params.id;
     //console.log('user info by Id ',id);
     pool.query(`SELECT * FROM user_info WHERE id=$1`,[id]).then((response)=>{
@@ -161,7 +227,7 @@ const Add_User_info =(req,res)=>{
       })
     })
   }
-
+*/
 
   
 
@@ -170,6 +236,8 @@ module.exports = {
   login,
   getAllUsers,
   getAllCoachs,
-  Add_User_info,
-  getUser_InfoById
+  AddUserinfo,
+  //getUserInfoById,
+  updateUserInfo,
+  getUserInfoByUserId
 };
