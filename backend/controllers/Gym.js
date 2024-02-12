@@ -2,7 +2,7 @@
 const pool = require("../models/db");
 
 const createGym = (req,res)=>{
-    const userId = 1;
+    const userId = req.token.userId;
     const {name, description} = req.body;
     const provider = [name, description, userId];
     pool.query(`INSERT INTO gyms (name , description, owner_id) VALUES ($1, $2, $3)`, provider).then((result) => {
@@ -38,8 +38,8 @@ const getAllGym = (req, res)=>{
 }
 
 const getGymByOwner = (req,res)=>{
-    const user_id = req.params.ownerId;
-    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [user_id]).then((result)=>{
+    const userId = req.params.ownerId;
+    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result)=>{
         if(result.rows.length === 0){
             return res.status(201).json({
                 success : true,
@@ -61,9 +61,9 @@ const getGymByOwner = (req,res)=>{
 }
 
 const createPlan = (req,res)=>{
-    const gym_id = req.params.gymid;
+    const gymId = req.params.gymid;
     const {name, description, numOfMonth, price} = req.body;
-    const provider = [name,description, numOfMonth,price, gym_id];
+    const provider = [name,description, numOfMonth,price, gymId];
 
     pool.query(`INSERT INTO gym_plan (name,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
         res.status(201).json({
@@ -99,11 +99,12 @@ const getPlanByGymId = (req,res) =>{
 }   
 
 const addNewUserInGym = (req,res)=>{
-    const {gym_id, user_id, plan_id, numOfMonth} = req.body;
+    const userId = req.token.userId;
+    const {gymId, planId, numOfMonth} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
-    const providerS = [user_id, gym_id, plan_id];
+    const providerS = [userId, gymId, planId];
     
-    pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[user_id]).then((result)=>{
+    pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[userId]).then((result)=>{
         if(result.rows.length !== 0 ){
             res.status(201).json({
                 success : true,
@@ -111,7 +112,7 @@ const addNewUserInGym = (req,res)=>{
             });
             
         }else{
-            pool.query(`SELECT coach_id FROM gym_coach WHERE coach_id = $1`, [user_id]).then((result)=>{
+            pool.query(`SELECT coach_id FROM gym_coach WHERE coach_id = $1`, [userId]).then((result)=>{
                 if(result.rows.length !== 0){
                     res.status(201).json({
                         success : false,
@@ -142,8 +143,8 @@ const addNewUserInGym = (req,res)=>{
 }
 
 const getAllUserInGym = (req,res)=>{
-    const gym_id = 2;
-    const provider = [gym_id]
+    const {gymId} = req.body;
+    const provider = [gymId]
     pool.query(`SELECT * FROM gym_user INNER JOIN users ON gym_user.user_id = users.id WHERE gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
@@ -160,8 +161,9 @@ const getAllUserInGym = (req,res)=>{
 }
 
 const deleteUserInGym = async(req,res)=>{
-    const {gym_id, user_id} = req.body;
-    const provider = [gym_id,user_id];
+    const userId = req.token.userId;
+    const {gymId} = req.body;
+    const provider = [gymId,userId];
     await pool.query(`UPDATE gym_user SET is_deleted =1 WHERE user_id = $2 AND gym_id = $1`, provider).then(async(result) => {
         res.status(201).json({
             success : true,
@@ -180,8 +182,9 @@ const deleteUserInGym = async(req,res)=>{
 }
 
 const addNewCoachInGym = (req,res) =>{
-    const {gym_id, coach_id} = req.body;
-    const provider = [gym_id, coach_id];
+    const coachId = req.token.userId;
+    const {gymId} = req.body;
+    const provider = [gymId, coachId];
     pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,provider).then((result) => {
         pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2)`, provider).then((result) => {
             res.status(201).json({
@@ -206,8 +209,8 @@ const addNewCoachInGym = (req,res) =>{
 }
 
 const getAllCoachInGym = (req,res)=>{
-    const gym_id = 2;
-    const provider = [gym_id];
+    const {gymId} = req.body;
+    const provider = [gymId];
     pool.query(`SELECT * FROM gym_coach INNER JOIN users ON gym_coach.coach_id = users.id WHERE gym_coach.gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
@@ -224,8 +227,9 @@ const getAllCoachInGym = (req,res)=>{
 }
 
 const deleteCoachInGym = async(req,res)=>{
-    const {gym_id, coach_id} = req.body;
-    const provider = [gym_id,coach_id];
+    const coachId = req.token.userId;
+    const {gymId} = req.body;
+    const provider = [gymId,coachId];
     await pool.query(`UPDATE gym_coach SET is_deleted = 1 WHERE coach_id = $2 AND gym_id = $1`, provider).then(async(result) => {
         res.status(201).json({
             success : true,
