@@ -82,7 +82,6 @@ const createPlan = (req,res)=>{
                     message : `Server error`,
                     erorr : err.message
                 })
-                
             });
         }
         
@@ -253,7 +252,21 @@ const createRoomInGym = (req, res)=>{
 }
 
 const getRoomByIdRoom = (req,res)=> {
-
+    const {gymid, roomid} = req.params;
+    const provider = [gymid, roomid];
+    pool.query(`SELECT * FROM room_gym WHERE room_id = $2 AND gym_id = $1`, provider).then((result) => {
+        res.status(201).json({
+            success : true,
+            message : `Room By Id : ${roomid} For Gym Id : ${gymid}`,
+            room : result.rows
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    });
 }
 
 const getAllRoomByGymId = (req,res)=>{
