@@ -1,5 +1,16 @@
 const pool = require("../models/db");
-
+const activePrivate=(req,res)=>{
+  const coach_id=req.token.userId
+  const value=[coach_id]
+  const query=`UPDATE users SET private='true' WHERE id=$(1) RETURNING *;`
+  pool.query(query,value).then((result)=>{
+    res.status(201).json({
+      success:true,
+      message:`You'r Private Is Active Now`,
+      result :result.rows
+    })
+  })
+}
 const cteateNewPlane = (req, res) => {
   const { name, description, numOfMonth } = req.body;
   const coach_id = req.token.userId;
@@ -151,5 +162,6 @@ module.exports = {
   AddUserToPrivate,
   removeUserFromPrivate,
   getAllPlanByCoachId,
-  getAllUserByPlanId
+  getAllUserByPlanId,
+  activePrivate
 };
