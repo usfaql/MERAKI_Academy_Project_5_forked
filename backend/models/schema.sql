@@ -25,6 +25,7 @@ CREATE TABLE users(
     firstName VARCHAR(255),
     lastName VARCHAR(255),
     age INT,
+    private SMALLINT DEFAULT 0,
     gender VARCHAR(255),
     image VARCHAR(255),
     email VARCHAR(255) UNIQUE,
@@ -32,8 +33,8 @@ CREATE TABLE users(
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES roles(id),
     is_deleted SMALLINT DEFAULT 0,
-    PRIMARY KEY (id)
-     created_at TIMESTAMP DEFAULT NOW()
+    PRIMARY KEY (id),
+    created_at TIMESTAMP DEFAULT NOW()
 );
 
 
@@ -58,7 +59,26 @@ CREATE TABLE gyms(
     is_deleted SMALLINT DEFAULT 0,
     PRIMARY KEY (id)
 );
-
+CREATE TABLE gym_plan(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    numOfMonth INT,
+    price INT,
+    gym_id INT,
+    FOREIGN KEY (gym_id) REFERENCES gyms(id),
+    is_deleted SMALLINT DEFAULT 0
+);
+CREATE TABLE coach_plan(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    numOfMonth INT,
+    price INT,
+    coach_id INT,
+    FOREIGN KEY (coach_id) REFERENCES users(id),
+    is_deleted SMALLINT DEFAULT 0
+);
 CREATE TABLE gym_user(
     id SERIAL NOT NULL,
     user_id INT,
@@ -83,48 +103,19 @@ CREATE TABLE gym_coach(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE requests(
-    id SERIAL NOT NULL,
-    user_id INT,
-    gym_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (gym_id) REFERENCES gyms(id),
-    is_deleted SMALLINT DEFAULT 0,
-    PRIMARY KEY (id)
-);
 CREATE TABLE room_user(
     id SERIAL NOT NULL,
     plan_id INT,
     user_id INT,
     coach_id INT,
-    private_room_id INT
-    endSub TIMESTAMP DEFAULT NULL
+    private_room_id INT,
+    endSub TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coach_id) REFERENCES users(id),
     FOREIGN KEY (plan_id) REFERENCES coach_plan(id),
     is_deleted SMALLINT DEFAULT 0,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
     created_at TIMESTAMP DEFAULT NOW()
 );
-CREATE TABLE coach_plan(
-    id SERIAL NOT NULL PRIMARY KEY (id),
-    name VARCHAR(255),
-    description TEXT,
-    numOfMonth INT,
-    price INT,
-    coach_id INT,
-    FOREIGN KEY (coach_id) REFERENCES users(id),
-    is_deleted SMALLINT DEFAULT 0,
-   
-);
-CREATE TABLE gym_plan(
-    id SERIAL NOT NULL PRIMARY KEY (id),
-    name VARCHAR(255),
-    description TEXT,
-    numOfMonth INT,
-    price INT,
-    gym_id INT,
-    FOREIGN KEY (gym_id) REFERENCES gyms(id),
-    is_deleted SMALLINT DEFAULT 0,
-   
-);
+
+

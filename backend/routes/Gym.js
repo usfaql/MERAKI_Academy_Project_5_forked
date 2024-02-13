@@ -29,7 +29,7 @@ gymsRouter.post("/gym_coach", addNewCoachInGym)
 gymsRouter.get("/gym_coach", getAllCoachInGym);
 gymsRouter.delete("/delete_coach", deleteCoachInGym)
 gymsRouter.post("/:gymid/room/create", createRoomInGym);
-gymsRouter.get("/:gymid/room/:idroom",getRoomByIdRoom);
+gymsRouter.get("/:gymid/room/:roomid",getRoomByIdRoom);
 gymsRouter.get("/:gymid/room/", getAllRoomByGymId);
 
 module.exports = gymsRouter
