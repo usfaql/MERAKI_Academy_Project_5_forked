@@ -79,7 +79,6 @@ const AddUserinfo =(req,res)=>{
     pool.query(`SELECT user_info.user_id  FROM user_info WHERE user_id=$1`,[user_id]).then ((result)=>{
       if (!result.rows.length) {
         pool.query( `INSERT INTO user_info (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,value)
-   
       .then((result) => {
         res.status(200).json({
           success: true,
@@ -119,7 +118,7 @@ pool.query(query,value).then((result)=>{
     res.status(201).json({
       success:true,
       message:`All Info For user_id=${user_id}`,
-      info:result.rows[0]
+      info:result.rows
     })
   }else{
     res.status(201).json({
@@ -145,7 +144,7 @@ pool.query(query,value).then((result)=>{
 res.status(200).json({
 success :true ,
 message :"Update Successfully",
-updatedUserInfo:result.rows[0]
+updatedUserInfo:result.rows
 })
    }).catch((err)=>{
      return res.status(500).json({
