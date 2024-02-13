@@ -1,9 +1,8 @@
-const { query } = require("express");
 const pool = require("../models/db");
 const activePrivate=(req,res)=>{
   const coach_id=req.token.userId
   const value=[coach_id]
-  const query=`UPDATE users SET private=1 WHERE id=$(1) RETURNING *;`
+  const query=`UPDATE users SET private=1 WHERE id=$1 RETURNING *;`
   pool.query(query,value).then((result)=>{
     res.status(201).json({
       success:true,
@@ -14,6 +13,7 @@ const activePrivate=(req,res)=>{
     res.status(500).json({
       success: false,
       message: "Server error",
+      err
     });
   });
 }
@@ -40,13 +40,15 @@ const getAllCoachsAreOpenPrivate=(req,res)=>{
     });
   });
 }
-const cteateNewPlane = (req, res) => {
-  const { name, description, numOfMonth } = req.body;
+const createNewPlane = (req, res) => {
+
   const coach_id = req.token.userId;
-  const value = [name, description, numOfMonth, coach_id];
-  const query = `INSERT INTO coach_plan (name,description,numOfMonth,coach_id) VALUES ($1,$2,$3,$4) RETURNING *;`;
-  const query_1=`SELECT * FROM coach_plan WHERE coach_id=$4 RETURNING *;`
-  pool.query(query_1,value).then((result)=>{
+  const { name, description, price, numOfMonth } = req.body;
+  
+  const value = [name, description, price, numOfMonth, coach_id];
+  const query = `INSERT INTO coach_plan (name,description,price,numOfMonth,coach_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`;
+  const query_1=`SELECT * FROM coach_plan WHERE coach_id=$1`
+  pool.query(query_1,[coach_id]).then((result)=>{
     if(result.rows.length<3){
        pool
     .query(query, value)
@@ -60,7 +62,8 @@ const cteateNewPlane = (req, res) => {
     .catch((err) => {
       res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "Server error Query",
+        err
       });
     });
     }else{
@@ -72,18 +75,19 @@ const cteateNewPlane = (req, res) => {
   }).catch((err) => {
     res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "Server error query_1",
+      err
     });
   });
 
  
 };
 const getAllPlanByCoachId =(req,res)=>{
-  const coach_id=req.token.userId
-  const value=[coach_id]
-  const query=`SELECT * FROM coach_plan WHERE coach_id=$1 RETURNING *; `
+  const coach_id=req.token.userId;
+  const value=[coach_id];
+  const query=`SELECT * FROM coach_plan WHERE coach_id= $1; `
   pool.query(query,value).then((result)=>{
-    if(!result.rows.length){
+    if(result.rows.length){
       res.status(201).json({
         success:true,
         message:`All Plans For Coach_id=${coach_id}`,
@@ -99,59 +103,73 @@ const getAllPlanByCoachId =(req,res)=>{
     res.status(500).json({
       success: false,
       message: "Server error",
+      err
     });
   });
 
 }
 const AddUserToPrivate = (req, res) => {
-  const { plan_id, coach_id,numOfMonth} = req.body;
-  const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
+  const { plan_id, coach_id} = req.body;
   const user_id =req.token.userId;
   const value = [plan_id, coach_id, user_id];
-  const query = `INSERT INTO room_user (plan_id, coach_id, user_id, endSub) 
-  VALUES ($1, $2, $3,${endSub}) 
-  RETURNING *;`;
-  const query_1=`SELECT user_id FROM room_user 
-  WHERE user_id=$3 AND plan_id=$1`
-  pool.query(query_1,value).then((result)=>{
-if(!result.rows.length){
-  res.status(201).json({
-    success : false,
-    message : `The User Already Exist In This Plan`
-})
-}else{
-  pool
-    .query(query, value)
-    .then((result) => {
-      res.status(201).json({
-        success: true,
-        message: "User Add successfully",
-        user: result.rows,
+  pool.query(`SELECT * FROM coach_plan WHERE id=$1`, [plan_id]).then((result) => {
+    const numOfMonth = result.rows[0].numOfMonth;
+    const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
+    const query = `INSERT INTO room_user (plan_id, coach_id, user_id, endSub) 
+    VALUES ($1, $2, $3,${endSub}) 
+    RETURNING *;`;
+    const query_1=`SELECT user_id FROM room_user 
+    WHERE user_id=$1 AND plan_id=$2`
+    pool.query(query_1,[user_id, plan_id]).then((result)=>{
+      console.log(result.rows.length);
+  if(result.rows.length){
+    res.status(201).json({
+      success : false,
+      message : `The User Already Exist In This Plan`
+  })
+  }else{
+    pool
+      .query(query, value)
+      .then((result) => {
+        res.status(201).json({
+          success: true,
+          message: "User Add successfully",
+          user: result.rows,
+        });
+      })
+  }
+    }).catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: "Server error",
+          err
+        });
       });
-    })
-}
+    
   }).catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-        err
-      });
+    res.status(500).json({
+      success: false,
+      message: "Server error Search Plan",
+      err
     });
+  });
+
 };
 const getAllUserByPlanId=(req,res)=>{
-  const plan_id=req.body;
+  const plan_id=req.params.idplan;
   const value=[plan_id];
   const query=`SELECT room_user.user_id, users.firstName, room_user.endSub
   FROM room_user
   JOIN users ON room_user.user_id = users.id
-  WHERE room_user.plan_id = 1;
+  WHERE room_user.plan_id = $1;
   `
   pool.query(query,value).then((result)=>{
-    if(!result.rows.length){
+    if(result.rows.length){
       res.status(201).json({
         success:true,
         message:`All Users IN Plan_id=${plan_id}`,
-        users:result.rows
+        users:result.rows,
+        countUser : result.rows.length
       })
     }else{
       res.status(404).json({
@@ -169,7 +187,7 @@ const getAllUserByPlanId=(req,res)=>{
 const removeUserFromPrivate = (req, res) => {
   const {user_id,coach_id} = req.body;
   const value = [user_id,coach_id];
-  const query = `UPDATE room_user SET is_delete=1 WHERE user_id=$1 AND coach_id=$2`;
+  const query = `UPDATE room_user SET is_deleted=1 WHERE user_id=$1 AND coach_id=$2`;
   pool
     .query(query, value)
     .then((result) => {
@@ -183,11 +201,12 @@ const removeUserFromPrivate = (req, res) => {
       res.status(500).json({
         success: false,
         message: "Server error",
+        err
       });
     });
 };
 module.exports = {
-  cteateNewPlane,
+  createNewPlane,
   AddUserToPrivate,
   removeUserFromPrivate,
   getAllPlanByCoachId,
