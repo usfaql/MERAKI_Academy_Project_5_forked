@@ -1,5 +1,45 @@
+const { query } = require("express");
 const pool = require("../models/db");
-
+const activePrivate=(req,res)=>{
+  const coach_id=req.token.userId
+  const value=[coach_id]
+  const query=`UPDATE users SET private=1 WHERE id=$(1) RETURNING *;`
+  pool.query(query,value).then((result)=>{
+    res.status(201).json({
+      success:true,
+      message:`You'r Private Is Active Now`,
+      result :result.rows
+    })
+  })   .catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  });
+}
+const getAllCoachsAreOpenPrivate=(req,res)=>{
+  const query=`SELECT * FROM users WHERE private=1`
+  pool.query(query).then((result)=>{
+    if(!result.rows.length){
+      res.status(404).json({
+        success:false,
+        message:'No Coach Are Open The Private'
+      })
+    }else{
+       res.status(201).json({
+      success:true,
+      message:'All Coachs Are Open the Private',
+      coachs:result.rows
+    })
+    }
+   
+  }).catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  });
+}
 const cteateNewPlane = (req, res) => {
   const { name, description, numOfMonth } = req.body;
   const coach_id = req.token.userId;
@@ -18,7 +58,7 @@ const cteateNewPlane = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(400).json({
+      res.status(500).json({
         success: false,
         message: "Server error",
       });
@@ -30,7 +70,7 @@ const cteateNewPlane = (req, res) => {
       })
     }
   }).catch((err) => {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
     });
@@ -56,7 +96,7 @@ const getAllPlanByCoachId =(req,res)=>{
       })
     }
   }) .catch((err) => {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
     });
@@ -91,7 +131,7 @@ if(!result.rows.length){
     })
 }
   }).catch((err) => {
-      res.status(400).json({
+      res.status(500).json({
         success: false,
         message: "Server error",
         err
@@ -120,7 +160,7 @@ const getAllUserByPlanId=(req,res)=>{
       })
     }
   }) .catch((err) => {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
     });
@@ -140,7 +180,7 @@ const removeUserFromPrivate = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(400).json({
+      res.status(500).json({
         success: false,
         message: "Server error",
       });
@@ -151,5 +191,7 @@ module.exports = {
   AddUserToPrivate,
   removeUserFromPrivate,
   getAllPlanByCoachId,
-  getAllUserByPlanId
+  getAllUserByPlanId,
+  activePrivate,
+  getAllCoachsAreOpenPrivate
 };
