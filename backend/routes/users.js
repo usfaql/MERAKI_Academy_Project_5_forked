@@ -1,15 +1,15 @@
 const express = require("express");
 
 const { register, login,AddUserinfo,getAllUsers ,getAllCoachs,getUserInfoById,updateUserInfo,getUserInfoByUserId} = require("../controllers/users");
-
+const authentication = require("../middleware/authentication");
 const usersRouter = express.Router();
 
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
-usersRouter.post("/info/create",AddUserinfo)
-usersRouter.get("/", getAllUsers)
-usersRouter.get("/coaches", getAllCoachs)
+usersRouter.post("/info/create",authentication,AddUserinfo)
+usersRouter.get("/", authentication,getAllUsers)
+usersRouter.get("/coaches", authentication,getAllCoachs)
 //usersRouter.get("/info/:id",getUserInfoById)
-usersRouter.put('/info/update', updateUserInfo)
-usersRouter.get('/info',getUserInfoByUserId)
+usersRouter.put('/info/update', authentication,updateUserInfo)
+usersRouter.get('/info/:userId',authentication,getUserInfoByUserId)
 module.exports = usersRouter;

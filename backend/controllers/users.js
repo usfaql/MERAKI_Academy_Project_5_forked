@@ -74,9 +74,9 @@ const login = (req, res) => {
 
 const AddUserinfo =(req,res)=>{
     const { weight, height,goal } = req.body;
-    const user_id = req.token.user_id; 
+    const user_id = req.token.userId;
     const value = [weight, height,goal, user_id]
-    pool.query(`SELECT user_id  FROM user_info WHERE user_id=$4`,value).then ((result)=>{
+    pool.query(`SELECT user_info.user_id  FROM user_info WHERE user_id=$1`,[user_id]).then ((result)=>{
       if (!result.rows.length) {
         pool.query( `INSERT INTO user_info (weight, height, goal,user_id) VALUES ($1,$2,$3,$4) RETURNING*`,value)
       .then((result) => {
@@ -112,7 +112,7 @@ const AddUserinfo =(req,res)=>{
   const getUserInfoByUserId=(req,res)=> {
 const user_id=req.params.userId;
 const value=[user_id]
-const query=`SELECT * FROM user_info WHERE user_id=$1 RETURNING *;`
+const query=`SELECT * FROM user_info WHERE user_id=$1`
 pool.query(query,value).then((result)=>{
   if(result.rows.length){
     res.status(201).json({
@@ -185,15 +185,11 @@ updatedUserInfo:result.rows
   
 
   const getAllCoachs =(req,res)=>{
-    const  id= req.params.id;
-    //console.log('user id',id);
-    if (!id) {
-      res.status(404).json({
-        success:false,
-        message: "User ID is required"
-      });
-    }
-    pool.query(`SELECT * FROM users WHERE role='coach'`).then((result)=>{
+    pool.query(`SELECT roles.role, users.firstname, users.lastname,users.firstname, users.age, users.gender
+    FROM users 
+    INNER JOIN roles
+    ON users.role_id = roles.id 
+    WHERE roles.role = 'COACH'`).then((result)=>{
       res.status(200).json({
         success :true ,
         message:'Showing All Coaches',
