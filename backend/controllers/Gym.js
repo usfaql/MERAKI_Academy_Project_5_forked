@@ -100,9 +100,10 @@ const getPlanByGymId = (req,res) =>{
 
 const addNewUserInGym = (req,res)=>{
     const userId = req.token.userId;
-    const {gymId, planId, numOfMonth} = req.body;
+    const {gymId, planId, numOfMonth, roomId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
-    const providerS = [userId, gymId, planId];
+    const providerS = [userId, gymId, planId, roomId];
+    
     pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[userId]).then((result)=>{
         if(result.rows.length !== 0 ){
             res.status(201).json({
@@ -118,8 +119,7 @@ const addNewUserInGym = (req,res)=>{
                         message : `The User Already Exist Coach In Gym`
                     })
                 }else{
-                    
-                    pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2,$3, ${endSub}) RETURNING *`, providerS).then((result) => {
+                    pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
                         res.status(201).json({
                             success : true,
                             message : "User Add Successfully In Gym",
@@ -182,10 +182,10 @@ const deleteUserInGym = async(req,res)=>{
 
 const addNewCoachInGym = (req,res) =>{
     const coachId = req.token.userId;
-    const {gymId} = req.body;
-    const provider = [gymId, coachId];
+    const {gymId, roomId} = req.body;
+    const provider = [gymId, coachId, roomId];
     pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,provider).then((result) => {
-        pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2)`, provider).then((result) => {
+        pool.query(`INSERT INTO gym_coach (gym_id, coach_id, room_id) VALUES ($1,$2, $3)`, provider).then((result) => {
             res.status(201).json({
                 success : true,
                 message : `Coach Add Successfully In Gym`,
@@ -205,6 +205,33 @@ const addNewCoachInGym = (req,res) =>{
             error : err.message
         });
     });
+}
+
+const createRoomInGym = (req, res)=>{
+    const gymId = req.params.gymid;
+    const {name} = req.body;
+    const provider = [name, gymId];
+    pool.query(`INSERT INTO room_gym (name, gym_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
+        res.status(201).json({
+            success : true,
+            message : `Created Room Successfully`,
+            room : result.rows
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    });
+}
+
+const getRoomByIdRoom = (req,res)=> {
+
+}
+
+const getAllRoomByGymId = (req,res)=>{
+
 }
 
 const getAllCoachInGym = (req,res)=>{
@@ -257,5 +284,9 @@ module.exports = {
     deleteCoachInGym,
     createPlan,
     getGymByOwner,
-    getPlanByGymId
+    getPlanByGymId,
+    createRoomInGym,
+    getRoomByIdRoom,
+    getAllRoomByGymId
 }
+
