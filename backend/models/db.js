@@ -46,6 +46,7 @@ const createTable = () => {
         firstName VARCHAR(255),
         lastName VARCHAR(255),
         age INT,
+        private SMALLINT DEFAULT 0,
         gender VARCHAR(255),
         image VARCHAR(255),
         email VARCHAR(255) UNIQUE,

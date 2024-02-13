@@ -103,7 +103,6 @@ const addNewUserInGym = (req,res)=>{
     const {gymId, planId, numOfMonth, roomId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
     const providerS = [userId, gymId, planId, roomId];
-    
     pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[userId]).then((result)=>{
         if(result.rows.length !== 0 ){
             res.status(201).json({
