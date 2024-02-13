@@ -1,4 +1,3 @@
-
 const pool = require("../models/db");
 
 const createGym = (req,res)=>{
@@ -64,7 +63,6 @@ const createPlan = (req,res)=>{
     const gymId = req.params.gymid;
     const {name, description, numOfMonth, price} = req.body;
     const provider = [name,description, numOfMonth,price, gymId];
-
     pool.query(`INSERT INTO gym_plan (name,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
         res.status(201).json({
             success : true,
@@ -103,41 +101,52 @@ const addNewUserInGym = (req,res)=>{
     const {gymId, planId, numOfMonth, roomId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
     const providerS = [userId, gymId, planId, roomId];
-    
-    pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[userId]).then((result)=>{
-        if(result.rows.length !== 0 ){
+    pool.query(`SELECT * FROM gym_user WHERE gym_id = $2`, providerS).then((result) => {
+        if(result.rows.length >= 50){
             res.status(201).json({
                 success : true,
-                message : `The User Already Exist in Gym`
+                message : `Max User`
             });
-            
         }else{
-            pool.query(`SELECT coach_id FROM gym_coach WHERE coach_id = $1`, [userId]).then((result)=>{
-                if(result.rows.length !== 0){
+            pool.query(`SELECT user_id FROM gym_user WHERE user_id = $1`,[userId]).then((result)=>{
+                if(result.rows.length !== 0 ){
                     res.status(201).json({
-                        success : false,
-                        message : `The User Already Exist Coach In Gym`
-                    })
-                }else{
-                    pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
-                        res.status(201).json({
-                            success : true,
-                            message : "User Add Successfully In Gym",
-                            result : result.rows
-                        })
-                    }).catch((err) => {
-                        res.status(500).json({
-                            success : false,
-                            message : `Server error`,
-                            error : err.message
-                        });
+                        success : true,
+                        message : `The User Already Exist in Gym`
                     });
-                }
-            })
-
-        }
+                    
+                }else{
+                    pool.query(`SELECT coach_id FROM gym_coach WHERE coach_id = $1`, [userId]).then((result)=>{
+                        if(result.rows.length !== 0){
+                            res.status(201).json({
+                                success : false,
+                                message : `The User Already Exist Coach In Gym`
+                            })
+                        }else{
+                            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+                                res.status(201).json({
+                                    success : true,
+                                    message : "User Add Successfully In Gym",
+                                    result : result.rows
+                                })
+                            }).catch((err) => {
+                                res.status(500).json({
+                                    success : false,
+                                    message : `Server error`,
+                                    error : err.message
+                                });
+                            });
+                        }
+                    })
         
-    })
+                }
+                
+            })
+        }
+    }).catch((err) => {
+        
+    });
+    
 
 }
 
