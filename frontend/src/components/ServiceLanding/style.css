@@ -1,3 +1,56 @@
 .service-landing{
     height: 100vh;
 }
+
+.container-service-landing{
+    display: flex;
+    padding-left: 100px;
+    margin-top: 7%;
+    padding-right: 100px;
+    flex-direction: column;
+}
+
+.container-service-title{
+    display: flex;
+    font-size: 25px;
+    justify-content: space-between;
+}
+
+.container-service-card{
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-service{
+    margin-top: 3%;
+    background-color: #211F1F;
+    border-radius: 0 15px 0 0;
+    border: 1px solid #a6a6a659;
+    width: 23%;
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+}
+
+.title-card{
+    height: 25%;
+    font-size:26px;
+    margin-top:20px;
+     font-weight:bold;
+    color:#A1E533;
+}
+.desc-card{
+    min-height: 50%;
+    font-size:18px;
+     padding:25px;
+     font-family:cursive;
+}
+.container-button-card{
+    height: 25%;
+}
+.btn-card{
+    border: 0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #A1E533;
+}
