@@ -1,0 +1,77 @@
+.Register-Page {
+  height: 95vh;
+  display: flex;
+  background-color: #1e1e1e;
+}
+.Left-Image {
+  width: 50%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.image {
+  height: 100%;
+}
+.FirstName-LastName {
+  display: flex;
+  gap: 20px;
+}
+.FirstName {
+  text-align: left;
+  font-size: large;
+}
+.LastName {
+  text-align: left;
+  font-size: large;
+}
+.Email {
+  text-align: left;
+  font-size: large;
+}
+.Password {
+  text-align: left;
+  font-size: large;
+}
+.Age-Gender{
+    display: flex;
+    gap: 10px;
+}
+.Age{
+    display: flex;
+    width: 25%;
+    gap: 10px;
+}
+.Gender{
+    background-color: white;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    font-size: larger;
+}
+.Male{
+    width: 50%;
+    border-right:solid #D9D9D9;
+    color: #000000;
+
+}
+.Female{
+    width: 50%;
+    color: #000000;
+}
+.Account{
+    display: flex;
+    gap: 10px;
+    font-size: larger;
+}
+
+.User-Coach{
+    background-color: white;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
