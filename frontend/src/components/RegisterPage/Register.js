@@ -9,7 +9,6 @@ const Register = () => {
   const [gender, setGender] = useState("")
   const [age, setAge] = useState(null)
   const [typeOfAccount, setTypeOfAccount] = useState("")
-  
   return (
     <div>Register</div>
   )
