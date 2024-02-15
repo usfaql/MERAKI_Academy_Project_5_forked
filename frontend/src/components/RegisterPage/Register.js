@@ -190,7 +190,7 @@ setAge(e.target.value)
         <div className="doYou">
           <small>
             Do you have account?
-            <a style={{ color: "#7aad28" ,cursor:"pointer"}}>create account now</a>
+            <a style={{ color: "#7aad28" ,cursor:"pointer"}}>Login Now</a>
           </small>
         </div>
         {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
