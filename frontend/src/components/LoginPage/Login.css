@@ -10,3 +10,8 @@ body{
 .email_input{
     
 }
+.login_title{
+    display: flex;
+    margin-top: 200px;
+    margin-left: 700px;
+}

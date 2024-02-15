@@ -4,6 +4,7 @@ import './Login.css'
 import axios from 'axios'
 
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 const Login = () => {
 
@@ -41,6 +42,20 @@ const Login = () => {
         }}
       />
       </div>
+      <div className='login_button'>
+
+         <div className="d-grid gap-2">
+      <Button variant="primary" size="lg" >
+      Login
+      </Button>
+      
+    </div>
+
+
+
+
+      </div>
+
 
 
         </div>
