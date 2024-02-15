@@ -12,89 +12,166 @@ const Register = () => {
   const [gender, setGender] = useState("male");
   const [age, setAge] = useState(null);
   const [roleId, setRoleId] = useState(null);
-  const [typeOfAccount, setTypeOfAccount] = useState("");
+  const [success, setSuccess] = useState(null)
+  const [message, setMessage] = useState("")
+  const createNewAccount=()=>{
+    axios.post("http://localhost:5000/users/register",{ firstName,lastName,email,password,age,gender,roleId}).then((result)=>{
+      if(result.data.success){
+        setSuccess(true)
+        setMessage(result.data.message)
+      }else throw Error;
+    }).catch((error)=>{
+      setSuccess(false)
+      if (error.response && error.response.data) {
+        return setMessage(error.response.data.message);
+      }
+      setMessage("Error happened while register, please try again");
+    }
+      
+    )}
+  
   return (
     <div className="Register-Page">
       <div className="Left-Image">
         <img className="image" src={logo} />
       </div>
       <div className="Right-Inputs">
-        <h1>Register</h1>
+        <h1 className="Title">Register</h1>
         <div className="FirstName-LastName">
           <div className="FirstName">
-            {" "}
             <Form.Label>First Name:</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control onChange={(e)=>{
+              setFirstName(e.target.value)
+            }}
+            
+              type="text"
+              style={{
+                backgroundColor: "#1e1e1e",
+                border: "0",
+                color: "white",
+              }}
+            />
           </div>
           <div className="LastName">
             <Form.Label>Last Name:</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control onChange={(e)=>{
+setLastName(e.target.value)
+            }}
+              type="text"
+              style={{
+                backgroundColor: "#1e1e1e",
+                border: "0",
+                color: "white",
+              }}
+            />
           </div>
         </div>
         <div className="Email">
           <Form.Label>Email:</Form.Label>
-          <Form.Control type="email" />
+          <Form.Control onChange={(e)=>{
+setEmail(e.target.value)
+          }}
+            type="email"
+            style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
+          />
         </div>
         <div className="Password">
           <Form.Label>Password:</Form.Label>
-          <Form.Control type="password" />
+          <Form.Control onChange={(e)=>{
+setPassword(e.target.value)
+          }}
+            type="password"
+            style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
+          />
         </div>
         <div className="Age-Gender">
           <div className="Age">
             <Form.Label>Age:</Form.Label>
-            <Form.Control type="number" />
+            <Form.Control onChange={(e)=>{
+setAge(e.target.value)
+            }}
+              type="number"
+              style={{
+                backgroundColor: "#1e1e1e",
+                border: "0",
+                color: "white",
+              }}
+            />
           </div>
-          <div className="Gender">
-            <label>
-              <input
-                type="radio"
-                value="Male"
-                checked={gender === "male"}
-                onChange={() => {
-                  setGender("male");
-                }}
-              />
-              Male
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="Female"
-                checked={gender === "female"}
-                onChange={() => {
-                  setGender("female");
-                }}
-              />
-              Female
-            </label>
+
+          <div className="Gender-label">
+            <Form.Label>Gender:</Form.Label>
+            <div
+              className="Gender"
+              style={{
+                backgroundColor: "#1e1e1e",
+                border: "0",
+                color: "white",
+              }}
+            >
+              <div className="Male">
+                <label style={{ color: "white" }}>
+                  <input
+                    type="radio"
+                    value="Male"
+                    checked={gender === "male"}
+                    onChange={() => {
+                      setGender("male");
+                    }}
+                  />
+                  Male
+                </label>
+              </div>
+              <div className="Female">
+                <label style={{ color: "white" }}>
+                  <input
+                    type="radio"
+                    value="Female"
+                    checked={gender === "female"}
+                    onChange={() => {
+                      setGender("female");
+                    }}
+                  />
+                  Female
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <div className="Account">
           <div className="Account-Label"></div>
           <Form.Label>Account:</Form.Label>
-          <div className="User-Coach">
-            <label>
-              <input
-                type="radio"
-                value="user"
-                checked={roleId === 2}
-                onChange={() => {
-                  setRoleId(2);
-                }}
-              />
-              User
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="coach"
-                checked={roleId === 3}
-                onChange={() => {
-                  setRoleId(3);
-                }}
-              />
-              Coach
-            </label>
+          <div
+            className="User-Coach"
+            style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
+          >
+            <div className="User">
+              {" "}
+              <label style={{ color: "white" }}>
+                <input
+                  type="radio"
+                  value="user"
+                  checked={roleId === 2}
+                  onChange={() => {
+                    setRoleId(2);
+                  }}
+                />
+                User
+              </label>
+            </div>
+            <div className="Coach">
+              <label style={{ color: "white" }}>
+                <input
+                  type="radio"
+                  value="coach"
+                  checked={roleId === 3}
+                  onChange={() => {
+                    setRoleId(3);
+                  }}
+                />
+                Coach
+              </label>
+            </div>
           </div>
         </div>
         <div className="Check-Forget">
@@ -105,10 +182,18 @@ const Register = () => {
             <small>Forget Password?</small>
           </div>
         </div>
-        <Button variant="success">Register</Button>
-        <small>
-          Do you have account?<a>create account now</a>
-        </small>
+        <div className="Register-Btn">
+          <Button onClick={()=>{
+            createNewAccount()
+          }} >Register</Button>
+        </div>
+        <div className="doYou">
+          <small>
+            Do you have account?
+            <a style={{ color: "#7aad28" ,cursor:"pointer"}}>create account now</a>
+          </small>
+        </div>
+        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
       </div>
     </div>
   );
