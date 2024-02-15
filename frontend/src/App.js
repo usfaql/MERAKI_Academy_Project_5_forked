@@ -1,6 +1,6 @@
 import "./App.css";
 import LandingPage from "./components/LandingPage/LandingPage";
-import Login from "./components/RegisterPage/Register";
+import Login from "./components/LoginPage/Login";
 import NavBar from "./components/NavBar/NavBar";
 
 function App() {
