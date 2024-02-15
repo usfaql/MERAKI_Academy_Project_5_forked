@@ -3,15 +3,61 @@ body{
 }
 .loginpage{
     text-align: center;
-}
-.email_title{
+    position: relative;
 
+}
+.login_border{
+    
+    margin-top: 200px;
+    margin-left: 700px;
+    height: 300px ;
+    width: 500px;
+    border:#101010 solid ;
+    position: relative;
+    bottom: 80px;
+    font-size: large;
+
+
+}
+.login_header{
+    position: relative;
+    top: 60px;
+}
+/*email*/
+.login_email{
+
+}
+
+.email_label{
+margin-top: 80px;
+font-size: large;
+position: relative;
+text-align: left;
 }
 .email_input{
     
 }
-.login_title{
-    display: flex;
-    margin-top: 200px;
-    margin-left: 700px;
+/*password*/
+.password_title{
+    
+font-size: large;
+position: relative;
+text-align: left;
+
 }
+.password_input{
+text-align: center;
+}
+.login_button{
+
+}
+.login_img{
+    position: relative;
+    bottom: 440px;
+    right: 800px;
+    height: 90%;
+    
+}
+
+
+

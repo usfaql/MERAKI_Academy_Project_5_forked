@@ -12,12 +12,12 @@ const Login = () => {
     <div className='loginPage'>
 
 
-      <div className='login_title'>
-
+      <div className='login_border'>
+<div className='login_header'>
         <h1>Login</h1>
-        <h6>welcome Back</h6>
+        </div>
         <div className='login_email'>
-            <div className='email_title'>
+            <div className='email_label'>
         <Form.Label >Email :</Form.Label>
         </div>
         <div className='email_input'>
@@ -48,7 +48,9 @@ const Login = () => {
       <Button variant="primary" size="lg" >
       Login
       </Button>
-      
+    </div>
+    <div className='login_img'>
+        <img src='https://i.ibb.co/fD6g26X/pngwing-com.png' alt='logimg'/>
     </div>
 
 
