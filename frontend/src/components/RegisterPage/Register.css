@@ -3,10 +3,10 @@
   display: flex;
   background-color: #101010;
   justify-content: space-around;
+  align-content: center;
 
 }
 .Left-Image {
-  width: 50%;
   height: 100%;
   padding: 0;
   margin: 0;
