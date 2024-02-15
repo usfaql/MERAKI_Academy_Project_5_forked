@@ -12,18 +12,38 @@ const Register = () => {
   const [gender, setGender] = useState("male");
   const [age, setAge] = useState(null);
   const [roleId, setRoleId] = useState(null);
-  const [typeOfAccount, setTypeOfAccount] = useState("");
+  const [success, setSuccess] = useState(null)
+  const [message, setMessage] = useState("")
+  const createNewAccount=()=>{
+    axios.post("http://localhost:5000/users/register",{ firstName,lastName,email,password,age,gender,roleId}).then((result)=>{
+      if(result.data.success){
+        setSuccess(true)
+        setMessage(result.data.message)
+      }else throw Error;
+    }).catch((error)=>{
+      setSuccess(false)
+      if (error.response && error.response.data) {
+        return setMessage(error.response.data.message);
+      }
+      setMessage("Error happened while register, please try again");
+    }
+      
+    )}
+  
   return (
     <div className="Register-Page">
       <div className="Left-Image">
         <img className="image" src={logo} />
       </div>
       <div className="Right-Inputs">
-        <h1>Register</h1>
+        <h1 className="Title">Register</h1>
         <div className="FirstName-LastName">
           <div className="FirstName">
             <Form.Label>First Name:</Form.Label>
-            <Form.Control
+            <Form.Control onChange={(e)=>{
+              setFirstName(e.target.value)
+            }}
+            
               type="text"
               style={{
                 backgroundColor: "#1e1e1e",
@@ -34,7 +54,9 @@ const Register = () => {
           </div>
           <div className="LastName">
             <Form.Label>Last Name:</Form.Label>
-            <Form.Control
+            <Form.Control onChange={(e)=>{
+setLastName(e.target.value)
+            }}
               type="text"
               style={{
                 backgroundColor: "#1e1e1e",
@@ -46,14 +68,18 @@ const Register = () => {
         </div>
         <div className="Email">
           <Form.Label>Email:</Form.Label>
-          <Form.Control
+          <Form.Control onChange={(e)=>{
+setEmail(e.target.value)
+          }}
             type="email"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
           />
         </div>
         <div className="Password">
           <Form.Label>Password:</Form.Label>
-          <Form.Control
+          <Form.Control onChange={(e)=>{
+setPassword(e.target.value)
+          }}
             type="password"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
           />
@@ -61,7 +87,9 @@ const Register = () => {
         <div className="Age-Gender">
           <div className="Age">
             <Form.Label>Age:</Form.Label>
-            <Form.Control
+            <Form.Control onChange={(e)=>{
+setAge(e.target.value)
+            }}
               type="number"
               style={{
                 backgroundColor: "#1e1e1e",
@@ -155,14 +183,17 @@ const Register = () => {
           </div>
         </div>
         <div className="Register-Btn">
-          <Button variant="success">Register</Button>
+          <Button onClick={()=>{
+            createNewAccount()
+          }} >Register</Button>
         </div>
         <div className="doYou">
           <small>
             Do you have account?
-            <a style={{ color: "#7aad28" }}>create account now</a>
+            <a style={{ color: "#7aad28" ,cursor:"pointer"}}>create account now</a>
           </small>
         </div>
+        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
       </div>
     </div>
   );
