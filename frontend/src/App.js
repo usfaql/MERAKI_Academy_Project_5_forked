@@ -1,6 +1,6 @@
 import "./App.css";
 import LandingPage from "./components/LandingPage/LandingPage";
-import Register from "./components/RegisterPage/Register";
+import Login from "./components/LoginPage/Login";
 import NavBar from "./components/NavBar/NavBar";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <NavBar/>
       {/* <LandingPage/> */}
-      <Register/>
+      <Login/>
     </div>
   );
 }
