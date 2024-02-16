@@ -81,17 +81,17 @@ const Login = () => {
       <div className='login_button'>
 
          <div className="d-grid gap-2">
-      <Button variant="primary" size="lg" onClick={(e)=>{
+         <Button variant="success"onClick={(e)=>{
         login(e)
-      }} >
-      Login
-      </Button>
+      }} >Login</Button>
+
       
+
 
     </div>
     
 <div className='dont_have_account'>
-    <p>Dont have account ? <div className='signup'>create accout now </div></p>
+    <p>Dont have account ? <a href='*'>create accout now </a></p>
 </div>
 
 <div className='login_img'>
