@@ -16,31 +16,24 @@ const Login = () => {
 
     const [message, setMessage] = useState("");
 
-    const login = async(e)=>{
+    const login = (e)=>{
 
       e.preventDefault();
-      try {
-        const result = await axios.post("http://localhost:5000/users/login", {
+         axios.post("http://localhost:5000/users/login", {
           email,
           password,
-        });
-        if (result.data) {
+        }).then((result)=>{
           console.log("result.data",result.data);
           dispatch(setLogin(result.data.token));
           dispatch(setUserId(result.data.userId));
           setMessage("");
           localStorage.setItem("token", result.data.token);
           localStorage.setItem("userId", result.data.userId);
-          //saveToken(result.data.token, result.data.userId);
-        } else throw Error;
-      } catch (error) {
-        if (error.response && error.response.data) {
-          return setMessage(error.response.data.message);
-        }
-        setMessage("Error happened while Login, please try again");
-      }
 
-
+        }).catch((error)=>{
+          setMessage(error.response.data.message);
+        })
+       
         }
     
 
