@@ -2,7 +2,6 @@ import React from 'react'
 import{useState,useEffect} from 'react'
 import './Login.css'
 import axios from 'axios'
-
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -22,7 +21,7 @@ const Login = () => {
         </div>
         <div className='email_input'>
       <Form.Control
-        type="email"
+        type="text"
         placeholder='email'
         onChange={()=>{
 
@@ -49,10 +48,13 @@ const Login = () => {
       Login
       </Button>
     </div>
-    <div className='login_img'>
+    
+<div className='dont_have_account'>
+    <p>Dont have account ? <div className='signup'>create accout now </div></p>
+</div>
+<div className='login_img'>
         <img src='https://i.ibb.co/fD6g26X/pngwing-com.png' alt='logimg'/>
     </div>
-
 
 
 
