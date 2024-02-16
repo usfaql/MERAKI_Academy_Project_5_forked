@@ -4,7 +4,7 @@ function NavBar() {
   return (
     <div className='nav-bar'>
         <div>
-            <h2 >NUTRI <a style={{color:"#A1E533"}}>FIT</a></h2>
+            <h2 ><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <a style={{color:"#A1E533"}}>FIT</a></a></h2>
         </div>
         <div>
             <lu >
@@ -16,7 +16,7 @@ function NavBar() {
         </div>
 
         <div>
-            <button className='button'>Login</button>
+        <a href='login' className='link-in-button'><button className='button' >Login</button></a>
         </div>
     </div>
   )

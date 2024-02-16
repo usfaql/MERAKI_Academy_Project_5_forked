@@ -1,6 +1,6 @@
 .nav-bar{
     display: flex;
-    padding: 0 100px  0 100px;
+    padding: 10px 100px  10px 100px;
     height: 10%;
     flex-direction: row;
     justify-content: space-between;
@@ -24,4 +24,8 @@
 }
 .button:hover{
     background-color: #7aad28;
+}
+.link-in-button{
+    text-decoration: none;
+    color: #101010;
 }
