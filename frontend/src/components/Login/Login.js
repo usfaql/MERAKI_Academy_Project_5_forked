@@ -51,7 +51,7 @@ const Login = () => {
       </div>
 
       <div className="Right-Inputs">
-#        <h1>Login</h1>
+ <h1>Login</h1>
             <div className="Email">
           <Form.Label>Email:</Form.Label>
           <Form.Control type="email" onChange={(e)=>{

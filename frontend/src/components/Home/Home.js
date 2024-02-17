@@ -12,7 +12,7 @@ function Home() {
       gymBoxes.push(
         <div className='gym-viewer' key={i}>
           <p className='name-gym'>Gym {i+1}</p>
-          <p className='desc-gym'>test Paragraph Desc</p>
+          <p className='desc-gym'>test Paragraph Desc fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</p>
           <p className='member-in-gym'>{randomMember}/50 Member</p>
           <button className='button-join'>Join</button>
         </div>
