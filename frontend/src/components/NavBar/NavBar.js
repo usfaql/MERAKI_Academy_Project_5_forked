@@ -4,19 +4,19 @@ function NavBar() {
   return (
     <div className='nav-bar'>
         <div>
-            <h2 >NUTRI <a style={{color:"#A1E533"}}>FIT</a></h2>
+            <h2><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <a style={{color:"#A1E533"}}>FIT</a></a></h2>
         </div>
         <div>
-            <lu >
-                <lo className='nav-map'>Home</lo>
-                <lo className='nav-map'>Service</lo>
-                <lo className='nav-map'>About</lo>
-                <lo className='nav-map'>Contact</lo>
+            <lu className="navbar-lu">
+                <li className='nav-map'>Home</li>
+                <li className='nav-map'>Service</li>
+                <li className='nav-map'>About</li>
+                <li className='nav-map'>Contact</li>
             </lu>
         </div>
 
         <div>
-            <button className='button'>Login</button>
+        <a href='login' className='link-in-button'><button className='button' >Login</button></a>
         </div>
     </div>
   )
