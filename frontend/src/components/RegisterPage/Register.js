@@ -3,7 +3,7 @@ import './Register.css'
 import axios from 'axios'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
+import logo from '../assets/pngwing.com.png'
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
