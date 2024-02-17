@@ -1,5 +1,5 @@
 .Register-Page {
-  height: 94vh;
+  height: 95.1vh;
   display: flex;
   background-color: #101010;
   justify-content: space-around;
@@ -159,8 +159,5 @@ justify-content: space-between;
     background-color: hsla(0, 100%, 50%, 0.402);
     color: white;
     text-align: center;
-  }
-  .img{
-    height: 1000px;
   }
   
