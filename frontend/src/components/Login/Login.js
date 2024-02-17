@@ -16,26 +16,30 @@ const Login = () => {
 
     const [message, setMessage] = useState("");
 
-    const [status, setStatus] = useState(false);
 
 
     const login = ()=>{
 
-      
-         axios.post("http://localhost:5000/users/login", {
-          email,
-          password,
-        }).then((result)=>{
-          console.log("result.data",result.data);
-          dispatch(setLogin(result.data.token));
-          dispatch(setUserId(result.data.userId));
-          setMessage("");
-          localStorage.setItem("token", result.data.token);
-          localStorage.setItem("userId", result.data.userId);
-
-        }).catch((error)=>{
-          setMessage(error.response.data.message);
-        })
+          if(!email || !password){
+            console.log("Conn't Send Empty Data");
+          }else{
+            axios.post("http://localhost:5000/users/login", {
+              email,
+              password,
+            }).then((result)=>{
+              console.log("result.data",result.data);
+              dispatch(setLogin(result.data.token));
+              dispatch(setUserId(result.data.userId));
+              setMessage("");
+              localStorage.setItem("token",result.data.token);
+              localStorage.setItem("userId",result.data.userId);
+    
+            }).catch((error)=>{
+              //setMessage(error.response.data.message);
+              console.log(error);
+            })
+          }
+        
        
         }
     
@@ -50,13 +54,13 @@ const Login = () => {
 #        <h1>Login</h1>
             <div className="Email">
           <Form.Label>Email:</Form.Label>
-          <Form.Control type="email" onClick={(e)=>{
+          <Form.Control type="email" onChange={(e)=>{
             setEmail(e.target.value)
           }} />
         </div>
         <div className="Password">
           <Form.Label>Password:</Form.Label>
-          <Form.Control type="password" onClick={(e)=>{
+          <Form.Control type="password" onChange={(e)=>{
             setPassword(e.target.value)
           }} />
         </div>
@@ -64,12 +68,11 @@ const Login = () => {
         <Button variant="success"onClick={()=>{
         login()
       }} >Login</Button>
+
       <small>
-      If you don't have an account<a>signup</a>
+      If you don't have an account   <a>signup</a>
         </small>
-        {status
-          ? message && <div className="SuccessMessage">{message}</div>
-          : message && <div className="ErrorMessage">{message}</div>}
+        
 
       </div>
 
