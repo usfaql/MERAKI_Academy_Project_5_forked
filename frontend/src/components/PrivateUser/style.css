@@ -1,0 +1,23 @@
+.private_user{
+    background-color: #101010;
+    min-height: calc(100vh - 68px);
+    user-select: none;
+}
+
+.contener-navbar-home{
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    color: #101010;
+    
+}
+
+.search_bar{
+    width: 450px;
+    position: relative;
+    left: 28%;
+}
+.coach_bar{
+    
+}

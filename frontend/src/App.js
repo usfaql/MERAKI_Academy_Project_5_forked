@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar/NavBar";
 import Register from "./components/RegisterPage/Register"
 import NotFound from "./components/NotFound/NotFound";
 import Home from "./components/Home/Home"
+import Private_user from "./components/PrivateUser/Private_user";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<NotFound/>}/>
         <Route path="/home" element={<Home/>}/>
+        <Route path='/privateuser' element={<Private_user/>}/>
       </Routes>
     </div>
   );

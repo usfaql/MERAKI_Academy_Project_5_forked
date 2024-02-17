@@ -16,6 +16,8 @@ const Login = () => {
 
     const [message, setMessage] = useState("");
 
+    const [success, setSuccess] = useState(null)
+
 
 
     const login = ()=>{
@@ -52,17 +54,23 @@ const Login = () => {
 
       <div className="Right-Inputs">
  <h1>Login</h1>
-            <div className="Email">
+ <div className="Email">
           <Form.Label>Email:</Form.Label>
-          <Form.Control type="email" onChange={(e)=>{
-            setEmail(e.target.value)
-          }} />
+          <Form.Control onChange={(e)=>{
+setEmail(e.target.value)
+          }}
+            type="email"
+            style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
+          />
         </div>
         <div className="Password">
           <Form.Label>Password:</Form.Label>
-          <Form.Control type="password" onChange={(e)=>{
-            setPassword(e.target.value)
-          }} />
+          <Form.Control onChange={(e)=>{
+setPassword(e.target.value)
+          }}
+            type="password"
+            style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
+          />
         </div>
       <br/>
         <Button variant="success"onClick={()=>{
@@ -72,9 +80,11 @@ const Login = () => {
       <small>
       If you don't have an account   <a>signup</a>
         </small>
-        
+        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
+
 
       </div>
+      
 
       
      
