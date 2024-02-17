@@ -1,12 +1,13 @@
+
 .login-Page {
-  height: 95.1vh;
+  height:calc(100vh - 68px);
   display: flex;
   background-color: #101010;
   justify-content: space-around;
   align-content: center;
 
 }
-.Left-Image {
+.login-Page .Left-Image {
   height: 100%;
   padding: 0;
   margin: 0;
@@ -14,10 +15,13 @@
   justify-content: center;
   align-items: flex-end;
 }
-.image {
+
+
+
+.login-Page .image {
   height: 90%;
 }
-.Right-Inputs{
+.login-Page .Right-Inputs{
   height: 100%;
   padding: 0;
   margin: 0;
@@ -25,31 +29,27 @@
   flex-direction: column;
   justify-content: center;
 }
-.Title{
+.login-Page .Title{
     margin-bottom: 50px;
     font-size:3.5em;
     font-weight: bold;
 }
 
 
-.Email {
+.login-Page .Email {
   text-align: left;
   font-size: large;
 }
-.Password {
+.login-Page .Password {
   text-align: left;
   font-size: large;
 }
-
-
-
-
-.Check-Forget{
+.login-Page .Check-Forget{
 display: flex;
 justify-content: space-between;
 
 }
-.Register-Btn Button{
+.login-Page .Register-Btn Button{
     margin-top: 10px;
     width: 100%;
     border: 0;
@@ -58,25 +58,22 @@ justify-content: space-between;
     color : black;
     font-weight: bold;
 }
-.doYou{
+.login-Page .doYou{
     margin-top: 5px;
     text-align: left;
 }
-.Check , .Forget {
+.login-Page .Check , .login-Page .Forget {
     cursor: pointer;
     color: #7aad28;
 }
-.Register-Btn Button:hover{
+.login-Page .Register-Btn Button:hover{
     background-color: #7aad28;
     color: #000000;
 }
-
-
-  
-  .img{
+  /* .img{
     height: 1000px;
-  }
-  .SuccessMessage {
+  } */
+  .login-Page .SuccessMessage {
     padding-top: 3px;
     align-self: center;
     border-radius: 10px;
@@ -87,7 +84,7 @@ justify-content: space-between;
     text-align: center;
   }
   
-  .ErrorMessage {
+  .login-Page .ErrorMessage {
     padding-top: 3px;
     border-radius: 10px;
     align-self: center;
