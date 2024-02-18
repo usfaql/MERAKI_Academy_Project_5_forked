@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import './style.css';
+import Pagination from 'react-bootstrap/Pagination';
+import GymHome from './GymHome/GymHome';
+import PrivateHome from './PrivateHome/PrivateHome';
+import AllGymHome from './AllGymHome/AllGymHome';
 function Home() {
   const [selected , setSelected] = useState('allgym');
-
-  const generateGymBox = () => {
-    const gymBoxes = [];
-  
-    for (let i = 0; i < 15; i++) {
-      let randomMember = Math.floor(Math.random() * 50);
-      console.log(randomMember);
-      gymBoxes.push(
-        <div className='gym-viewer' key={i}>
-          <p className='name-gym'>Gym {i+1}</p>
-          <p className='desc-gym'>test Paragraph Desc fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</p>
-          <p className='member-in-gym'>{randomMember}/50 Member</p>
-          <button className='button-join'>Join</button>
-        </div>
-      );
-    }
-  
-    return gymBoxes;
-  };
+  const items = [];
+  const [PageNumber, setPageNumber] = useState(1); 
+  for (let number = 1; number <= 5; number++) {
+    items.push(
+      <Pagination.Item key={number} linkStyle={PageNumber === number ? {backgroundColor:"#A1E533", border:"0", color:"#101010"} : {backgroundColor:"#404040",border:"0", color:"white"}}  active={number === PageNumber} onClick={()=>{
+        setPageNumber(number);
+      }}>
+        {number}
+      </Pagination.Item>
+    );
+  }
 
   return (
     <div className='contener-home'>
@@ -39,17 +35,13 @@ function Home() {
       </div>
 
       <div className='contener-gym-viewer'>
-        
-        {generateGymBox()}
-
+        {selected == 'gym' && <GymHome/>}
+        {selected == 'private' && <PrivateHome/>}
+        {selected == 'allgym' && <AllGymHome/>}
       </div>
       <div style={{display:"flex" , margin : "0 100px 0 100px", justifyContent:"center" ,gap:"20px", alignItems:"center", textAlign:"center"}}>
-        <button style={{backgroundColor:"#A1E533", border:"0",borderRadius:"4px"}}>back</button>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>5</div>
-        <button style={{backgroundColor:"#A1E533", border:"0",borderRadius:"4px"}}>Next</button>
+
+        <Pagination>{items}</Pagination>
 
       </div>
     </div>

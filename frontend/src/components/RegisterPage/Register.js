@@ -15,7 +15,8 @@ const Register = () => {
   const [success, setSuccess] = useState(null)
   const [message, setMessage] = useState("")
   const createNewAccount=()=>{
-    axios.post("http://localhost:5000/users/register",{ firstName,lastName,email,password,age,gender,roleId}).then((result)=>{
+    if(firstName&& lastName&& age&& gender&& email&&password&&roleId){
+        axios.post("http://localhost:5000/users/register",{ firstName, lastName, age, gender, email, password,role_id:roleId }).then((result)=>{
       if(result.data.success){
         setSuccess(true)
         setMessage(result.data.message)
@@ -28,7 +29,12 @@ const Register = () => {
       setMessage("Error happened while register, please try again");
     }
       
-    )}
+    )}else{
+      setSuccess(false)
+      setMessage("Please Fill All Field")
+    }
+    }
+  
   
   return (
     <div className="Register-Page">
@@ -174,14 +180,14 @@ setAge(e.target.value)
             </div>
           </div>
         </div>
-        <div className="Check-Forget">
+        {/* <div className="Check-Forget">
           <div className="Check">
             <small>check</small>
           </div>
           <div className="Forget">
             <small>Forget Password?</small>
           </div>
-        </div>
+        </div> */}
         <div className="Register-Btn">
           <Button onClick={()=>{
             createNewAccount()

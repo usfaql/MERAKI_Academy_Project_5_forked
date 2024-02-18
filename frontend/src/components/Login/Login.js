@@ -1,6 +1,7 @@
 import React from 'react'
 import{useState,useEffect} from 'react'
 import './Login.css'
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 import { UseDispatch,useDispatch,useSelector } from 'react-redux'
 import { setLogin,setUserId } from '../Redux/Reducers/Auth/index';
@@ -8,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import logo from '../assets/pngwing.com.png'
 const Login = () => {
+  const navigate = useNavigate();
     const dispatch = useDispatch()
 
     const [email ,setEmail] = useState("")
@@ -35,7 +37,7 @@ const Login = () => {
               setMessage("");
               localStorage.setItem("token",result.data.token);
               localStorage.setItem("userId",result.data.userId);
-    
+              navigate('/home');
             }).catch((error)=>{
               //setMessage(error.response.data.message);
               console.log(error);

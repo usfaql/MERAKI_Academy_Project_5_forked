@@ -1,6 +1,6 @@
 import React from 'react'
 import "./style.css";
-import homeLandingImage from '../assets/home-landing.png';
+import homeLandingImage from '../../assets/home-landing.png';
 function HomeLanding() {
   return (
     <div className='home-landing'>
