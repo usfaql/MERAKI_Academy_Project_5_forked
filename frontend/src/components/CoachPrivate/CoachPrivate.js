@@ -9,6 +9,16 @@ const [header, setHeader] = useState("")
   return (
     <div className='Coach-Private-Page'>
         <div className='Left-Side'>
+          <div className='User-Filter'>
+          <Form.Select
+          style={{alignSelf:"center",width:"85%" ,paddingLeft:"5px",backgroundColor:"#3d3939",color:"white"}}
+          aria-label="Default select example">
+      <option>All Users</option>
+      <option value="1">Premium Users</option>
+      <option value="2">Gold Users</option>
+      <option value="3">Lite Users</option>
+    </Form.Select>
+          </div>
             <div className='User-List'>
             {users.map((user,i)=>
                 <div className='User-Name' onClick={()=>{

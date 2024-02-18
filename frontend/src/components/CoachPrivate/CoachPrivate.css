@@ -12,6 +12,12 @@
     align-items:center;
 
   }
+  .User-Filter{
+    width: 85%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: left;
+  }
   .User-List{
     height: 80%;
     width: 100%;
@@ -21,6 +27,10 @@
     align-items: center;
     gap: 10px;
     overflow: auto;
+  }
+  option{
+    background-color: #3d3939;
+    color:white;
   }
   .User-Name{
     cursor: pointer;
@@ -128,6 +138,7 @@ fill: #6c3e3e;
     gap: 25px;
     width: 100%;
     padding-bottom: 10px;
+    padding-top: 10px;
     
   }
   .user-message{
