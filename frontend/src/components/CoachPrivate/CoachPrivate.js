@@ -16,8 +16,20 @@ const {token,userId,users}=useSelector((state)=>{
  
 })
   const getAllUsers=()=>{
-    axios.get('')
+    axios.get(`http://localhost:5000/coachs/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      console.log(result);
+    }).catch((err)=>{
+      console.log(err);
+    })
   }
+  useEffect(() => {
+getAllUsers()
+  }, [])
+  
 let users_1=["ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed"]
 let messages=[{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111"},]
 const [header, setHeader] = useState("")
