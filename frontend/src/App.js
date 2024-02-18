@@ -5,7 +5,6 @@ import Login from "./components/Login/Login";
 import NavBar from "./components/NavBar/NavBar";
 import Register from "./components/RegisterPage/Register";
 import NotFound from "./components/NotFound/NotFound";
-import Private_user from "./components/PrivateUser/Private_user";
 
 import Home from "./components/Home/Home";
 import CoachPrivate from "./components/CoachPrivate/CoachPrivate";

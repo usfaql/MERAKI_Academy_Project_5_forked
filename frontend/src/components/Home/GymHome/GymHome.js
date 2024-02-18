@@ -7,7 +7,9 @@ import './style.css'
 function GymHome() {
 
     const generateGymBox = (gymUser) => {
-        gymUser = [];
+
+        gymUser = ["k"];
+
         
         const createGym = [];
         if(!gymUser.length){
