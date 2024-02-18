@@ -2,7 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import logoGym from '../assets/image-gym.jpg';
+import logoGym from '../../assets/image-gym.jpg';
 import './style.css'
 function GymHome() {
 

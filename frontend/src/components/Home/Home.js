@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './style.css';
 import Pagination from 'react-bootstrap/Pagination';
-import GymHome from '../GymHome/GymHome';
+import GymHome from './GymHome/GymHome';
 import PrivateHome from '../PrivateHome/PrivateHome';
-import AllGymHome from '../AllGymHome/AllGymHome';
+import AllGymHome from './AllGymHome/AllGymHome';
 function Home() {
   const [selected , setSelected] = useState('allgym');
   const items = [];
@@ -14,7 +14,7 @@ function Home() {
         setPageNumber(number);
       }}>
         {number}
-      </Pagination.Item>,
+      </Pagination.Item>
     );
   }
 
