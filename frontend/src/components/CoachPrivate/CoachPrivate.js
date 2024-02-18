@@ -1,15 +1,19 @@
 import React,{useEffect,useState} from 'react'
 import "./CoachPrivate.css"
-
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 const CoachPrivate = () => {
 let users=["ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed",]
 let messages=["test","test","test","test"]
+const [header, setHeader] = useState("")
   return (
     <div className='Coach-Private-Page'>
         <div className='Left-Side'>
             <div className='User-List'>
             {users.map((user,i)=>
-                <div className='User-Name'># {user}</div>
+                <div className='User-Name' onClick={()=>{
+                  setHeader(user)
+                }}># {user}</div>
             )}
             </div>
             <div className='My-Private'>
@@ -25,7 +29,33 @@ let messages=["test","test","test","test"]
 </svg>
             </div>
         </div>
-        <div className='Right_Side'>
+        <div className='Right-Side'>
+          <div className='Header'>
+            {header}
+          </div>
+          <div className='message'>
+rfgef
+          </div>
+          <div className='Input-Button'>
+            <div className='Input'>
+            <Form.Control
+
+        type="text"
+        id="inputPassword5"
+        aria-describedby="passwordHelpBlock"
+      />
+            </div>
+            <div className='Buttons'>
+              <div className='left'>
+              <Button>Image</Button>
+                <Button>Video</Button>
+                  <Button>File</Button>
+              </div>
+              <div className='right'>
+              <Button>Send</Button>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
    
