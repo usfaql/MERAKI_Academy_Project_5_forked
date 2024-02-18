@@ -12,6 +12,12 @@
     align-items:center;
 
   }
+  .User-Filter{
+    width: 85%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: left;
+  }
   .User-List{
     height: 80%;
     width: 100%;
@@ -20,10 +26,14 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    overflow: auto;
+  }
+  option{
+    background-color: #3d3939;
+    color:white;
   }
   .User-Name{
-    /* margin-left: 10px;
-    margin-right: 10px; */
+    cursor: pointer;
     background-color: #3d3939;
     border-radius: 7px;
     height: 5%;
@@ -33,44 +43,40 @@
     text-align: left;
     padding-left: 5px;
   }
-  .Private-img{
-  width:20%;
-    height: 50%;
-    background-color: white;
+  .Private-img svg{
+
     border-radius:50%;
     justify-self: flex-start;
 
   }
   .My-Private{
-    /* 
-    height: 20%;
-    width: 40%;
-    display: grid;
- grid-template-columns: 1fr 1fr 1fr;
-    /* align-content: space-around; */
-    /* 
-    margin-bottom: 20px;  */
     display: flex;
-    justify-content: space-evenly;
-    padding: 0.5rem;
+    justify-content: space-between;
+    padding: 0.85rem;
     height: 20%;
     width: 100%;
 align-items: center;
+
+
   }
-  svg{
-    justify-self:flex-end;
-    margin-right: 0;
+  .img-title{
+    display: flex;
+    gap: 20px;
+    align-items: center;
   }
+
   .Private-Title{
-    font-size: larger;
+    font-size: x-large;
     font-weight: bolder;
+  }
+  .My-Private svg:hover{
+fill: #6c3e3e;
   }
   .Right-Side{
     width: 75%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: space-between;
   }
   .Header{
@@ -116,4 +122,50 @@ align-items: center;
   #inputPassword5{
     font-size: medium;
     font-weight: 500;
+  }
+ 
+  .message{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-left: 20px;
+    overflow: auto;
+  }
+  .msg{
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    
+  }
+  .user-message{
+    background-color: #3d3939;
+    width: 90%;
+    text-align: left;
+    padding-left: 5px;
+    font-size: large;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+
+  ::-webkit-scrollbar-track {
+    box-shadow:  grey; 
+    border-radius: 10px;
+  }
+   
+
+  ::-webkit-scrollbar-thumb {
+    background: #959393; 
+    border-radius: 10px;
+  }
+  
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #575757; 
   }
