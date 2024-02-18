@@ -14,6 +14,7 @@
 .navbar-lu{
     display: flex;
     list-style:none;
+    font-weight: bold;
     position: relative;
     left: -20px;
 }
@@ -23,11 +24,15 @@
     user-select: none;
     font-size: 18px;
 }
+.end{
+    margin-right: 0;
+}
 .button{
     border: 0;
     padding: 8px;
     border-radius: 4px;
     background-color: #A1E533;
+    font-weight: bold;
     cursor: pointer;
 }
 .button:hover{
