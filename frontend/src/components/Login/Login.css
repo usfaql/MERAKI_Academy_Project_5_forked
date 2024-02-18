@@ -94,4 +94,11 @@ justify-content: space-between;
     color: white;
     text-align: center;
   }
-  
+  .Email {
+    text-align: left;
+    font-size: large;
+  }
+  .Password {
+    text-align: left;
+    font-size: large;
+  }

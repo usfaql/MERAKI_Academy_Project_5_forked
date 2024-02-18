@@ -17,7 +17,7 @@ const activePrivate=(req,res)=>{
     });
   });
 }
-const getAllCoachsAreOpenPrivate=(req,res)=>{
+const getAllCoachsAreOpenPrivate=(req,res)=>{ ///////////////////////
   const query=`SELECT * FROM users WHERE private=1`
   pool.query(query).then((result)=>{
     if(!result.rows.length){
