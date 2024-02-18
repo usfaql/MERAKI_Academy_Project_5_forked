@@ -2,8 +2,35 @@ import React,{useEffect,useState} from 'react'
 import "./CoachPrivate.css"
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import {setUsers} from "../Redux/Reducers/CoachPrivate/index"
 const CoachPrivate = () => {
-let users=["ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed"]
+const dispatch =useDispatch()
+const {token,userId,users}=useSelector((state)=>{
+  return{
+    //  token:state.Auth.token,
+  // userId:state.Auth.userId,
+  // users:state.CoachPrivate.users
+}
+ 
+})
+  const getAllUsers=()=>{
+    axios.get(`http://localhost:5000/coachs/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      console.log(result);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+  useEffect(() => {
+getAllUsers()
+  }, [])
+  
+let users_1=["ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed"]
 let messages=[{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111"},]
 const [header, setHeader] = useState("")
   return (
@@ -20,7 +47,7 @@ const [header, setHeader] = useState("")
     </Form.Select>
           </div>
             <div className='User-List'>
-            {users.map((user,i)=>
+            {users_1.map((user,i)=>
                 <div className='User-Name' onClick={()=>{
                   setHeader(user)
                 }}># {user}</div>
