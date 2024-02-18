@@ -14,22 +14,22 @@ const {createGym,
     createRoomInGym,
     getRoomByIdRoom,
     getAllRoomByGymId} = require("../controllers/Gym");
-
+    const authentication = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
-gymsRouter.post("/", createGym);
-gymsRouter.get("/", getAllGym);
-gymsRouter.get("/:ownerId", getGymByOwner);
-gymsRouter.post("/:gymid/plan/create", createPlan);
-gymsRouter.get("/plan/:gymid",getPlanByGymId);
-gymsRouter.post("/gym_user", addNewUserInGym);
-gymsRouter.get("/gym_user", getAllUserInGym);
-gymsRouter.delete("/gym_user", deleteUserInGym);
-gymsRouter.post("/gym_coach", addNewCoachInGym)
-gymsRouter.get("/gym_coach", getAllCoachInGym);
-gymsRouter.delete("/delete_coach", deleteCoachInGym)
-gymsRouter.post("/:gymid/room/create", createRoomInGym);
-gymsRouter.get("/:gymid/room/:roomid",getRoomByIdRoom);
-gymsRouter.get("/:gymid/room/", getAllRoomByGymId);
+gymsRouter.post("/", authentication ,createGym);
+gymsRouter.get("/", authentication, getAllGym);
+gymsRouter.get("/:ownerId", authentication,getGymByOwner);
+gymsRouter.post("/:gymid/plan/create", authentication,createPlan);
+gymsRouter.get("/plan/:gymid", authentication ,getPlanByGymId);
+gymsRouter.post("/gym_user",authentication, addNewUserInGym);
+gymsRouter.get("/gym_user", authentication,getAllUserInGym);
+gymsRouter.delete("/gym_user", authentication,deleteUserInGym);
+gymsRouter.post("/gym_coach", authentication,addNewCoachInGym)
+gymsRouter.get("/gym_coach",authentication, getAllCoachInGym);
+gymsRouter.delete("/delete_coach", authentication,deleteCoachInGym)
+gymsRouter.post("/:gymid/room/create", authentication,createRoomInGym);
+gymsRouter.get("/:gymid/room/:roomid", authentication,getRoomByIdRoom);
+gymsRouter.get("/:gymid/room/", authentication,getAllRoomByGymId);
 
 module.exports = gymsRouter
