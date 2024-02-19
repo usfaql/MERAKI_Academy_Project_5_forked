@@ -4,7 +4,9 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import logo from "../assets/pngwing.com.png";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,6 +43,7 @@ const Register = () => {
       <div className="Left-Image">
         <img className="image" src={logo} />
       </div>
+      <div className="right-input-contener">
       <div className="Right-Inputs">
         <h1 className="Title">Register</h1>
         <div className="FirstName-LastName">
@@ -194,13 +197,17 @@ setAge(e.target.value)
           }} >Register</Button>
         </div>
         <div className="doYou">
-          <small>
+          <span style={{cursor:"default"}}>
             Do you have account?
-            <a style={{ color: "#7aad28" ,cursor:"pointer"}}>Login Now</a>
-          </small>
+            <soan style={{ color: "#A1E533" ,cursor:"pointer"}} onClick={()=>{
+              navigate(-1);
+            }}>Login Now</soan>
+          </span>
         </div>
         {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
       </div>
+      </div>
+      
     </div>
   );
 };

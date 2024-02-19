@@ -1,5 +1,5 @@
 .Register-Page {
-  height: 95.1vh;
+  height: calc(100vh - 68px);
   display: flex;
   background-color: #101010;
   justify-content: space-around;
@@ -8,6 +8,7 @@
 }
 .Left-Image {
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -17,8 +18,14 @@
 .image {
   height: 90%;
 }
+.right-input-contener{
+  display: flex;
+  width: 50%;
+  justify-content: center;
+}
 .Right-Inputs{
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -32,13 +39,16 @@
 }
 .FirstName-LastName {
   display: flex;
+  justify-content: space-between;
   gap: 20px;
 }
 .FirstName {
+  width: 47.5%;
   text-align: left;
   font-size: large;
 }
 .LastName {
+  width: 47.5%;
   text-align: left;
   font-size: large;
 }

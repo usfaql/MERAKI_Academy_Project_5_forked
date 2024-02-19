@@ -12,10 +12,9 @@ function AllGymHome() {
       
         for (let i = 0; i < 10; i++) {
           let randomMember = Math.floor(Math.random() * 50);
-          console.log(randomMember);
           gymBoxes.push(
           <Col key={1}>
-          <Card linkStyle={{backgroundColor:"#A1E533"}}>
+          <Card style={{backgroundColor:"#A1E533"}}>
             <Card.Img variant="top" className='image-gym-in-card' src={logoGym} />
             <Card.Body>
               <Card.Title style={{fontWeight:"bold"}}>Gym {i+1}</Card.Title>

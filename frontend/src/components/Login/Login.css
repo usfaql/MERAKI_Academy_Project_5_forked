@@ -9,6 +9,7 @@
 }
 .login-Page .Left-Image {
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -17,17 +18,24 @@
 }
 
 
-
+.continer-form-login{
+  width: 50%;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
 .login-Page .image {
   height: 90%;
 }
 .login-Page .Right-Inputs{
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 .login-Page .Title{
     margin-bottom: 50px;
@@ -54,7 +62,7 @@ justify-content: space-between;
     width: 100%;
     border: 0;
     font-size: x-large;
-    background-color: #A1E533;
+    background-color: #c6df9e;
     color : black;
     font-weight: bold;
 }
@@ -101,4 +109,11 @@ justify-content: space-between;
   .Password {
     text-align: left;
     font-size: large;
+  }
+
+  .button-login{
+    background-color: #A1E533;
+    border: 0;
+    padding: 8px;
+    border-radius: 6px;
   }
