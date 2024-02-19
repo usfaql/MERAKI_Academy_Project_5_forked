@@ -1,5 +1,5 @@
 .Register-Page {
-  height: 95.1vh;
+  height: calc(100vh - 68px);
   display: flex;
   background-color: #101010;
   justify-content: space-around;
@@ -8,6 +8,7 @@
 }
 .Left-Image {
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -17,8 +18,14 @@
 .image {
   height: 90%;
 }
+.right-input-contener{
+  display: flex;
+  width: 50%;
+  justify-content: center;
+}
 .Right-Inputs{
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -32,13 +39,16 @@
 }
 .FirstName-LastName {
   display: flex;
+  justify-content: space-between;
   gap: 20px;
 }
 .FirstName {
+  width: 47.5%;
   text-align: left;
   font-size: large;
 }
 .LastName {
+  width: 47.5%;
   text-align: left;
   font-size: large;
 }
@@ -140,9 +150,8 @@ justify-content: space-between;
     color: #000000;
 }
 .SuccessMessage {
-    padding-top: 3px;
     align-self: center;
-    border-radius: 10px;
+    border-radius: 4px;
     height: 60px;
     width: 100%;
     background-color: #A1E533;
@@ -151,8 +160,8 @@ justify-content: space-between;
   }
   
   .ErrorMessage {
-    padding-top: 3px;
-    border-radius: 10px;
+    padding: 5px;
+    border-radius: 4px;
     align-self: center;
   
     width: 100%;

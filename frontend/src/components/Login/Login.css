@@ -9,6 +9,7 @@
 }
 .login-Page .Left-Image {
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -17,17 +18,24 @@
 }
 
 
-
+.continer-form-login{
+  width: 50%;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
 .login-Page .image {
   height: 90%;
 }
 .login-Page .Right-Inputs{
   height: 100%;
+  width: 50%;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 .login-Page .Title{
     margin-bottom: 50px;
@@ -54,7 +62,7 @@ justify-content: space-between;
     width: 100%;
     border: 0;
     font-size: x-large;
-    background-color: #A1E533;
+    background-color: #c6df9e;
     color : black;
     font-weight: bold;
 }
@@ -73,27 +81,8 @@ justify-content: space-between;
   /* .img{
     height: 1000px;
   } */
-  .login-Page .SuccessMessage {
-    padding-top: 3px;
-    align-self: center;
-    border-radius: 10px;
-    height: 60px;
-    width: 100%;
-    background-color: #A1E533;
-    color: black;
-    text-align: center;
-  }
+
   
-  .login-Page .ErrorMessage {
-    padding-top: 3px;
-    border-radius: 10px;
-    align-self: center;
-  
-    width: 100%;
-    background-color: hsla(0, 100%, 50%, 0.402);
-    color: white;
-    text-align: center;
-  }
   .Email {
     text-align: left;
     font-size: large;
@@ -101,4 +90,33 @@ justify-content: space-between;
   .Password {
     text-align: left;
     font-size: large;
+  }
+
+  .button-login{
+    font-weight: bold;
+    font-size: x-large;
+    background-color: #A1E533;
+    border: 0;
+    padding: 8px;
+    border-radius: 6px;
+  }
+  .SuccessMessage {
+    align-self: center;
+    border-radius: 4px;
+    height: 60px;
+    width: 100%;
+    background-color: #A1E533;
+    color: black;
+    text-align: center;
+
+  }
+  
+  .ErrorMessage {
+    border-radius: 4px;
+    align-self: center;
+    padding: 5px;
+    width: 100%;
+    background-color: hsla(0, 100%, 50%, 0.402);
+    color: white;
+    text-align: center;
   }

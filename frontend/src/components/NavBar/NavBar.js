@@ -14,30 +14,33 @@ console.log("role",state.role);
   return (
     <div className='nav-bar'>
         <div>
-            <h2 style={{fontWeight:"bold",margin:"0"}}><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <a style={{color:"#A1E533"}}>FIT</a></a></h2>
+            <h2 style={{fontWeight:"bold",margin:"0"}}><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <span style={{color:"#A1E533"}}>FIT</span></a></h2>
         </div>
         <div>
           {state.isLoggedIn ?
-            <lu className="navbar-lu">
+            <ul className="navbar-lu">
                 <li className='nav-map'>Recipes</li>
                 <li className='nav-map'>Dashboard</li>
                 <li className='nav-map end'>Settings</li>
-            </lu>
+            </ul>
             :
-            <lu className="navbar-lu">
+            <ul className="navbar-lu">
                 <li className='nav-map'>Home</li>
                 <li className='nav-map'>Service</li>
                 <li className='nav-map'>About</li>
                 <li className='nav-map end'>Contact</li>
-            </lu>
+            </ul>
           }
         </div>
 
         <div>
-          {state.isLoggedIn? <lu style={{listStyle: "none" , maxWidth: "12px"}}><li>Yousef A.</li></lu>: <button onClick={()=>{
-            navigate('login')
-          }}  className='button' >Login</button>}
-        
+          {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", width:"97px", whiteSpace:"nowrap", overflow:"hidden"}}>
+            <li>Yousef A.</li></ul>
+            : 
+            <button className='button' onClick={()=>{
+              navigate('login')
+            }}>Login</button>
+            }
         </div>
     </div>
   )
