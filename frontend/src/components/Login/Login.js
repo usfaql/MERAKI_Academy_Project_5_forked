@@ -32,7 +32,7 @@ const Login = () => {
               password,
             }).then((result)=>{
               console.log("result.data",result.data);
-              dispatch(setLogin(result.data.token));
+              dispatch(setLogin(result.data));
               dispatch(setUserId(result.data.userId));
               setMessage("");
               localStorage.setItem("token",result.data.token);
