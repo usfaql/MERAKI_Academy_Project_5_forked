@@ -30,8 +30,6 @@ function GymHome() {
         }else{
             const gymBoxes = [];
             for (let i = 0; i < 3; i++) {
-              let randomMember = Math.floor(Math.random() * 50);
-              console.log(randomMember);
               gymBoxes.push(
               <Col key={1}>
               <Card linkStyle={{backgroundColor:"#A1E533"}}>
