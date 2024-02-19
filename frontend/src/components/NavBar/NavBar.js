@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 function NavBar() {
   const navigate = useNavigate();
+  const userInfo = localStorage.getItem("userInfo");
+  const covertUserInfoToJson = JSON.parse(userInfo);
   const state = useSelector((state)=>{
     return{
       isLoggedIn : state.auth.isLoggedIn
@@ -15,7 +17,7 @@ function NavBar() {
         <div>
             <h2 style={{fontWeight:"bold",margin:"0"}}><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <span style={{color:"#A1E533"}}>FIT</span></a></h2>
         </div>
-        <div>
+        <div style={{ display:"flex", justifyContent:"center"}}>
           {state.isLoggedIn ?
             <ul className="navbar-lu">
                 <li className='nav-map'>Recipes</li>
@@ -32,9 +34,10 @@ function NavBar() {
           }
         </div>
 
-        <div>
-          {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", width:"97px", whiteSpace:"nowrap", overflow:"hidden"}}>
-            <li>Yousef A.</li></ul>
+        <div style={{textAlign:"end"}}>
+          {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
+            <img style={{width:"48px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
+            <li>{covertUserInfoToJson.nameUser}</li></ul>
             : 
             <button className='button' onClick={()=>{
               navigate('login')

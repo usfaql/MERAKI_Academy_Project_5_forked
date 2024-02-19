@@ -5,8 +5,9 @@
 }
 .contener-navbar-home{
     user-select: none;
+    margin: 0 100px 20px 100px;
     display: flex;
-    
+    padding: 0;
     justify-content: center;
     list-style: none;
     color: #101010;

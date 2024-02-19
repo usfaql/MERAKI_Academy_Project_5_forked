@@ -37,6 +37,13 @@ const Login = () => {
               setMessage("");
               localStorage.setItem("token",result.data.token);
               localStorage.setItem("userId",result.data.userId);
+              localStorage.setItem("userInfo", JSON.stringify({
+                  nameUser : result.data.userInfo.firstname + " "+ result.data.userInfo.lastname,
+                  email : result.data.userInfo.email,
+                  gender : result.data.userInfo.gender,
+                  private : result.data.userInfo.private,
+                  image : result.data.userInfo.image
+                }));
               navigate('/home');
             }).catch((error)=>{
               //setMessage(error.response.data.message);
