@@ -37,7 +37,6 @@ const login = (req, res) => {
           if (response) {
             const payload = {
               userId: result.rows[0].id,
-              country: result.rows[0].country,
               role: result.rows[0].role_id,
             };
             const options = { expiresIn: "1d" };

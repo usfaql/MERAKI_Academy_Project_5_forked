@@ -1,14 +1,16 @@
 import React from 'react'
 import './style.css'
 import { useSelector } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 function NavBar() {
-
+const navigate=useNavigate()
   const state = useSelector((state)=>{
     return{
-      isLoggedIn : state.auth.isLoggedIn
+      isLoggedIn : state.auth.isLoggedIn,
+      role:state.auth.role
     }
   })
-
+console.log("role",state.role);
   return (
     <div className='nav-bar'>
         <div>
@@ -32,7 +34,9 @@ function NavBar() {
         </div>
 
         <div>
-          {state.isLoggedIn? <lu style={{listStyle: "none" , maxWidth: "12px"}}><li>Yousef A.</li></lu>: <a href='login' className='link-in-button'><button className='button' >Login</button></a>}
+          {state.isLoggedIn? <lu style={{listStyle: "none" , maxWidth: "12px"}}><li>Yousef A.</li></lu>: <button onClick={()=>{
+            navigate('login')
+          }}  className='button' >Login</button>}
         
         </div>
     </div>
