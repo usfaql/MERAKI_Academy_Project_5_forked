@@ -1,36 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import logoGym from '../../assets/image-gym.jpg';
-import PageItem from 'react-bootstrap/PageItem'
+import axios, { all } from 'axios';
+import { useSelector } from 'react-redux';
 
 function AllGymHome() {
-
+    const [allGym, setAllGym] = useState([]);
+    console.log(allGym);
+    const state = useSelector((state)=>{
+      return{
+      userId : state.auth.userId,
+      token : state.auth.token
+      }
+    })
+    const config = {
+      headers: { Authorization: `Bearer ${state.token}` }
+    }
+    useEffect(()=>{
+      axios.get('http://localhost:5000/gyms', config).then((result) => {
+        setAllGym(result.data.gym);
+      }).catch((err) => {
+        
+      });
+    },[])
     const generateGymBox = () => {
         const gymBoxes = [];
-      
-        for (let i = 0; i < 10; i++) {
-          let randomMember = Math.floor(Math.random() * 50);
+        {allGym.length !== 0 && allGym.map((e,i)=>{
           gymBoxes.push(
           <Col key={1}>
-          <Card style={{backgroundColor:"#A1E533"}}>
-            <Card.Img variant="top" className='image-gym-in-card' src={logoGym} />
+          <Card>
+            <Card.Img variant="top" className='image-gym-in-card' src={e.image} />
             <Card.Body>
-              <Card.Title style={{fontWeight:"bold"}}>Gym {i+1}</Card.Title>
+              <Card.Title style={{fontWeight:"bold"}}>{e.name}</Card.Title>
               <Card.Text className='text-card'>
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                {e.description}
               </Card.Text>
-              <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}}>Join</button>
+              <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}} onClick={()=>{
+                console.log(e);
+              }}>Join</button>
             </Card.Body>
           </Card>
         </Col>
         );
+        })
         }
         return <Row xs={1} md={5} className="g-2">{gymBoxes}</Row>
       };

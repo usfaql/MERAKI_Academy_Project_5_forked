@@ -22,7 +22,9 @@ console.log("role",state.role);
           {state.isLoggedIn ?
             <ul className="navbar-lu">
                 <li className='nav-map'>Recipes</li>
-                <li className='nav-map'>Dashboard</li>
+                <li className='nav-map' onClick={()=>{
+                  navigate("/home")
+                }}>Dashboard</li>
                 <li className='nav-map end'>Settings</li>
             </ul>
             :
