@@ -200,11 +200,11 @@ setAge(e.target.value)
           <span style={{cursor:"default"}}>
             Do you have account?
             <soan style={{ color: "#A1E533" ,cursor:"pointer"}} onClick={()=>{
-              navigate(-1);
+              navigate("/login");
             }}>Login Now</soan>
           </span>
         </div>
-        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
+        <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"}  style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
       </div>
       </div>
       
