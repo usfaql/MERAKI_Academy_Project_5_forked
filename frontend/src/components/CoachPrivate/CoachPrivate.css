@@ -131,6 +131,7 @@ fill: #6c3e3e;
     gap: 25px;
     padding-left: 20px;
     overflow: auto;
+    /* transform: scaleY(-1); */
   }
   .msg{
     display: flex;
@@ -140,6 +141,7 @@ fill: #6c3e3e;
     padding-bottom: 10px;
     padding-top: 10px;
     padding-right: 10px;
+    /* transform: scaleY(-1); */
     
   }
   .user-message{
