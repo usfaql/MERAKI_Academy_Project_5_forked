@@ -25,14 +25,14 @@ const Login = () => {
     const login = ()=>{
 
           if(!email || !password){
-            console.log("Conn't Send Empty Data");
+            setMessage("Conn't Send Empty Data")
           }else{
             axios.post("http://localhost:5000/users/login", {
               email,
               password,
             }).then((result)=>{
               console.log("result.data",result.data);
-              dispatch(setLogin(result.data.token));
+              dispatch(setLogin(result.data));
               dispatch(setUserId(result.data.userId));
               setMessage("");
               localStorage.setItem("token",result.data.token);
@@ -46,7 +46,8 @@ const Login = () => {
                 }));
               navigate('/home');
             }).catch((error)=>{
-              //setMessage(error.response.data.message);
+              setSuccess(false)
+              setMessage(error.response.data.message);
               console.log(error);
             })
           }
@@ -63,7 +64,7 @@ const Login = () => {
 
       <div className="Right-Inputs">
         <div className='continer-form-login'>
-        <h1>Login</h1>
+        <h1 className="Title">Login</h1>
         <div className="Email">
           <Form.Label>Email:</Form.Label>
           <Form.Control onChange={(e)=>{
@@ -91,8 +92,9 @@ const Login = () => {
           navigate("/register")
         }}>signup</span>
         </span>
-        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
-
+           <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"} style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
+    
+        
 
         </div>
 

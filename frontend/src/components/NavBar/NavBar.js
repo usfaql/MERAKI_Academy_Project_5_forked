@@ -1,17 +1,18 @@
 import React from 'react'
 import './style.css'
-import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useSelector } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 function NavBar() {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
   const state = useSelector((state)=>{
     return{
-      isLoggedIn : state.auth.isLoggedIn
+      isLoggedIn : state.auth.isLoggedIn,
+      role:state.auth.role
     }
   })
-
+console.log("role",state.role);
   return (
     <div className='nav-bar'>
         <div>
@@ -43,7 +44,6 @@ function NavBar() {
               navigate('login')
             }}>Login</button>
             }
-        
         </div>
     </div>
   )

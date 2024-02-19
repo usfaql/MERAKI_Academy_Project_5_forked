@@ -7,7 +7,7 @@ import Register from "./components/RegisterPage/Register";
 import NotFound from "./components/NotFound/NotFound";
 
 import Home from "./components/Home/Home";
-import CoachPrivate from "./components/CoachPrivate/CoachPrivate";
+import CoachPrivate from "./components/Home/CoachPrivate/CoachPrivate";
 import CreateGym from "./components/CreateGym/CreateGym";
 
 function App() {
