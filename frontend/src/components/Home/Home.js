@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import './style.css';
 import Pagination from 'react-bootstrap/Pagination';
 import GymHome from './GymHome/GymHome';
+
 import PrivateHome from './PrivateHome/PrivateHome';
+
+
 import AllGymHome from './AllGymHome/AllGymHome';
 function Home() {
-  const [selected , setSelected] = useState('allgym');
+  const [selected , setSelected] = useState('gym');
   const items = [];
   const [PageNumber, setPageNumber] = useState(1); 
   for (let number = 1; number <= 5; number++) {

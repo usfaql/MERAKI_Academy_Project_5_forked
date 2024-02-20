@@ -25,21 +25,29 @@ const Login = () => {
     const login = ()=>{
 
           if(!email || !password){
-            console.log("Conn't Send Empty Data");
+            setMessage("Conn't Send Empty Data")
           }else{
             axios.post("http://localhost:5000/users/login", {
               email,
               password,
             }).then((result)=>{
               console.log("result.data",result.data);
-              dispatch(setLogin(result.data.token));
+              dispatch(setLogin(result.data));
               dispatch(setUserId(result.data.userId));
               setMessage("");
               localStorage.setItem("token",result.data.token);
               localStorage.setItem("userId",result.data.userId);
+              localStorage.setItem("userInfo", JSON.stringify({
+                  nameUser : result.data.userInfo.firstname + " "+ result.data.userInfo.lastname,
+                  email : result.data.userInfo.email,
+                  gender : result.data.userInfo.gender,
+                  private : result.data.userInfo.private,
+                  image : result.data.userInfo.image
+                }));
               navigate('/home');
             }).catch((error)=>{
-              //setMessage(error.response.data.message);
+              setSuccess(false)
+              setMessage(error.response.data.message);
               console.log(error);
             })
           }
@@ -55,11 +63,12 @@ const Login = () => {
       </div>
 
       <div className="Right-Inputs">
- <h1>Login</h1>
- <div className="Email">
+        <div className='continer-form-login'>
+        <h1 className="Title">Login</h1>
+        <div className="Email">
           <Form.Label>Email:</Form.Label>
           <Form.Control onChange={(e)=>{
-setEmail(e.target.value)
+            setEmail(e.target.value)
           }}
             type="email"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
@@ -68,22 +77,26 @@ setEmail(e.target.value)
         <div className="Password">
           <Form.Label>Password:</Form.Label>
           <Form.Control onChange={(e)=>{
-setPassword(e.target.value)
+            setPassword(e.target.value)
           }}
             type="password"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
           />
         </div>
-      <br/>
-        <Button variant="success"onClick={()=>{
+        <button className="button-login" onClick={()=>{
         login()
-      }} >Login</Button>
+      }} >Login</button>
 
-      <small>
-      If you don't have an account   <a>signup</a>
-        </small>
-        {success?message&&<div className="SuccessMessage">{message}</div>:message&&<div className="ErrorMessage">{message}</div>}
+      <span style={{cursor:"default" , textAlign:"start"}}>
+        don't have an account?  <span style={{color:"#A1E533" , cursor:"pointer", textAlign:"start34"}} onClick={()=>{
+          navigate("/register")
+        }}>signup</span>
+        </span>
+           <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"} style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
+    
+        
 
+        </div>
 
       </div>
       

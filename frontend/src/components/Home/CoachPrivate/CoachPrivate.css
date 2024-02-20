@@ -72,6 +72,10 @@ align-items: center;
   .My-Private svg:hover{
 fill: #6c3e3e;
   }
+  .img-title svg:hover{
+    fill:#575757;
+    cursor: pointer;
+  }
   .Right-Side{
     width: 75%;
     height: 100%;
@@ -131,6 +135,7 @@ fill: #6c3e3e;
     gap: 25px;
     padding-left: 20px;
     overflow: auto;
+    /* transform: scaleY(-1); */
   }
   .msg{
     display: flex;
@@ -140,6 +145,7 @@ fill: #6c3e3e;
     padding-bottom: 10px;
     padding-top: 10px;
     padding-right: 10px;
+    /* transform: scaleY(-1); */
     
   }
   .user-message{
