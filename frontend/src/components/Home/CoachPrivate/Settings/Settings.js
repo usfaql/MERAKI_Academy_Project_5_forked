@@ -1,5 +1,7 @@
 import React ,{ useState } from 'react'
 import "./Settings.css"
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 const Settings = () => {
     const [arr, setarr] = useState(["Lite","Gold","Premium"])
   return (
@@ -20,27 +22,30 @@ const Settings = () => {
             <div className='Plan-Title'>
                 {ele} Plan
             </div>
-            <div className='Description-Title'>
-                Description Plan {ele}
-            </div>
             <div className='Description-Input'>
-                <textarea
-                type='text'
-                placeholder='Input Description here'
-                />
+            <Form.Label>Description Plan {ele}</Form.Label>
+      <Form.Control
+        type="text"/>
             </div>
             <div className='Sub-Duration'>
                 <p>Subscription Duration:</p>
-                <input type='number'/>
-                <p>Month</p>
+                <div className='month'>       
+      <Form.Control
+        type="number"/>
+                <p>Month</p></div>
+               
             </div>
             <div className='Price'>
                 <p>Total Price:</p>
-                <input type='number'/>
+                <div className='num-price'>
+                <Form.Control
+        type="number"/>
                 <p>$</p>
+                </div>
+                
             </div>
             <div className='Save-Btn'>
-                <button>Save Changes</button>
+                <Button>Save Changes</Button>
             </div>
         </div>
         )}

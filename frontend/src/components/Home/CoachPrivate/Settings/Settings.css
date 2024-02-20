@@ -35,15 +35,19 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    /* justify-content: space-between; */
+}
+.Description-Input{
+    text-align: left;
 }
 .Plan-Title{
     font-weight: bold;
     font-size:xx-large ;
 }
-.Description-Title{
-text-align: left;
+.Sub-Duration,.Price{
+    display: flex;
+    justify-content: space-between;
 }
-.Description-Input textarea{
-    width: 100%;
-    
+.month,.num-price {
+    display: flex;
 }
