@@ -59,8 +59,9 @@ gap: 25px;
     justify-content: space-between;
 }
 .month,.num-price {
-    width: 100%;
+    width: 30%;
     display: flex;
+    justify-content: flex-end;
 }
 .Save-Btn Button{
     border: 0;

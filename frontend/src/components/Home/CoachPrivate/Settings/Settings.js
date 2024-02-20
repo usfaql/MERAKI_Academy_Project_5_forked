@@ -46,6 +46,23 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
+  const disActivePrivate = () => {
+    axios
+      .get(`http://localhost:5000/coachs/private/disactive`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        dispatch(setActivePrivate("0"));
+        setSuccess(result.data.success);
+        setMessage(result.data.message);
+      })
+      .catch((error) => {
+        setSuccess(false);
+        setMessage(error.response.data.message);
+      });
+  };
   useEffect(() => {
     getAllPlans();
   }, []);
@@ -80,32 +97,16 @@ const Settings = () => {
       setAbeled(false);
     }
   };
-  const disActivePrivate = () => {
-    axios
-      .put(`http://localhost:5000/coachs/private/disactive`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        dispatch(setActivePrivate(result.data.result.private));
-        setSuccess(result.data.success);
-        setMessage(result.data.message);
-      })
-      .catch((error) => {
-        setSuccess(false);
-        setMessage(error.response.data.message);
-      });
-  };
+
   const activePrivateFun = () => {
     axios
-      .put(`http://localhost:5000/coachs/private`, {
+      .get(`http://localhost:5000/coachs/private`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((result) => {
-        dispatch(setActivePrivate(result.data.result.private));
+       dispatch(setActivePrivate("1"));
         setSuccess(result.data.success);
         setMessage(result.data.message);
       })
@@ -125,6 +126,7 @@ const Settings = () => {
           <h1>Open Private</h1>
           <div className="Toggel">
             <Form.Check
+            checked={activePrivate==="1"?true:false}
               onChange={(e) => {
                 console.log(e.target.checked);
                 e.target.checked?activePrivateFun():disActivePrivate()
@@ -156,12 +158,12 @@ const Settings = () => {
                   />
                 </div>
                 <div className="Sub-Duration">
-                  <p style={{ fontSize: "larger" }}>Subscription Duration:</p>
+                  <p style={{ fontSize: "larger",width:"70%" ,textAlign:"left"}}>Subscription Duration:</p>
                   <div className="month">
                     <Form.Control
                       style={{
-                        height: "60%",
-                        width: "25%",
+                        height: "80%",
+                        width: "50%",
                         backgroundColor: "#1e1e1e",
                         border: "0",
                         color: "white",
@@ -179,8 +181,8 @@ const Settings = () => {
                   <div className="num-price">
                     <Form.Control
                       style={{
-                        height: "60%",
-                        width: "25%",
+                        height: "80%",
+                        width: "50%",
                         backgroundColor: "#1e1e1e",
                         border: "0",
                         color: "white",
