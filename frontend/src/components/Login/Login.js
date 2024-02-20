@@ -4,7 +4,7 @@ import './Login.css'
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 import { UseDispatch,useDispatch,useSelector } from 'react-redux'
-import { setLogin,setUserId } from '../Redux/Reducers/Auth/index';
+import { setLogin,setUserId, setActivePrivate } from '../Redux/Reducers/Auth/index';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import logo from '../assets/pngwing.com.png'
@@ -34,6 +34,7 @@ const Login = () => {
               console.log("result.data",result.data);
               dispatch(setLogin(result.data));
               dispatch(setUserId(result.data.userId));
+              dispatch(setActivePrivate(result.data.private));
               setMessage("");
               localStorage.setItem("token",result.data.token);
               localStorage.setItem("userId",result.data.userId);

@@ -12,7 +12,6 @@ function NavBar() {
       role:state.auth.role
     }
   })
-console.log("role",state.role);
   return (
     <div className='nav-bar'>
         <div>

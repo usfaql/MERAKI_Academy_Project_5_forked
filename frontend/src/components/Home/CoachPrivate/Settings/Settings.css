@@ -59,8 +59,9 @@ gap: 25px;
     justify-content: space-between;
 }
 .month,.num-price {
-    width: 100%;
+    width: 30%;
     display: flex;
+    justify-content: flex-end;
 }
 .Save-Btn Button{
     border: 0;
@@ -69,3 +70,35 @@ gap: 25px;
     color : black;
     font-weight: bold;
 }
+.Save-Btn Button:hover{
+    background-color: #7aad28;
+    color: #000000;
+}
+.Save-Btn Button:disabled{
+    background-color: #7aad28;
+    color: #000000;
+}
+.SuccessMessage {
+    margin-top: 10px;
+    align-self: center;
+    border-radius: 4px;
+    height: 60px;
+    width: 40%;
+    background-color: #A1E533;
+    color: black;
+    text-align: center;
+    align-items: center;
+
+  }
+  
+  .ErrorMessage {
+    margin-top: 10px;
+    border-radius: 4px;
+    align-self: center;
+    padding: 5px;
+    width: 40%;
+    background-color: hsla(0, 100%, 50%, 0.402);
+    color: white;
+    text-align: center;
+    align-items: center;
+  }
