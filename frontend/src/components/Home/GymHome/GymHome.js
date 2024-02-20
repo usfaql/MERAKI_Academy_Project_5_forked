@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import logoGym from '../../assets/image-gym.jpg';
 import './style.css'
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 function GymHome() {
+    const [myGym, setMyGym] = useState([]);
+    const state = useSelector((state)=>{
+      return{
+      userId : state.auth.userId,
+      token : state.auth.token
+      }
+    })
+    const config = {
+      headers: { Authorization: `Bearer ${state.token}` }
+    }
+    useEffect(()=>{
+      axios.get(`http://localhost:5000/gyms/:${state.userId}`, config).then((result) => {
+        setMyGym(result.data.gym);
+      }).catch((err) => {
 
+      });
+    },[])
     const generateGymBox = (gymUser) => {
 
         gymUser = ["k"];
