@@ -17,6 +17,24 @@ const activePrivate=(req,res)=>{
     });
   });
 }
+const disActivePrivate=(req,res)=>{
+  const coach_id=req.token.userId
+  const value=[coach_id]
+  const query=`UPDATE users SET private=0 WHERE id=$1 RETURNING *;`
+  pool.query(query,value).then((result)=>{
+    res.status(201).json({
+      success:true,
+      message:`You'r Private Is DisActive Now`,
+      result :result.rows
+    })
+  })   .catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      err
+    });
+  });
+}
 const getAllCoachsAreOpenPrivate=(req,res)=>{ ///////////////////////
   const query=`SELECT * FROM users WHERE private=1`
   pool.query(query).then((result)=>{
@@ -241,6 +259,7 @@ module.exports = {
   getAllPlanByCoachId,
   getAllUserByPlanId,
   activePrivate,
+  disActivePrivate,
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId
 };

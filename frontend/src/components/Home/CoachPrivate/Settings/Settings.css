@@ -78,22 +78,26 @@ gap: 25px;
     color: #000000;
 }
 .SuccessMessage {
+    margin-top: 10px;
     align-self: center;
     border-radius: 4px;
     height: 60px;
-    width: 100%;
+    width: 40%;
     background-color: #A1E533;
     color: black;
     text-align: center;
+    align-items: center;
 
   }
   
   .ErrorMessage {
+    margin-top: 10px;
     border-radius: 4px;
     align-self: center;
     padding: 5px;
-    width: 100%;
+    width: 40%;
     background-color: hsla(0, 100%, 50%, 0.402);
     color: white;
     text-align: center;
+    align-items: center;
   }

@@ -7,6 +7,7 @@ const {
   getAllPlanByCoachId,
   getAllUserByPlanId,
   activePrivate,
+  disActivePrivate,
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId
 } = require("../controllers/coachs");
@@ -18,5 +19,6 @@ coachRouter.get('/user',authentication,getAllUserByCoachId)
 coachRouter.put("/user/remove", authentication, removeUserFromPrivate);
 coachRouter.get("/:idplan/user", authentication, getAllUserByPlanId);
 coachRouter.put("/private", authentication, activePrivate);
+coachRouter.put("/private/disactive",authentication,disActivePrivate)
 coachRouter.get("/openedprivate", authentication, getAllCoachsAreOpenPrivate);
 module.exports = coachRouter;
