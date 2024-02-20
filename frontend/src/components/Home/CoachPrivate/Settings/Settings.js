@@ -18,7 +18,7 @@ const Settings = () => {
       const [message, setMessage] = useState("")
   const [arr, setarr] = useState(["Lite", "Gold", "Premium"]);
   const [abeled, setAbeled] = useState(false);
-  const [name, setName] = useState("");
+//   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
   const [numOfMonth, setNumOfMonth] = useState(null);
@@ -41,14 +41,15 @@ const Settings = () => {
 getAllPlans()
   }, [])
 
-  const createNewPlan=()=>{
+  const createNewPlan=(name)=>{
     console.log(name);
     setAbeled(true)
-    axios.post(`http://localhost:5000/coachs/plan`,{name,description,price,numOfMonth},{headers:{
+    if(name && description && price&& numOfMonth){
+          axios.post(`http://localhost:5000/coachs/plan`,{name:name,description,price,numOfMonth},{headers:{
         Authorization: `Bearer ${token}`
     }}).then((result)=>{
         dispatch(addNewPlan(result.data.plan))
-        setSuccess(true)
+        setSuccess(result.data.success)
         setMessage(result.data.message)
         setAbeled(false)
     }).catch((error)=>{
@@ -56,6 +57,12 @@ getAllPlans()
         setMessage(error.response.data.message)
         setAbeled(false)
     })
+    }else{
+        setSuccess(false)
+        setMessage("Please Fill All Field")
+        setAbeled(false)
+    }
+  
   }
   
   return (
@@ -131,9 +138,7 @@ getAllPlans()
                 </div>
                 <div className="Save-Btn">
                   <Button disabled={abeled} onClick={()=>{
-                    console.log(ele);
-                    setName(ele)
-                    createNewPlan()
+                    createNewPlan(ele)
                   }}>Save Changes</Button>
                 </div>
               </div>
