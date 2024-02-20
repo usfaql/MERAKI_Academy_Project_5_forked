@@ -42,16 +42,19 @@ getAllPlans()
   }, [])
 
   const createNewPlan=()=>{
+    console.log(name);
     setAbeled(true)
     axios.post(`http://localhost:5000/coachs/plan`,{name,description,price,numOfMonth},{headers:{
         Authorization: `Bearer ${token}`
     }}).then((result)=>{
         dispatch(addNewPlan(result.data.plan))
-        setAbeled(true)
+        setSuccess(true)
+        setMessage(result.data.message)
+        setAbeled(false)
     }).catch((error)=>{
         setSuccess(false)
         setMessage(error.response.data.message)
-        setAbeled(true)
+        setAbeled(false)
     })
   }
   
@@ -128,7 +131,9 @@ getAllPlans()
                 </div>
                 <div className="Save-Btn">
                   <Button disabled={abeled} onClick={()=>{
+                    console.log(ele);
                     setName(ele)
+                    createNewPlan()
                   }}>Save Changes</Button>
                 </div>
               </div>
@@ -136,6 +141,7 @@ getAllPlans()
           ))}
         </div>
       </div>
+      <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"}  style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
     </div>
   );
 };
