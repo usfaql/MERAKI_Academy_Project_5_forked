@@ -1,0 +1,49 @@
+.setting-Page{
+    display: flex;
+    flex-direction: column;
+    height:calc(100vh - 93px);
+    align-items: center;
+    /* gap: 150px; */
+    margin-top: 25px;
+    /* justify-content: center; */
+}
+.Items{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    height: 75%;
+    width: 90%;
+    background-color: #464646;
+    border-radius: 16px;
+}
+.Open-Private{
+
+}
+.Plans{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px 0 10px;
+    height: 100%;
+    align-items: center;
+
+}
+.Plan{
+    height: 90%;
+    background-color: #232222;
+    padding: 10px;
+    width: 30%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+.Plan-Title{
+    font-weight: bold;
+    font-size:xx-large ;
+}
+.Description-Title{
+text-align: left;
+}
+.Description-Input textarea{
+    width: 100%;
+    
+}
