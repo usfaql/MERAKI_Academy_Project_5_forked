@@ -25,7 +25,7 @@ const disActivePrivate=(req,res)=>{
     res.status(201).json({
       success:true,
       message:`You'r Private Is DisActive Now`,
-      result :result.rows
+      result :result.rows[0]
     })
   })   .catch((err) => {
     res.status(500).json({
