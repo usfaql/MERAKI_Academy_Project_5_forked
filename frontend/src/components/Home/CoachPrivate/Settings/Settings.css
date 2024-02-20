@@ -3,11 +3,10 @@
     flex-direction: column;
     height:calc(100vh - 93px);
     align-items: center;
-    /* gap: 150px; */
     margin-top: 25px;
-    /* justify-content: center; */
 }
 .Items{
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
     justify-content:center;
@@ -17,7 +16,10 @@
     border-radius: 16px;
 }
 .Open-Private{
-
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 25px;
 }
 .Plans{
     display: flex;

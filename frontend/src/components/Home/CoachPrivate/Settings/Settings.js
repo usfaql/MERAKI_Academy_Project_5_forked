@@ -13,7 +13,9 @@ const Settings = () => {
          <div className='Open-Private'>
         <h1>Open Private</h1>
         <div className='Toggel'>
-
+        <Form.Check 
+        type="switch"
+      />
         </div>
     </div>
     <div className='Plans'>
