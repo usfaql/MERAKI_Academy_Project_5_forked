@@ -5,12 +5,11 @@ import Login from "./components/Login/Login";
 import NavBar from "./components/NavBar/NavBar";
 import Register from "./components/RegisterPage/Register";
 import NotFound from "./components/NotFound/NotFound";
-import Private_user from "./components/PrivateUser/Private_user";
 
 import Home from "./components/Home/Home";
 import CoachPrivate from "./components/CoachPrivate/CoachPrivate";
 import CreateGym from "./components/CreateGym/CreateGym";
-
+import ProfileSetting from "./components/ProfileSetting/Profile"
 function App() {
   return (
     <div className="App">
@@ -23,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/gym/create" element={<CreateGym/>}/>
         <Route path="/coach/private" element={<CoachPrivate/>}/>
+        <Route path="/Profile" element={<ProfileSetting/>}/>
       </Routes>
     </div>
   );
