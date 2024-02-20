@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 
 function AllGymHome() {
     const [allGym, setAllGym] = useState([]);
-    console.log(allGym);
     const state = useSelector((state)=>{
       return{
       userId : state.auth.userId,

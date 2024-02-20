@@ -118,7 +118,23 @@ const addNewUserInGym = (req,res)=>{
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
     const providerS = [userId, gymId, planId, roomId];
 
-    pool.query(`SELECT * FROM gym_user WHERE gym_id = $2`, providerS).then((result) => {
+    pool.query(`SELECT * FROM gym_user WHERE gym_id = $1`, [gymId]).then((result) => {
+        console.log(result);
+        if(result.rows.length === 0){
+            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+                res.status(201).json({
+                    success : true,
+                    message : "User Add Successfully In Gym",
+                    result : result.rows
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    success : false,
+                    message : `Server error`,
+                    error : err.message
+                });
+            });
+        }else
         if(result.rows.length >= 50){
             res.status(201).json({
                 success : true,
@@ -185,6 +201,22 @@ const getAllUserInGym = (req,res)=>{
     });
 }
 
+const getAllGymByUserId = async (req,res) =>{
+    const {userId} = req.params;
+    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1`[userId]).then((result) => {
+        res.status(200).json({
+            success : true,
+            message :`All gyms in which the user is joined => ${userId}`,
+            gyms : result.rows
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    });
+}
 const deleteUserInGym = async(req,res)=>{
     const userId = req.token.userId;
     const {gymId} = req.body;
@@ -205,6 +237,7 @@ const deleteUserInGym = async(req,res)=>{
         });
     });
 }
+
 
 const addNewCoachInGym = (req,res) =>{
     const coachId = req.token.userId;
@@ -317,6 +350,7 @@ module.exports = {
     createGym,
     addNewCoachInGym,
     addNewUserInGym,
+    getAllGymByUserId,
     getAllGym,
     getAllUserInGym,
     getAllCoachInGym,
