@@ -69,3 +69,11 @@ gap: 25px;
     color : black;
     font-weight: bold;
 }
+.Save-Btn Button:hover{
+    background-color: #7aad28;
+    color: #000000;
+}
+.Save-Btn Button:disabled{
+    background-color: #7aad28;
+    color: #000000;
+}

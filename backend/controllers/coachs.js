@@ -56,7 +56,7 @@ const createNewPlane = (req, res) => {
       res.status(201).json({
         success: true,
         message: "Plane created successfully",
-        Plan: result.rows,
+        Plan: result.rows[0],
       });
     })
     .catch((err) => {
