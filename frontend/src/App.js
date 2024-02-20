@@ -9,6 +9,7 @@ import NotFound from "./components/NotFound/NotFound";
 import Home from "./components/Home/Home";
 import CoachPrivate from "./components/Home/CoachPrivate/CoachPrivate";
 import CreateGym from "./components/CreateGym/CreateGym";
+import Settings from "./components/Home/CoachPrivate/Settings/Settings";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/gym/create" element={<CreateGym/>}/>
         <Route path="/coach/private" element={<CoachPrivate/>}/>
+       <Route path="/coach/private/setting" element={<Settings/>}/>
       </Routes>
     </div>
   );
