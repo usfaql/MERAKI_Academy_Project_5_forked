@@ -38,7 +38,6 @@ const login = (req, res) => {
             const payload = {
               userId: result.rows[0].id,
               role: result.rows[0].role_id,
-              private:result.rows[0].private,
             };
             const options = { expiresIn: "1d" };
             const secret = process.env.SECRET;
@@ -50,6 +49,7 @@ const login = (req, res) => {
                 message: `Valid login credentials`,
                 userId:result.rows[0].id,
                 private:result.rows[0].private
+                userInfo : result.rows[0]
               });
             } else {
               throw Error;
