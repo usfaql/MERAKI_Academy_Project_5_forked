@@ -22,31 +22,38 @@ const Settings = () => {
             <div className='Plan-Title'>
                 {ele} Plan
             </div>
-            <div className='Description-Input'>
+            <div className='inputs'>
+                 <div className='Description-Input'>
             <Form.Label>Description Plan {ele}</Form.Label>
       <Form.Control
-        type="text"/>
+      style={{height:"100%",backgroundColor:"#1e1e1e",border:"0",color:"white"}}
+      as="textarea" rows={3}/>
             </div>
             <div className='Sub-Duration'>
-                <p>Subscription Duration:</p>
+                <p style={{fontSize:"larger"}}>Subscription Duration:</p>
                 <div className='month'>       
       <Form.Control
+      style={{height:"60%",width:"25%",backgroundColor:"#1e1e1e",border:"0",color:"white"}}
         type="number"/>
-                <p>Month</p></div>
+                <p style={{fontSize:"larger"}}>Month</p></div>
                
             </div>
             <div className='Price'>
-                <p>Total Price:</p>
+                <p style={{fontSize:"larger"}}>Total Price:</p>
                 <div className='num-price'>
                 <Form.Control
+                style={{height:"60%",width:"25%",backgroundColor:"#1e1e1e",border:"0",color:"white"}}
         type="number"/>
-                <p>$</p>
+                <p style={{fontSize:"x-large"}}>$</p>
                 </div>
                 
             </div>
             <div className='Save-Btn'>
                 <Button>Save Changes</Button>
             </div>
+            </div>
+               
+           
         </div>
         )}
         

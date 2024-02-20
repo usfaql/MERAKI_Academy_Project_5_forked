@@ -37,17 +37,33 @@
     flex-direction: column;
     /* justify-content: space-between; */
 }
+.inputs{
+    height: 90% ;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 .Description-Input{
     text-align: left;
+    height: 25%;
 }
 .Plan-Title{
     font-weight: bold;
     font-size:xx-large ;
 }
 .Sub-Duration,.Price{
+    width: 100%;
     display: flex;
     justify-content: space-between;
 }
 .month,.num-price {
+    width: 100%;
     display: flex;
+}
+.Save-Btn Button{
+    border: 0;
+    font-size: large;
+    background-color: #A1E533;
+    color : black;
+    font-weight: bold;
 }
