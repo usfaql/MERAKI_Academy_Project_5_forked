@@ -17,13 +17,37 @@ const {token,userId,users}=useSelector((state)=>{
 }
  
 })
+const removeUserFromPrivate=(user_id,coach_id)=>{
+  axios.put(`http://localhost:5000/coachs/user/remove`,{user_id:user_id,coach_id:coach_id},{
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((result)=>{
+    console.log(result);
+  }).catch((error)=>{
+    console.log(error);
+  })
+}
   const getAllUsers=()=>{
+    // console.log(token);
+    // console.log(new Date());
+    // if(new Date()>new Date("2024-03-13T18:35:32.290Z")){
+    //   console.log("ok");
+    // }
     axios.get(`http://localhost:5000/coachs/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((result)=>{
-      console.log(result);
+      if(result.data.success){
+        result.data.users.map((ele,i)=>{
+          if(new Date() >= new Date(ele.endsub)){
+            removeUserFromPrivate(ele.user_id,ele.coach_id)
+          }
+        })
+        const newUserArr= result.data.users.filter
+      }
+      // dispatch(setUsers(result.data.users))
     }).catch((err)=>{
       console.log(err);
     })
