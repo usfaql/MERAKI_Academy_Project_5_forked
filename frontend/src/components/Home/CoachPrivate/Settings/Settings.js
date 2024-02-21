@@ -11,7 +11,7 @@ import axios from "axios";
 import { setActivePrivate } from "../../../Redux/Reducers/Auth";
 const Settings = () => {
   const dispatch = useDispatch();
-  const { token, userId, activePrivate } = useSelector((state) => {
+  const { token, userId, activePrivate,plans } = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
@@ -115,7 +115,7 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
-  console.log(activePrivate, "sksskks");
+console.log(plans);
   return (
     <div className="setting-Page">
       <div className="Page-Title">
@@ -123,9 +123,10 @@ const Settings = () => {
       </div>
       <div className="Items">
         <div className="Open-Private">
-          <h1>Open Private</h1>
-          <div className="Toggel">
-            <Form.Check
+          <h1 className="open">Open Private</h1>
+        <div className="toggle">
+            <Form.Check className="form-check-input form-switch"
+            // style={{backgroundColor:"green"}}
             checked={activePrivate==="1"?true:false}
               onChange={(e) => {
                 console.log(e.target.checked);
@@ -134,7 +135,7 @@ const Settings = () => {
               }}
               type="switch"
             />
-          </div>
+       </div>
         </div>
         <div className="Plans">
           {arr.map((ele, i) => (
