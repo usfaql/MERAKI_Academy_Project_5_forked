@@ -1,7 +1,7 @@
 .setting-Page{
     display: flex;
     flex-direction: column;
-    height:calc(100vh - 93px);
+    height:calc(100vh - 94px);
     align-items: center;
     margin-top: 25px;
 }
