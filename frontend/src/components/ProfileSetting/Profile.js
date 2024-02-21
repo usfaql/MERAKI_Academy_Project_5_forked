@@ -10,7 +10,17 @@ import "./Profile.css";
 import axios from "axios";
 
 const Profile = () => {
+
+  const [image, setImage] = useState("");
   const [userinfo, setUserInfo] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [status, setStatus] = useState(false);
+  const [goal, setGoal] = useState('');
+
   const [message, setMessage] = useState("");
 
   const dispatch = useDispatch();
@@ -26,7 +36,7 @@ const Profile = () => {
   }, []);
   const getUserInfoByUserId = () => {
     axios
-      .get(`http://localhost:5000/users/info/${state.userId}`, {
+      .get(`http://localhost:5001/users/info/${state.userId}`, {
         headers: {
           Authorization: `Bearer ${state.token}`,
         },
@@ -41,65 +51,92 @@ const Profile = () => {
       });
   };
 
-  // const updateArticle = async (id) => {
-  //   try {
-  //     await axios.put(`http://localhost:5000/users/info/${id}`, {
-  //       title,
-  //       description,
-  //     });
-  //     setUserInfo({id, title, description});
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const updateUserInfo = async () => {
+    try {
+      const result =await axios.put(`http://localhost:5001/users/info/${state.userId}`, {
+        
+        image , 
+        weight,
+        height,
+        goal
 
+      },
+      {headers: {
+        Authorization: `Bearer ${state.token}`,
+      }});
+
+      setUserInfo({...userinfo,...result})//
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+console.log(userinfo.image);
   return (
     <div className="profile">
+      <div className="prifile-title">
+                <h1 style={{ border: "0" ,}}>profile Info</h1>
+              </div>
       {userinfo && (
         <div className="profile_form">
-
+              
           <div className="profile_img">
-          <img src={userinfo.image} alt="profile img" />
+          <img src={userinfo.image} alt="profile img"   
+          />
+          <input type="file" onChange={(e)=>{
+            setImage(e.target.value)
+            console.log(e.target.files[0]);
+          }} />
           </div>
-           <Form>
+           <Form style={{width:"50%"}}>
       <Row className="mb-3">
-        <Form.Group as={Col} controlId="formGridEmail"  >
-          <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" placeholder="first name" value={userinfo.firstname} />
+        <Form.Group as={Col} controlId="formGridEmail" style={{textAlign:"start"}}  >
+          <Form.Label style={{color:"white",fontSize:"18px"}}>First Name:</Form.Label>
+          <Form.Control type="text" placeholder="first name" value={userinfo.firstname}style={{  border: "0", color: "#272727"}} />
         </Form.Group>
 
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control type="text" placeholder="last name"  value={userinfo.lastname} />
+        <Form.Group as={Col} controlId="formGridPassword" style={{textAlign:"start"}}>
+          <Form.Label style={{color:"white",fontSize:"18px"}}>Last Name:</Form.Label>
+          <Form.Control type="text" placeholder="last name"  value={userinfo.lastname}   style={{ border: "0", color: "#272727"}} />
         </Form.Group>
       </Row>
 
-      <Form.Group className="mb-3" controlId="formGridAddress1">
-        <Form.Label>email</Form.Label>
-        <Form.Control placeholder="email"  value={userinfo.email} />
+      <Form.Group className="mb-3" controlId="formGridAddress1" style={{textAlign:"start"}}>
+        <Form.Label style={{color:"white",fontSize:"18px"}}>email:</Form.Label>
+        <Form.Control placeholder="email"  value={userinfo.email}  style={{ border: "0",color: "#272727"}} />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formGridAddress2">
-        <Form.Label>your goals</Form.Label>
-        <Form.Control placeholder="Apartment, studio, or floor"   value={userinfo.goal}/>
+      <Form.Group className="mb-3" controlId="formGridAddress2" style={{textAlign:"start"}}>
+        <Form.Label style={{color:"white",fontSize:"18px"}}>your goals:</Form.Label>
+        <Form.Control defaultValue={userinfo.goal}    onChange={(e)=>{
+            setGoal(e.target.value)
+            console.log(e.target.value);
+          }}  style={{  border: "0", color: "#272727"}}/>
       </Form.Group>
 
       <Row className="mb-3">
-        <Form.Group as={Col} controlId="formGridCity">
-          <Form.Label>height</Form.Label>
-          <Form.Control  value={userinfo.height} type="number" />
+        <Form.Group as={Col} controlId="formGridCity" style={{textAlign:"start"}}>
+          <Form.Label style={{color:"white",fontSize:"18px"}}>height:</Form.Label>
+          <Form.Control  defaultValue={userinfo.height} type="number"   onChange={(e)=>{
+            setHeight(e.target.value)
+          }} style={{border: "0",color: "#272727"}}/>
         </Form.Group>
 
-        <Form.Group as={Col} controlId="formGridZip">
-          <Form.Label>weight</Form.Label>
-          <Form.Control  value={userinfo.weight} type="number" />
+        <Form.Group as={Col} controlId="formGridZip" style={{textAlign:"start"}}>
+          <Form.Label style={{color:"white",fontSize:"18px"}}>weight:</Form.Label>
+          <Form.Control  defaultValue={userinfo.weight} type="number"  onChange={(e)=>{
+            setWeight(e.target.value)
+          }}  style={{border: "0", color: "#272727"}}/>
         </Form.Group>
       </Row>
 
        
 
-      <Button  type="submit">
-        Submit
+      <Button  style={{backgroundColor :"#A1E533",border:"0", color:"black"}} type="submit" onClick={(e)=>{
+        e.preventDefault()
+        updateUserInfo()
+      }}>
+        save change
       </Button>
     </Form>
 
@@ -114,36 +151,3 @@ const Profile = () => {
 
 export default Profile;
 
-{/* <h1 className="header">profile info</h1>
-      <div className="profile_user">
-        <div className="profile_img">
-          <img src="" alt="profile-img" />
-          <button className="img-button">change image</button>
-        </div>
-        <div class="grid-container">
-          <div class="grid-item">
-            <input placeholder="first name" onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-          <div class="grid-item">
-            <input placeholder="last name " onChange={() => {}} />
-          </div>
-        </div>
-      </div> */}
