@@ -5,9 +5,12 @@ import Row from 'react-bootstrap/Row';
 import logoGym from '../../assets/image-gym.jpg';
 import './style.css'
 import { useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 function GymHome() {
+    const navigate = useNavigate();
     const [myGym, setMyGym] = useState([]);
+
     const state = useSelector((state)=>{
       return{
       userId : state.auth.userId,
@@ -18,61 +21,38 @@ function GymHome() {
       headers: { Authorization: `Bearer ${state.token}` }
     }
     useEffect(()=>{
-      axios.get(`http://localhost:5000/gyms/:${state.userId}`, config).then((result) => {
-        setMyGym(result.data.gym);
+      axios.get(`http://localhost:5000/gyms/user/${state.userId}`, config).then((result) => {
+        setMyGym(result.data.gyms);
+        console.log(result.data);
       }).catch((err) => {
-
+        console.log("Error", err);
       });
     },[])
-    const generateGymBox = (gymUser) => {
+    
 
-        gymUser = ["k"];
-
-        
-        const createGym = [];
-        if(!gymUser.length){
-            createGym.push(
-                <Col key={1}>
-                <Card linkStyle={{backgroundColor:"#A1E533"}}>
-                  <Card.Body>
-                    <Card.Title style={{fontWeight:"bold"}}>Create Gym</Card.Title>
-                    <Card.Text className='text-card'>
-                    You can create a gym, add coaches and players, and follow them
-                    </Card.Text>
-                    <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}}>Create New Gym</button>
-                  </Card.Body>
-                </Card>
-              </Col>
-              );
-              return <Row xs={1} md={5} className="g-2">{createGym}</Row>
-        }else{
-            const gymBoxes = [];
-            for (let i = 0; i < 3; i++) {
-              gymBoxes.push(
-              <Col key={1}>
-              <Card linkStyle={{backgroundColor:"#A1E533"}}>
-                <Card.Img variant="top" className='image-gym-in-card' src={logoGym} />
-                <Card.Body>
-                  <Card.Title style={{fontWeight:"bold"}}>Gym {i+1}</Card.Title>
-                  <Card.Text className='text-card'>
-                    This is a longer card with supporting text below as a natural
-                    lead-in to additional content. This content is a little bit
-                    longer.
-                    This is a longer card with supporting text below as a natural
-                    lead-in to additional content. This content is a little bit
-                    longer.
-                  </Card.Text>
-                  <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}}>Open</button>
-                </Card.Body>
-              </Card>
-            </Col>
-            );
-            }
-            return <Row xs={1} md={5} className="g-2">{gymBoxes}</Row>
-        }
-
-
-      };
+    const generateGymBox = () => {
+      const gymBoxes = [];
+      {myGym.length !== 0 && myGym.map((e,i)=>{
+        gymBoxes.push(
+        <Col key={1}>
+        <Card>
+          <Card.Img variant="top" className='image-gym-in-card' src={e.image} />
+          <Card.Body>
+            <Card.Title style={{fontWeight:"bold"}}>{e.name}</Card.Title>
+            <Card.Text className='text-card'>
+              {e.description}
+            </Card.Text>
+            <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}} onClick={()=>{
+              navigate(`/gym/${e.gym_id}`);
+            }}>Open</button>
+          </Card.Body>
+        </Card>
+      </Col>
+      );
+      })
+      }
+      return <Row xs={1} md={5} className="g-2">{gymBoxes}</Row>
+    };
 
 
   return (

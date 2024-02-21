@@ -119,7 +119,6 @@ const addNewUserInGym = (req,res)=>{
     const providerS = [userId, gymId, planId, roomId];
 
     pool.query(`SELECT * FROM gym_user WHERE gym_id = $1`, [gymId]).then((result) => {
-        console.log(result);
         if(result.rows.length === 0){
             pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
                 res.status(201).json({
@@ -177,7 +176,11 @@ const addNewUserInGym = (req,res)=>{
             })
         }
     }).catch((err) => {
-        
+        res.status(500).json({
+            success : false,
+            message : "Server Error",
+            error : err.message
+        })
     });
     
 
@@ -203,7 +206,7 @@ const getAllUserInGym = (req,res)=>{
 
 const getAllGymByUserId = async (req,res) =>{
     const {userId} = req.params;
-    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1`[userId]).then((result) => {
+    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1`,[userId]).then((result) => {
         res.status(200).json({
             success : true,
             message :`All gyms in which the user is joined => ${userId}`,
@@ -363,4 +366,5 @@ module.exports = {
     getRoomByIdRoom,
     getAllRoomByGymId
 }
+
 

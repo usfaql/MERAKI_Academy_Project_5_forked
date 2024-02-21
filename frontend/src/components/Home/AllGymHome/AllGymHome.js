@@ -5,8 +5,10 @@ import Row from 'react-bootstrap/Row';
 import logoGym from '../../assets/image-gym.jpg';
 import axios, { all } from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function AllGymHome() {
+    const navigate = useNavigate();
     const [allGym, setAllGym] = useState([]);
     const state = useSelector((state)=>{
       return{
@@ -24,7 +26,7 @@ function AllGymHome() {
         
       });
     },[])
-    const generateGymBox = () => {
+      const generateGymBox = () => {
         const gymBoxes = [];
         {allGym.length !== 0 && allGym.map((e,i)=>{
           gymBoxes.push(
@@ -38,6 +40,7 @@ function AllGymHome() {
               </Card.Text>
               <button style={{width:"60%", border:"0", backgroundColor:"#101010",color: "white", borderRadius:"4px"}} onClick={()=>{
                 console.log(e);
+                 navigate(`/${e.id}/plan`);
               }}>Join</button>
             </Card.Body>
           </Card>
