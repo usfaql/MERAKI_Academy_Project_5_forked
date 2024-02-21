@@ -14,12 +14,14 @@ const {createGym,
     getPlanByGymId,
     createRoomInGym,
     getRoomByIdRoom,
-    getAllRoomByGymId} = require("../controllers/Gym");
+    getAllRoomByGymId,
+    getGymByGymId} = require("../controllers/Gym");
     const authentication = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
 gymsRouter.post("/", authentication ,createGym);
 gymsRouter.get("/", authentication, getAllGym);
+gymsRouter.get("/:gymId", authentication, getGymByGymId);
 gymsRouter.get("/user/:userId", authentication, getAllGymByUserId);
 gymsRouter.get("/:ownerId", authentication,getGymByOwner);
 gymsRouter.post("/:gymid/plan/create", authentication,createPlan);

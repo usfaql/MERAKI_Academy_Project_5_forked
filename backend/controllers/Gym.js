@@ -36,6 +36,23 @@ const getAllGym = (req, res)=>{
     });
 }
 
+const getGymByGymId = (req,res)=>{
+    const {gymId} = req.params;
+    pool.query(`SELECT name, description FROM gyms WHERE gyms.id = $1`,[gymId]).then((result) => {
+        res.status(200).json({
+            success: true,
+            message : `This Data For Gym :${result.rows[0].name}`,
+            oneGym : result.rows[0]
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err.message
+        })
+    });
+}
+
 const getGymByOwner = (req,res)=>{
     const userId = req.params.ownerId;
     pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result)=>{
@@ -63,14 +80,14 @@ const createPlan = (req,res)=>{
     const gymId = req.params.gymid;
     const {name, description, numOfMonth, price} = req.body;
     const provider = [name,description, numOfMonth,price, gymId];
-    pool.query(`SELECT * FROM gym_plan WHERE gym_id = $5`, provider).then((result) => {
+    pool.query(`SELECT * FROM gym_plan WHERE gym_id = $1`, [gymId]).then((result) => {
         if(result.rows.length >= 3){
             res.status(201).json({
                 success : true,
                 message : `Can't Create more Plan`
             })
         }else{
-            pool.query(`INSERT INTO gym_plan (name,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
+            pool.query(`INSERT INTO gym_plan (name_plan ,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
                 res.status(201).json({
                     success : true,
                     message : `Created Plan For Gym Successfully`,
@@ -220,6 +237,7 @@ const getAllGymByUserId = async (req,res) =>{
         })
     });
 }
+
 const deleteUserInGym = async(req,res)=>{
     const userId = req.token.userId;
     const {gymId} = req.body;
@@ -364,7 +382,8 @@ module.exports = {
     getPlanByGymId,
     createRoomInGym,
     getRoomByIdRoom,
-    getAllRoomByGymId
+    getAllRoomByGymId,
+    getGymByGymId
 }
 
 
