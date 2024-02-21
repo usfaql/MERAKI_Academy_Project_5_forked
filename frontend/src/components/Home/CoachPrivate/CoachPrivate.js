@@ -86,10 +86,10 @@ const [header, setHeader] = useState("")
     </Form.Select>
           </div>
             <div className='User-List'>
-            {users_1.map((user,i)=>
+            {filtered.map((user,i)=>
                 <div className='User-Name' onClick={()=>{
-                  setHeader(user)
-                }}># {user}</div>
+                  setHeader(`${user.firstname} ${user.lastname}`)
+                }}># {user.firstname} {user.lastname}</div>
             )}
             </div>
             <div className='My-Private'>

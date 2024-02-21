@@ -54,7 +54,8 @@ const login = (req, res) => {
                 message: `Valid login credentials`,
                 userId:result.rows[0].id,
                 private:result.rows[0].private,
-                userInfo : result.rows[0]
+                userInfo : result.rows[0],
+                // userImage:result.rows[0].image
               });
             } else {
               throw Error;
