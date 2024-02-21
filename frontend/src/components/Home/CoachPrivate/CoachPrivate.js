@@ -19,6 +19,7 @@ const {token,userId,users}=useSelector((state)=>{
 })
 const [success, setSuccess] = useState(null)
 const [message, setMessage] = useState("")
+const [filtered, setFiltered] = useState([])
 const removeUserFromPrivate=(user_id,coach_id)=>{
   axios.put(`http://localhost:5000/coachs/user/remove`,{user_id:user_id,coach_id:coach_id},{
     headers: {
@@ -44,6 +45,7 @@ const removeUserFromPrivate=(user_id,coach_id)=>{
         })
         const newUserArr= result.data.users.filter((ele,i)=>new Date() < new Date(ele.endsub))
         dispatch(setUsers(newUserArr))
+        setFiltered(newUserArr)
       }
       
     }).catch((err)=>{
@@ -53,6 +55,16 @@ const removeUserFromPrivate=(user_id,coach_id)=>{
   useEffect(() => {
 getAllUsers()
   }, [])
+  const userFiltration=(e)=>{
+    if(e !== "All"){
+      const filteredUsers=users.filter((ele,i)=>ele.name===e)
+    setFiltered(filteredUsers)
+    }
+    else{
+      setFiltered(users)
+    }
+    
+  }
   
 let users_1=["ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed","ahmed","mohammed","ali","abed"]
 let messages=[{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."},{name:"Mohammed Odat",message:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111"},]
@@ -62,12 +74,15 @@ const [header, setHeader] = useState("")
         <div className='Left-Side'>
           <div className='User-Filter'>
           <Form.Select
+          onChange={(e)=>{
+           userFiltration(e.target.value)
+          }}
           style={{alignSelf:"center",width:"85%" ,paddingLeft:"5px",backgroundColor:"#3d3939",color:"white"}}
           aria-label="Default select example">
-      <option>All Users</option>
-      <option value="1">Premium Users</option>
-      <option value="2">Gold Users</option>
-      <option value="3">Lite Users</option>
+      <option value="All">All Users</option>
+      <option value="Lite">Lite Users</option>
+      <option value="Gold">Gold Users</option>
+      <option value="Premium">Premium Users</option>
     </Form.Select>
           </div>
             <div className='User-List'>
