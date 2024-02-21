@@ -73,6 +73,7 @@ const Settings = () => {
   }, []);
 
   const createNewPlan = (name) => {
+    console.log(name);
     setAbeled(true);
     if (name && description && price && numOfMonth) {
       axios
@@ -90,6 +91,7 @@ const Settings = () => {
           setSuccess(result.data.success);
           setMessage(result.data.message);
           setAbeled(false);
+          getAllPlans()
         })
         .catch((error) => {
           setSuccess(false);
@@ -120,8 +122,6 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
-  console.log(plans);
-  console.log(arr);
   return (
     <div className="setting-Page">
       <div className="Page-Title">
@@ -380,7 +380,6 @@ const Settings = () => {
           </div>}
           {arr.map((ele, i) => (
             <div className="Plan">
-              {console.log(ele, plans[i].name)}
               <div className="Plan-Title">{ele} Plan</div>
               <div className="inputs">
                 <div className="Description-Input">
