@@ -17,6 +17,8 @@ const {token,userId,users}=useSelector((state)=>{
 }
  
 })
+const [success, setSuccess] = useState(null)
+const [message, setMessage] = useState("")
 const removeUserFromPrivate=(user_id,coach_id)=>{
   axios.put(`http://localhost:5000/coachs/user/remove`,{user_id:user_id,coach_id:coach_id},{
     headers: {
@@ -29,11 +31,6 @@ const removeUserFromPrivate=(user_id,coach_id)=>{
   })
 }
   const getAllUsers=()=>{
-    // console.log(token);
-    // console.log(new Date());
-    // if(new Date()>new Date("2024-03-13T18:35:32.290Z")){
-    //   console.log("ok");
-    // }
     axios.get(`http://localhost:5000/coachs/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -45,9 +42,10 @@ const removeUserFromPrivate=(user_id,coach_id)=>{
             removeUserFromPrivate(ele.user_id,ele.coach_id)
           }
         })
-        const newUserArr= result.data.users.filter
+        const newUserArr= result.data.users.filter((ele,i)=>new Date() < new Date(ele.endsub))
+        dispatch(setUsers(newUserArr))
       }
-      // dispatch(setUsers(result.data.users))
+      
     }).catch((err)=>{
       console.log(err);
     })
