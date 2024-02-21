@@ -36,6 +36,23 @@ const getAllGym = (req, res)=>{
     });
 }
 
+const getGymByGymId = (req,res)=>{
+    const {gymId} = req.params;
+    pool.query(`SELECT name, description FROM gyms WHERE gyms.id = $1`,[gymId]).then((result) => {
+        res.status(200).json({
+            success: true,
+            message : `This Data For Gym :${result.rows[0].name}`,
+            oneGym : result.rows[0]
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err.message
+        })
+    });
+}
+
 const getGymByOwner = (req,res)=>{
     const userId = req.params.ownerId;
     pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result)=>{
@@ -220,6 +237,7 @@ const getAllGymByUserId = async (req,res) =>{
         })
     });
 }
+
 const deleteUserInGym = async(req,res)=>{
     const userId = req.token.userId;
     const {gymId} = req.body;
@@ -364,7 +382,8 @@ module.exports = {
     getPlanByGymId,
     createRoomInGym,
     getRoomByIdRoom,
-    getAllRoomByGymId
+    getAllRoomByGymId,
+    getGymByGymId
 }
 
 
