@@ -103,7 +103,9 @@ const createNewPlane = (req, res) => {
 const getAllPlanByCoachId =(req,res)=>{
   const coach_id=req.token.userId;
   const value=[coach_id];
-  const query=`SELECT * FROM coach_plan WHERE coach_id= $1; `
+  const query=`SELECT * FROM coach_plan 
+  WHERE coach_id=$1
+ORDER BY price ASC; `
   pool.query(query,value).then((result)=>{
     if(result.rows.length){
       res.status(201).json({
