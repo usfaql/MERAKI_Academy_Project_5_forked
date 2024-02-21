@@ -13,6 +13,7 @@ import CreateGym from "./components/CreateGym/CreateGym";
 import ProfileSetting from "./components/ProfileSetting/Profile"
 
 import Settings from "./components/Home/CoachPrivate/Settings/Settings";
+import PlanGym from "./components/Gym/PlanGym/PlanGym";
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
         <Route path="/Profile" element={<ProfileSetting/>}/>
 
        <Route path="/coach/private/setting" element={<Settings/>}/>
-
+        <Route path="/:gymid/plan" element={<PlanGym/>}/>
       </Routes>
     </div>
   );
