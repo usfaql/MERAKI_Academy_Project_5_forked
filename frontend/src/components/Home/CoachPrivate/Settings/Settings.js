@@ -145,11 +145,239 @@ const Settings = () => {
         </div>
         <div className="Plans">
           {!arr.includes("Lite") &&
-            <div>Lite</div>}
+             <div className="Plan">
+             <div className="Plan-Title">Lite Plan</div>
+             <div className="inputs">
+               <div className="Description-Input">
+                 <Form.Label>Description Plan Lite</Form.Label>
+                 <Form.Control
+                   style={{
+                     height: "100%",
+                     backgroundColor: "#1e1e1e",
+                     border: "0",
+                     color: "white",
+                   }}
+                   as="textarea"
+                   rows={3}
+                   onChange={(e) => {
+                     setDescription(e.target.value);
+                   }}
+                 />
+               </div>
+               <div className="Sub-Duration">
+                 <p
+                   style={{
+                     fontSize: "larger",
+                     width: "70%",
+                     textAlign: "left",
+                   }}
+                 >
+                   Subscription Duration:
+                 </p>
+                 <div className="month">
+                   <Form.Control
+                     style={{
+                       height: "80%",
+                       width: "50%",
+                       backgroundColor: "#1e1e1e",
+                       border: "0",
+                       color: "white",
+                     }}
+                     type="number"
+                     onChange={(e) => {
+                       setNumOfMonth(e.target.value);
+                     }}
+                   />
+                   <p style={{ fontSize: "larger" }}>Month</p>
+                 </div>
+               </div>
+               <div className="Price">
+                 <p style={{ fontSize: "larger" }}>Total Price:</p>
+                 <div className="num-price">
+                   <Form.Control
+                     style={{
+                       height: "80%",
+                       width: "50%",
+                       backgroundColor: "#1e1e1e",
+                       border: "0",
+                       color: "white",
+                     }}
+                     type="number"
+                     onChange={(e) => {
+                       setPrice(e.target.value);
+                     }}
+                   />
+                   <p style={{ fontSize: "x-large" }}>$</p>
+                 </div>
+               </div> 
+               <div className="Save-Btn">
+                   <Button
+                     disabled={abeled}
+                     onClick={() => {
+                       createNewPlan("Lite");
+                     }}
+                   >
+                     Save Changes
+                   </Button>
+                 </div>
+             </div>
+           </div>}
              {!arr.includes("Gold") &&
-            <div>Gold</div>}
+            <div className="Plan">
+            <div className="Plan-Title">Gold Plan</div>
+            <div className="inputs">
+              <div className="Description-Input">
+                <Form.Label>Description Plan Gold</Form.Label>
+                <Form.Control
+                  style={{
+                    height: "100%",
+                    backgroundColor: "#1e1e1e",
+                    border: "0",
+                    color: "white",
+                  }}
+                  as="textarea"
+                  rows={3}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="Sub-Duration">
+                <p
+                  style={{
+                    fontSize: "larger",
+                    width: "70%",
+                    textAlign: "left",
+                  }}
+                >
+                  Subscription Duration:
+                </p>
+                <div className="month">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setNumOfMonth(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "larger" }}>Month</p>
+                </div>
+              </div>
+              <div className="Price">
+                <p style={{ fontSize: "larger" }}>Total Price:</p>
+                <div className="num-price">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setPrice(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "x-large" }}>$</p>
+                </div>
+              </div> 
+              <div className="Save-Btn">
+                  <Button
+                    disabled={abeled}
+                    onClick={() => {
+                      createNewPlan("Gold");
+                    }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+            </div>
+          </div>}
              {!arr.includes("Premuim") &&
-            <div>Premuim</div>}
+            <div className="Plan">
+            <div className="Plan-Title">Premuim Plan</div>
+            <div className="inputs">
+              <div className="Description-Input">
+                <Form.Label>Description Plan Premuim</Form.Label>
+                <Form.Control
+                  style={{
+                    height: "100%",
+                    backgroundColor: "#1e1e1e",
+                    border: "0",
+                    color: "white",
+                  }}
+                  as="textarea"
+                  rows={3}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="Sub-Duration">
+                <p
+                  style={{
+                    fontSize: "larger",
+                    width: "70%",
+                    textAlign: "left",
+                  }}
+                >
+                  Subscription Duration:
+                </p>
+                <div className="month">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setNumOfMonth(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "larger" }}>Month</p>
+                </div>
+              </div>
+              <div className="Price">
+                <p style={{ fontSize: "larger" }}>Total Price:</p>
+                <div className="num-price">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setPrice(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "x-large" }}>$</p>
+                </div>
+              </div> 
+              <div className="Save-Btn">
+                  <Button
+                    disabled={abeled}
+                    onClick={() => {
+                      createNewPlan("Premuim");
+                    }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+            </div>
+          </div>}
           {arr.map((ele, i) => (
             <div className="Plan">
               {console.log(ele, plans[i].name)}

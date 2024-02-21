@@ -52,13 +52,9 @@ const login = (req, res) => {
                 token,
                 success: true,
                 message: `Valid login credentials`,
-<<
                 userId:result.rows[0].id,
                 private:result.rows[0].private,
                 userInfo : result.rows[0]
-
-              
-
               });
             } else {
               throw Error;
