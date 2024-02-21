@@ -46,6 +46,7 @@ const CoachPrivate = () => {
         },
       })
       .then((result) => {
+        console.log(result.data.success);
         if (result.data.success) {
           result.data.users.map((ele, i) => {
             if (new Date() >= new Date(ele.endsub)) {
@@ -57,6 +58,7 @@ const CoachPrivate = () => {
           );
           dispatch(setUsers(newUserArr));
           setFiltered(newUserArr);
+          setSuccess(result.data.success)
         }else{
           setSuccess(result.data.success)
           setMessage(result.data.message)
@@ -151,7 +153,8 @@ const CoachPrivate = () => {
               {user.firstname} {user.lastname}
             </div>
           ))}
-        </div>:<div className="User-Name" style={{backgroundColor:"red"}}>{message}</div>
+        </div>:<span  style={{backgroundColor:"red" ,width:"90%",
+        fontSize:"x-large",borderRadius:"8px"}}>{message}</span>
           
         }
         
