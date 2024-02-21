@@ -27,7 +27,6 @@ CREATE TABLE users(
     age INT,
     private SMALLINT DEFAULT 0,
     gender VARCHAR(255),
-    image VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     role_id INT,
@@ -40,6 +39,7 @@ CREATE TABLE users(
 
 CREATE TABLE user_info (
     id SERIAL NOT NULL,
+    image VARCHAR(255),
     weight VARCHAR(255),
     height VARCHAR(255),
     goal VARCHAR(255),

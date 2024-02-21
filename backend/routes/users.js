@@ -10,6 +10,6 @@ usersRouter.post("/info/create",authentication,AddUserinfo)
 usersRouter.get("/", authentication,getAllUsers)
 usersRouter.get("/coaches", authentication,getAllCoachs)
 //usersRouter.get("/info/:id",getUserInfoById)
-usersRouter.put('/info/update', authentication,updateUserInfo)
+usersRouter.put('/info/:id', authentication,updateUserInfo)
 usersRouter.get('/info/:userId',authentication,getUserInfoByUserId)
 module.exports = usersRouter;

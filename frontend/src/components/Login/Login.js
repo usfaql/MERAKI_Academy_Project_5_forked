@@ -27,12 +27,12 @@ const Login = () => {
           if(!email || !password){
             setMessage("Conn't Send Empty Data")
           }else{
-            axios.post("http://localhost:5000/users/login", {
+            axios.post("http://localhost:5001/users/login", {
               email,
               password,
             }).then((result)=>{
-              console.log("result.data",result.data);
-              dispatch(setLogin(result.data));
+              // console.log("result.data",result.data);
+              dispatch(setLogin(result?.data));
               dispatch(setUserId(result.data.userId));
               dispatch(setActivePrivate(result.data.private));
               setMessage("");
