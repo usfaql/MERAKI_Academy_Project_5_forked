@@ -12,8 +12,10 @@ import ProfileSetting from "./components/ProfileSetting/Profile"
 import Settings from "./components/Home/CoachPrivate/Settings/Settings";
 import PlanGym from "./components/Gym/PlanGym/PlanGym";
 import PaymentPlan from "./components/PaymentPlan/PaymentPlan";
-import AddUserInfo from "./components/AddUserInfo/UserInfo ";
+import AddUserInfo from "./components/AddUserInfo/UserInfo";
+import UserPrivate from "./components/Home/UserPrivate/UserPrivate";
 import GymGroup from "./components/Gym/GymGroup/GymGroup";
+
 
 function App() {
   return (
@@ -32,7 +34,9 @@ function App() {
         <Route path="/coach/private/setting" element={<Settings/>}/>
         <Route path="/:gymid/plan" element={<PlanGym/>}/>
         <Route path="/checkout/:gymid/:planid" element={<PaymentPlan/>}/>
+        <Route path="/user/private" element={<UserPrivate/>}/>
         <Route path="/gym/:gymid" element={<GymGroup/>}/>
+
       </Routes>
     </div>
   );

@@ -40,7 +40,6 @@ const Settings = () => {
             return ele.name;
           });
           dispatch(setPlans(result.data.plans));
-
           setarr(arr_plans);
         } else {
           setMessage("There is No Plan Yet");
