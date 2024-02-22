@@ -194,6 +194,9 @@ const CoachPrivate = () => {
           </div>
 
           <svg
+          onClick={()=>{
+            navigate('/home')
+          }}
             className="icon"
             style={{ cursor: "pointer" }}
             xmlns="http://www.w3.org/2000/svg"
