@@ -22,6 +22,7 @@ const CoachPrivate = () => {
       users: state.coachPrivate.users,
     };
   });
+  const [coachs, setCoachs] = useState([])
   const [header, setHeader] = useState("");
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
@@ -46,24 +47,15 @@ const CoachPrivate = () => {
   };
   const getAllUsers = () => {
     axios
-      .get(`http://localhost:5000/coachs/user`, {
+      .get(`http://localhost:5000/coachs/coach`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((result) => {
-        console.log(result.data.success);
         if (result.data.success) {
-          result.data.users.map((ele, i) => {
-            if (new Date() >= new Date(ele.endsub)) {
-              removeUserFromPrivate(ele.user_id, ele.coach_id);
-            }
-          });
-          const newUserArr = result.data.users.filter(
-            (ele, i) => new Date() < new Date(ele.endsub)
-          );
-          dispatch(setUsers(newUserArr));
-          setFiltered(newUserArr);
+          console.log(result.data.coachs);
+          setCoachs(result.data.coachs)
           setSuccess(result.data.success)
         }else{
           setSuccess(result.data.success)
@@ -110,25 +102,19 @@ const CoachPrivate = () => {
         "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
     },
   ];
+  console.log(coachs);
   return (
     <div className="Coach-Private-Page">
       <div className="Left-Side">
         {success?<div className="User-List">
-          {filtered.map((user, i) => (
+          {coachs.map((user, i) => (
             <div
               className="User-Name"
               onClick={() => {
                 setHeader(`${user.firstname} ${user.lastname}`);
               }}
             >
-              <>
-                {user.name === "Lite"
-                  ? "🐱"
-                  : user.name === "Gold"
-                  ? "🦁"
-                  : user.name === "Premium" && "👑"}
-              </>{" "}
-              {user.firstname} {user.lastname}
+              # {user.firstname} {user.lastname}
             </div>
           ))}
         </div>:<span  style={{backgroundColor:"red" ,width:"90%",
