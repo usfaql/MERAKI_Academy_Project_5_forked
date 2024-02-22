@@ -87,7 +87,7 @@ const createPlan = (req,res)=>{
                 message : `Can't Create more Plan`
             })
         }else{
-            pool.query(`INSERT INTO gym_plan (name_plan ,description, numOfMonth,price, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
+            pool.query(`INSERT INTO gym_plan (name_plan ,description_plan, numOfMonth_plan ,price_plan, gym_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,provider).then((result)=>{
                 res.status(201).json({
                     success : true,
                     message : `Created Plan For Gym Successfully`,
@@ -114,14 +114,14 @@ const createPlan = (req,res)=>{
 
 const getPlanByGymId = (req,res) =>{
     const gymId = req.params.gymid;
-    pool.query(`SELECT * FROM gym_plan INNER JOIN gyms ON gym_plan.gym_id = gyms.id WHERE gym_plan.gym_id = $1`,[gymId]).then((result) => {
+    pool.query(`SELECT gyms.name, gyms.description, * FROM gym_plan INNER JOIN gyms ON gym_plan.gym_id = gyms.id WHERE gym_plan.gym_id = $1`,[gymId]).then((result) => {
         res.status(201).json({
             success : true,
             message : `All Plan For Gym`,
             plans : result.rows
         })
     }).catch((err) => {
-        res.status(201).json({
+        res.status(500).json({
             success : false,
             message : `Server Error`,
             error : err
@@ -129,6 +129,23 @@ const getPlanByGymId = (req,res) =>{
     });
 }   
 
+const getPlanById = (req, res)=>{
+    const planId = req.params.planid;
+
+    pool.query(`SELECT gyms.name, gyms.description, * FROM gym_plan INNER JOIN gyms ON gym_plan.gym_id = gyms.id WHERE gym_plan.id_plan = $1`,[planId]).then((result) => {
+        res.status(200).json({
+            success : true,
+            message : `Plan ${result.rows[0].name_plan}`,
+            plan : result.rows[0]
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success: false,
+            message : `Server Error`,
+            error : err.message
+        })
+    });
+}
 const addNewUserInGym = (req,res)=>{
     const userId = req.token.userId;
     const {gymId, planId, numOfMonth, roomId} = req.body;
@@ -378,8 +395,9 @@ module.exports = {
     deleteUserInGym,
     deleteCoachInGym,
     createPlan,
-    getGymByOwner,
     getPlanByGymId,
+    getPlanById,
+    getGymByOwner,
     createRoomInGym,
     getRoomByIdRoom,
     getAllRoomByGymId,

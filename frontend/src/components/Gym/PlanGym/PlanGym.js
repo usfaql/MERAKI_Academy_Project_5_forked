@@ -47,6 +47,7 @@ function PlanGym() {
             console.log(err);
         });
     },[])
+
   return (
     <div className='plan-body'>
       <div className='continer-info-gym'>
@@ -109,7 +110,7 @@ function PlanGym() {
             <div className='select-plan'>
                 <button className='select-btn'onClick={()=>{
                     console.log(dataLProPlan);
-                    navigate(`/checkout/${dataLProPlan.gym_id}/${dataLProPlan.id}`)
+                    navigate(`/checkout/${dataLProPlan.gym_id}/${dataLProPlan.id_plan}`)
                 }}>select Plan</button>
             </div>
         </div>

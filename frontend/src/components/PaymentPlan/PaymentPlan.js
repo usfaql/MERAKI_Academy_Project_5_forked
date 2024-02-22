@@ -1,19 +1,44 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 function PaymentPlan() {
-    const {gymid, planid} = useParams;
+    const navigate = useNavigate();
+    const {gymid, planid} = useParams();
     const [numberCard, setNumberCard] = useState(null);
     const [nameOnCard, setNameOnCard] = useState(null);
     const [expirationDate, setExpirationDate] = useState(null);
     const [cVV, setCVV] = useState(null);
-
+    const [dataPlanForInvoice, setDataPlanForInvoice] = useState(null);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const state = useSelector((state)=>{
+        return{
+        userId : state.auth.userId,
+        token : state.auth.token
+        }
+      })
+    const config = {
+        headers: { Authorization: `Bearer ${state.token}` }
+    }
+    useEffect(()=>{
+        
+        axios.get(`http://localhost:5000/gyms/plan/${planid}/select`, config).then((result) => {
+            console.log(result.data.plan);
+            setDataPlanForInvoice(result.data.plan);
+            setTotalPrice(Number(result.data.plan.price_plan)+0.48)
+        }).catch((err) => {
+            
+        });
+       
+    },[])
     const handlePay = ()=>{
         if(numberCard && nameOnCard && expirationDate && cVV){
             console.log("Success");
+            navigate(`/gym/${gymid}`);
         }else{
             console.log("please fill data");
         }
@@ -24,27 +49,27 @@ function PaymentPlan() {
                 <h2 style={{textAlign:"center"}}>Invoice</h2>
                 <div className='inv'>
                 <h6>Name Gym:</h6>
-                <h6>Gold</h6>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.name}</h6>
                 </div>
                 <div className='inv'>
                     <h6>Name Plan:</h6>
-                <h6>Lite</h6></div>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.name_plan}</h6></div>
                 <div className='inv'>
                     <h6>Month:</h6>
-                    <h6>1</h6>
+                    <h6>{dataPlanForInvoice && dataPlanForInvoice.numofmonth_plan}</h6>
                 </div>
                 <div className='inv'>
                     <h6>Price:</h6>
-                    <h6>$9.99</h6>
+                    <h6>${dataPlanForInvoice && dataPlanForInvoice.price_plan}</h6>
                 </div>
                 <div style={{borderBottom:"1px solid gray"}}></div>
                 <div className='inv'>
                     <h6>TAX:</h6>
-                    <h6>$0.49</h6>
+                    <h6>$0.48</h6>
                 </div>
                 <div className='inv'>
                     <h6>Total Price:</h6>
-                    <h6>$10.48</h6>
+                    <h6>${totalPrice}</h6>
                 </div>
                 <div style={{borderBottom:"1px solid gray"}}></div>
             </div>

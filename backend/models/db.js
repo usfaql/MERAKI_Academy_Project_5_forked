@@ -80,11 +80,11 @@ const createTable = () => {
       PRIMARY KEY (id)
   );
   CREATE TABLE gym_plan(
-      id SERIAL NOT NULL PRIMARY KEY,
-      name VARCHAR(255),
-      description TEXT,
-      numOfMonth INT,
-      price INT,
+      id_plan SERIAL NOT NULL PRIMARY KEY,
+      name_plan VARCHAR(255),
+      description_plan TEXT,
+      numOfMonth_plan INT,
+      price_plan INT,
       gym_id INT,
       FOREIGN KEY (gym_id) REFERENCES gyms(id),
       is_deleted SMALLINT DEFAULT 0
