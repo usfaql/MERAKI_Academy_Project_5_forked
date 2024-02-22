@@ -10,7 +10,6 @@ const CoachPrivate = () => {
   const revarse =useRef(null)
   if(revarse.current){
     revarse.current.scrollTop= revarse.current.scrollHeight
-    console.log(revarse);
   }
   const dispatch = useDispatch();
   const navigate = useNavigate();
