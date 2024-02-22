@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./CoachPrivate.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUsers } from "../../Redux/Reducers/CoachPrivate/index";
 const CoachPrivate = () => {
+  const revarse =useRef(null)
+  if(revarse.current){
+    revarse.current.scrollTop= revarse.current.scrollHeight
+    console.log(revarse);
+  }
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, userId, users } = useSelector((state) => {
@@ -219,7 +224,7 @@ const CoachPrivate = () => {
       </div>
       <div className="Right-Side">
         <div className="Header">{header}</div>
-        <div className="message">
+        <div ref={revarse} className="message">
           {messages.map((ele, i) => (
             <div className="msg">
               <div className="user-pic">
