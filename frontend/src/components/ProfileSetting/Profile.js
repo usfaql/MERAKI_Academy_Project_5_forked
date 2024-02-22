@@ -37,7 +37,7 @@ const Profile = () => {
   }, []);
   const getUserInfoByUserId = () => {
     axios
-      .get(`http://localhost:5001/users/info/${state.userId}`, {
+      .get(`http://localhost:5000/users/info/${state.userId}`, {
         headers: {
           Authorization: `Bearer ${state.token}`,
         },
@@ -54,7 +54,7 @@ const Profile = () => {
 
   const updateUserInfo = async () => {
     try {
-      const result =await axios.put(`http://localhost:5001/users/info/${state.userId}`, {
+      const result =await axios.put(`http://localhost:5000/users/info/${state.userId}`, {
         
         image , 
         weight,
@@ -66,7 +66,7 @@ const Profile = () => {
         Authorization: `Bearer ${state.token}`,
       }});
 
-      setUserInfo({...userinfo,...result})//
+      setUserInfo({...userinfo,...result})
       console.log(result);
     } catch (error) {
       console.log(error);
