@@ -103,7 +103,9 @@ const createNewPlane = (req, res) => {
 const getAllPlanByCoachId =(req,res)=>{
   const coach_id=req.token.userId;
   const value=[coach_id];
-  const query=`SELECT * FROM coach_plan WHERE coach_id= $1; `
+  const query=`SELECT * FROM coach_plan 
+  WHERE coach_id=$1
+ORDER BY price ASC; `
   pool.query(query,value).then((result)=>{
     if(result.rows.length){
       res.status(201).json({
@@ -224,12 +226,14 @@ const removeUserFromPrivate = (req, res) => {
     });
 };
 const getAllUserByCoachId=(req,res)=>{
-  const {coach_id}=req.token.userId
+  const coach_id=req.token.userId
   const value=[coach_id]
-  const query=`SELECT room_user.user_id,room_user.endsub, users.firstName,users.lastName,room_user.plan_id, room_user.endSub
+  const query=`SELECT room_user.user_id,room_user.coach_id,room_user.endsub, users.firstName,users.lastName,room_user.plan_id, room_user.endSub,
+  coach_plan.name
   FROM room_user
   JOIN users ON room_user.user_id = users.id
-  WHERE room_user.coach_id = $1 AND is_deleted=0;
+  JOIN coach_plan ON room_user.plan_id=coach_plan.id
+  WHERE room_user.coach_id =$1 AND room_user.is_deleted=0;
   `
   pool.query(query,value).then((result)=>{
     if(!result.rows.length){

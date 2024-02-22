@@ -31,8 +31,8 @@ const Login = () => {
               email,
               password,
             }).then((result)=>{
-              console.log("result.data",result.data);
-              dispatch(setLogin(result.data));
+              // console.log("result.data",result.data);
+              dispatch(setLogin(result?.data));
               dispatch(setUserId(result.data.userId));
               dispatch(setActivePrivate(result.data.private));
               setMessage("");

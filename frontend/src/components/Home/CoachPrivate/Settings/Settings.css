@@ -1,7 +1,7 @@
 .setting-Page{
     display: flex;
     flex-direction: column;
-    height:calc(100vh - 93px);
+    height:calc(100vh - 94px);
     align-items: center;
     margin-top: 25px;
 }
@@ -17,9 +17,15 @@
 }
 .Open-Private{
 display: flex;
+flex-direction: row;
 align-items: center;
 justify-content: center;
+padding: 1rem;
 gap: 25px;
+}
+.open{
+    line-height: 0%;
+    margin-top: 9px;
 }
 .Plans{
     display: flex;
@@ -101,4 +107,39 @@ gap: 25px;
     color: white;
     text-align: center;
     align-items: center;
+  }
+  .form-check-input {
+    --bs-form-check-bg:#ded9d9 !important;
+    border: none !important;
+    background-color: #e8e7e7 !important;
+    border-radius: 2em;
+
+  }
+  .form-switch .form-check-input {
+    width: 100% !important;
+    margin-top: 0 !important;
+    width: 3em !important;
+    height: 1.42em !important;
+   /* align-self: center !important; */
+  
+ 
+
+
+
+  }
+  .form-check-input:checked  {
+    background-color: #A1E533 !important;
+    border-color: #A1E533 !important;
+    
+
+
+  }
+  .toggle{
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+justify-content: center;
+align-items: center;
+
   }

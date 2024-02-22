@@ -11,7 +11,7 @@ import axios from "axios";
 import { setActivePrivate } from "../../../Redux/Reducers/Auth";
 const Settings = () => {
   const dispatch = useDispatch();
-  const { token, userId, activePrivate } = useSelector((state) => {
+  const { token, userId, activePrivate, plans } = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
@@ -21,7 +21,7 @@ const Settings = () => {
   });
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
-  const [arr, setarr] = useState(["Lite", "Gold", "Premium"]);
+  const [arr, setarr] = useState([]);
   const [abeled, setAbeled] = useState(false);
   //   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -36,7 +36,12 @@ const Settings = () => {
       })
       .then((result) => {
         if (result.data.plans) {
+          const arr_plans = result.data.plans.map((ele, i) => {
+            return ele.name;
+          });
           dispatch(setPlans(result.data.plans));
+
+          setarr(arr_plans);
         } else {
           setMessage("There is No Plan Yet");
         }
@@ -68,6 +73,7 @@ const Settings = () => {
   }, []);
 
   const createNewPlan = (name) => {
+    console.log(name);
     setAbeled(true);
     if (name && description && price && numOfMonth) {
       axios
@@ -85,6 +91,7 @@ const Settings = () => {
           setSuccess(result.data.success);
           setMessage(result.data.message);
           setAbeled(false);
+          getAllPlans()
         })
         .catch((error) => {
           setSuccess(false);
@@ -106,7 +113,7 @@ const Settings = () => {
         },
       })
       .then((result) => {
-       dispatch(setActivePrivate("1"));
+        dispatch(setActivePrivate("1"));
         setSuccess(result.data.success);
         setMessage(result.data.message);
       })
@@ -115,7 +122,6 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
-  console.log(activePrivate, "sksskks");
   return (
     <div className="setting-Page">
       <div className="Page-Title">
@@ -123,20 +129,255 @@ const Settings = () => {
       </div>
       <div className="Items">
         <div className="Open-Private">
-          <h1>Open Private</h1>
-          <div className="Toggel">
+          <h1 className="open">Open Private</h1>
+          <div className="toggle">
             <Form.Check
-            checked={activePrivate==="1"?true:false}
+              className="form-check-input form-switch"
+              // style={{backgroundColor:"green"}}
+              checked={activePrivate === "1" ? true : false}
               onChange={(e) => {
                 console.log(e.target.checked);
-                e.target.checked?activePrivateFun():disActivePrivate()
-                
+                e.target.checked ? activePrivateFun() : disActivePrivate();
               }}
               type="switch"
             />
           </div>
         </div>
         <div className="Plans">
+          {!arr.includes("Lite") &&
+             <div className="Plan">
+             <div className="Plan-Title">Lite Plan</div>
+             <div className="inputs">
+               <div className="Description-Input">
+                 <Form.Label>Description Plan Lite</Form.Label>
+                 <Form.Control
+                   style={{
+                     height: "100%",
+                     backgroundColor: "#1e1e1e",
+                     border: "0",
+                     color: "white",
+                   }}
+                   as="textarea"
+                   rows={3}
+                   onChange={(e) => {
+                     setDescription(e.target.value);
+                   }}
+                 />
+               </div>
+               <div className="Sub-Duration">
+                 <p
+                   style={{
+                     fontSize: "larger",
+                     width: "70%",
+                     textAlign: "left",
+                   }}
+                 >
+                   Subscription Duration:
+                 </p>
+                 <div className="month">
+                   <Form.Control
+                     style={{
+                       height: "80%",
+                       width: "50%",
+                       backgroundColor: "#1e1e1e",
+                       border: "0",
+                       color: "white",
+                     }}
+                     type="number"
+                     onChange={(e) => {
+                       setNumOfMonth(e.target.value);
+                     }}
+                   />
+                   <p style={{ fontSize: "larger" }}>Month</p>
+                 </div>
+               </div>
+               <div className="Price">
+                 <p style={{ fontSize: "larger" }}>Total Price:</p>
+                 <div className="num-price">
+                   <Form.Control
+                     style={{
+                       height: "80%",
+                       width: "50%",
+                       backgroundColor: "#1e1e1e",
+                       border: "0",
+                       color: "white",
+                     }}
+                     type="number"
+                     onChange={(e) => {
+                       setPrice(e.target.value);
+                     }}
+                   />
+                   <p style={{ fontSize: "x-large" }}>$</p>
+                 </div>
+               </div> 
+               <div className="Save-Btn">
+                   <Button
+                     disabled={abeled}
+                     onClick={() => {
+                       createNewPlan("Lite");
+                     }}
+                   >
+                     Save Changes
+                   </Button>
+                 </div>
+             </div>
+           </div>}
+             {!arr.includes("Gold") &&
+            <div className="Plan">
+            <div className="Plan-Title">Gold Plan</div>
+            <div className="inputs">
+              <div className="Description-Input">
+                <Form.Label>Description Plan Gold</Form.Label>
+                <Form.Control
+                  style={{
+                    height: "100%",
+                    backgroundColor: "#1e1e1e",
+                    border: "0",
+                    color: "white",
+                  }}
+                  as="textarea"
+                  rows={3}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="Sub-Duration">
+                <p
+                  style={{
+                    fontSize: "larger",
+                    width: "70%",
+                    textAlign: "left",
+                  }}
+                >
+                  Subscription Duration:
+                </p>
+                <div className="month">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setNumOfMonth(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "larger" }}>Month</p>
+                </div>
+              </div>
+              <div className="Price">
+                <p style={{ fontSize: "larger" }}>Total Price:</p>
+                <div className="num-price">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setPrice(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "x-large" }}>$</p>
+                </div>
+              </div> 
+              <div className="Save-Btn">
+                  <Button
+                    disabled={abeled}
+                    onClick={() => {
+                      createNewPlan("Gold");
+                    }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+            </div>
+          </div>}
+             {!arr.includes("Premuim") &&
+            <div className="Plan">
+            <div className="Plan-Title">Premuim Plan</div>
+            <div className="inputs">
+              <div className="Description-Input">
+                <Form.Label>Description Plan Premuim</Form.Label>
+                <Form.Control
+                  style={{
+                    height: "100%",
+                    backgroundColor: "#1e1e1e",
+                    border: "0",
+                    color: "white",
+                  }}
+                  as="textarea"
+                  rows={3}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="Sub-Duration">
+                <p
+                  style={{
+                    fontSize: "larger",
+                    width: "70%",
+                    textAlign: "left",
+                  }}
+                >
+                  Subscription Duration:
+                </p>
+                <div className="month">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setNumOfMonth(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "larger" }}>Month</p>
+                </div>
+              </div>
+              <div className="Price">
+                <p style={{ fontSize: "larger" }}>Total Price:</p>
+                <div className="num-price">
+                  <Form.Control
+                    style={{
+                      height: "80%",
+                      width: "50%",
+                      backgroundColor: "#1e1e1e",
+                      border: "0",
+                      color: "white",
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      setPrice(e.target.value);
+                    }}
+                  />
+                  <p style={{ fontSize: "x-large" }}>$</p>
+                </div>
+              </div> 
+              <div className="Save-Btn">
+                  <Button
+                    disabled={abeled}
+                    onClick={() => {
+                      createNewPlan("Premuim");
+                    }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+            </div>
+          </div>}
           {arr.map((ele, i) => (
             <div className="Plan">
               <div className="Plan-Title">{ele} Plan</div>
@@ -150,6 +391,11 @@ const Settings = () => {
                       border: "0",
                       color: "white",
                     }}
+                    value={
+                      plans[i]?.name === ele &&
+                      plans[i]?.description &&
+                      plans[i]?.description
+                    }
                     as="textarea"
                     rows={3}
                     onChange={(e) => {
@@ -158,7 +404,15 @@ const Settings = () => {
                   />
                 </div>
                 <div className="Sub-Duration">
-                  <p style={{ fontSize: "larger",width:"70%" ,textAlign:"left"}}>Subscription Duration:</p>
+                  <p
+                    style={{
+                      fontSize: "larger",
+                      width: "70%",
+                      textAlign: "left",
+                    }}
+                  >
+                    Subscription Duration:
+                  </p>
                   <div className="month">
                     <Form.Control
                       style={{
@@ -168,6 +422,11 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
+                      value={
+                        plans[i]?.name === ele &&
+                        plans[i]?.numofmonth &&
+                        plans[i]?.numofmonth
+                      }
                       type="number"
                       onChange={(e) => {
                         setNumOfMonth(e.target.value);
@@ -187,6 +446,11 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
+                      value={
+                        plans[i]?.name === ele &&
+                        plans[i]?.price &&
+                        plans[i]?.price
+                      }
                       type="number"
                       onChange={(e) => {
                         setPrice(e.target.value);
@@ -195,16 +459,18 @@ const Settings = () => {
                     <p style={{ fontSize: "x-large" }}>$</p>
                   </div>
                 </div>
-                <div className="Save-Btn">
-                  <Button
-                    disabled={abeled}
-                    onClick={() => {
-                      createNewPlan(ele);
-                    }}
-                  >
-                    Save Changes
-                  </Button>
-                </div>
+                {plans[i]?.name === ele || (
+                  <div className="Save-Btn">
+                    <Button
+                      disabled={abeled}
+                      onClick={() => {
+                        createNewPlan(ele);
+                      }}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -216,7 +482,6 @@ const Settings = () => {
         }
         style={{ padding: "5px" }}
       >
-        
         <span style={{ visibility: "hidden" }}>:</span>
         {message}
       </div>
