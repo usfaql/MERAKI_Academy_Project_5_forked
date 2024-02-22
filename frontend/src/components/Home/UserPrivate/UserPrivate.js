@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-const CoachPrivate = () => {
+const UserPrivate = () => {
   const revarse =useRef(null)
   if(revarse.current){
     revarse.current.scrollTop= revarse.current.scrollHeight
@@ -206,4 +206,4 @@ const CoachPrivate = () => {
   );
 };
 
-export default CoachPrivate;
+export default UserPrivate;
