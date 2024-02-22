@@ -14,7 +14,7 @@ import ProfileSetting from "./components/ProfileSetting/Profile"
 
 import Settings from "./components/Home/CoachPrivate/Settings/Settings";
 import PlanGym from "./components/Gym/PlanGym/PlanGym";
-
+import AddUserInfo from "./components/AddUserInfo/UserInfo "
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<NotFound/>}/>
         <Route path="/home" element={<Home/>}/>
+        <Route path="userinfo" element={<AddUserInfo/>}/>
         <Route path="/gym/create" element={<CreateGym/>}/>
         <Route path="/coach/private" element={<CoachPrivate/>}/>
 

@@ -1,0 +1,52 @@
+.user_info{
+    height: 91lvh;
+    display: flex;
+    flex-direction: column;
+}
+.userinfo_form{
+    width: 70%;
+    height: 70%;
+    background-color: #272727;
+    margin-top: 70px;
+    margin-left: 200px;
+    display: flex;
+    flex-direction: row;
+
+}
+.inpuut{
+    width: 40px;
+}
+.Title{
+    margin-bottom: 50px;
+    font-size:3.5em;
+    font-weight: bold;
+}
+.height-width {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.height {
+  width: 47.5%;
+  text-align: left;
+  font-size: large;
+}
+.weight {
+  width: 47.5%;
+  text-align: left;
+  font-size: large;
+}
+.goal {
+  text-align: left;
+  font-size: large;
+  
+}
+.submit-Btn Button{
+    margin-top: 10px;
+    width: 100%;
+    border: 0;
+    font-size: x-large;
+    background-color: #A1E533;
+    color : black;
+    font-weight: bold;
+}
