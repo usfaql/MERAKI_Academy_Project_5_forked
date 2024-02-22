@@ -83,7 +83,7 @@ const createUserInfo =async()=>{
               setHeight(e.target.value)
             }}
             
-              type="text"
+              type="number"
               style={{
                 backgroundColor: "#1e1e1e",
                 border: "0",
@@ -96,7 +96,7 @@ const createUserInfo =async()=>{
             <Form.Control onChange={(e)=>{
 setWeight(e.target.value)
             }}
-              type="text"
+              type="number"
               style={{
                 backgroundColor: "#1e1e1e",
                 border: "0",
@@ -116,8 +116,8 @@ setWeight(e.target.value)
         </div>
         <div className="submit-Btn">
           <Button onClick={()=>{
-            
-          }} >Register</Button>
+            createUserInfo()
+          }} >next</Button>
         </div>
         
     </Stack>
