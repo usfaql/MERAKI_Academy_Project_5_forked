@@ -1,0 +1,78 @@
+.contener-payment{
+    height: calc(100vh - 69px);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.invoice{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 25%;
+    text-align: start;
+}
+.inv{
+    display: flex;
+    justify-content: space-between;
+}
+.form-pay{
+    width: 50%;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+}
+.text{
+    width: 100%;
+    margin: 0;
+}
+.text-card{
+    width: 100%;
+    margin: 0;
+}
+.input-card{
+    width: 100%;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 5px;
+    
+    padding-bottom: 5px;
+    border: 1px solid gray;
+    text-align: start;
+}
+.d{
+    width: 100%;
+    border-radius: 0 4px 4px 0 ;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-left: 0;
+    border: 1px solid gray;
+    text-align: start;
+}
+.c{
+    width: 100%;
+    border-radius: 4px 0 0 4px ;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px solid gray;
+    border-right: 0;
+    text-align: start;
+}
+
+.pay-btn{
+    width: 50%;
+    border: 0;
+    border-radius: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #A1E533;
+    font-weight: bold;
+}
