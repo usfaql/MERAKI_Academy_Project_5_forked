@@ -5,7 +5,6 @@ export const authSlice=createSlice({
      token: localStorage.getItem("token")||null,
     userId:localStorage.getItem("userId")||null,
     isLoggedIn: localStorage.getItem("token") ? true:false,
-    role:null,
     activePrivate:localStorage.getItem("activePrivate")||null
     },
     
@@ -37,5 +36,6 @@ export const {
     setUserId,
     setActivePrivate,
     setLogout,
+    setRole
 }=authSlice.actions;
 export default authSlice.reducer
