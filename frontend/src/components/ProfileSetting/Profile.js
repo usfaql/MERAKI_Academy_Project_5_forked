@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./Profile.css";
+import Image from 'react-bootstrap/Image';
 
 import axios from "axios";
 
@@ -81,8 +82,9 @@ console.log(userinfo.image);
         <div className="profile_form">
               
           <div className="profile_img">
-          <img src={userinfo.image} alt="profile img"   
-          />
+          <Col xs={6} md={4}>
+          <Image src={userinfo.image} roundedCircle />
+        </Col>
           <input type="file" onChange={(e)=>{
             setImage(e.target.value)
             console.log(e.target.files[0]);
@@ -92,6 +94,7 @@ console.log(userinfo.image);
       <Row className="mb-3">
         <Form.Group as={Col} controlId="formGridEmail" style={{textAlign:"start"}}  >
           <Form.Label style={{color:"white",fontSize:"18px"}}>First Name:</Form.Label>
+          
           <Form.Control type="text" placeholder="first name" value={userinfo.firstname}style={{  border: "0", color: "#272727"}} />
         </Form.Group>
 
