@@ -21,12 +21,20 @@ function GymHome() {
       headers: { Authorization: `Bearer ${state.token}` }
     }
     useEffect(()=>{
-      axios.get(`http://localhost:5000/gyms/user/${state.userId}`, config).then((result) => {
-        setMyGym(result.data.gyms);
-        console.log(result.data);
-      }).catch((err) => {
-        console.log("Error", err);
-      });
+      if(!state.token){
+        localStorage.clear();
+            navigate('/login')
+      }else{
+        axios.get(`http://localhost:5000/gyms/user/${state.userId}`, config).then((result) => {
+          setMyGym(result.data.gyms);
+        }).catch((err) => {
+          if(err.response.data.message === "The token is invalid or expired"){
+            localStorage.clear();
+            navigate('/login')
+          }
+        });
+      }
+
     },[])
     
 

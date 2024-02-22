@@ -39,7 +39,7 @@ function NavBar() {
         <div style={{textAlign:"end"}}>
           {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
             <img style={{width:"48px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
-            <li>{covertUserInfoToJson.nameUser}</li></ul>
+            <li>{covertUserInfoToJson && covertUserInfoToJson.nameUser}</li></ul>
             : 
             <button className='button' onClick={()=>{
               navigate('login')

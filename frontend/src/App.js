@@ -14,6 +14,7 @@ import ProfileSetting from "./components/ProfileSetting/Profile"
 
 import Settings from "./components/Home/CoachPrivate/Settings/Settings";
 import PlanGym from "./components/Gym/PlanGym/PlanGym";
+import PaymentPlan from "./components/PaymentPlan/PaymentPlan";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
 
        <Route path="/coach/private/setting" element={<Settings/>}/>
         <Route path="/:gymid/plan" element={<PlanGym/>}/>
+        <Route path="/checkout/:gymid/:planid" element={<PaymentPlan/>}/>
       </Routes>
     </div>
   );

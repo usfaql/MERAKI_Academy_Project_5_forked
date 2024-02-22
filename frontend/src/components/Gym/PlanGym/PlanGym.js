@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+
 function PlanGym() {
+    const navigate = useNavigate();
     const {gymid} = useParams();
     const [dataGym, setDataGym] = useState(null);
     const [dataPlan, setDataPlan] = useState(null);
     const [dataLitePlan, setDataLitePlan] = useState(null);
     const [dataGoldPlan, setDataGoldPlan] = useState(null);
     const [dataLProPlan, setDataProPlan] = useState(null);
+    
+
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -60,6 +64,7 @@ function PlanGym() {
             </div>
         </div>
     </div>
+
     <div className='continer-plan'>
         {dataLitePlan || dataGoldPlan || dataLProPlan ? <>
             <div className='lite-plan plan' style={dataLitePlan ? {display:"flex"} : {display:"none"}}>
@@ -73,7 +78,8 @@ function PlanGym() {
                 <p>{dataLitePlan && dataLitePlan.description}</p>
             </div>
             <div className='select-plan'>
-                <button className='select-btn'>select Plan</button>
+                <button className='select-btn' onClick={()=>{
+                }}>select Plan</button>
             </div>
         </div>
         <div className='gold-plan plan' style={dataGoldPlan ? {display:"flex"} : {display:"none"}}>
@@ -101,11 +107,13 @@ function PlanGym() {
                 <p>{dataLProPlan && dataLProPlan.description}</p>
             </div>
             <div className='select-plan'>
-                <button className='select-btn'>select Plan</button>
+                <button className='select-btn'onClick={()=>{
+                    console.log(dataLProPlan);
+                    navigate(`/checkout/${dataLProPlan.gym_id}/${dataLProPlan.id}`)
+                }}>select Plan</button>
             </div>
         </div>
         </>: <div style={{width:"100%", height:"100%", alignItems:"center", textAlign:"center"}}>Loading...</div>}
-
       </div>
     </div>
   )
