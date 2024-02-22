@@ -24,7 +24,9 @@ function NavBar() {
                 <li className='nav-map' onClick={()=>{
                   navigate("/home")
                 }}>Dashboard</li>
-                <li className='nav-map end'>Settings</li>
+                <li className='nav-map end' onClick={()=>{
+                  navigate('/profile')
+                }}>Settings</li>
             </ul>
             :
             <ul className="navbar-lu">
