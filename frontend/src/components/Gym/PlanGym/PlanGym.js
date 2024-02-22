@@ -80,6 +80,7 @@ function PlanGym() {
             </div>
             <div className='select-plan'>
                 <button className='select-btn' onClick={()=>{
+                    navigate(`/checkout/${dataLitePlan.gym_id}/${dataLitePlan.id_plan}`)
                 }}>select Plan</button>
             </div>
         </div>
@@ -94,7 +95,9 @@ function PlanGym() {
                 <p>{dataGoldPlan && dataGoldPlan.description}</p>
             </div>
             <div className='select-plan'>
-                <button className='select-btn'>select Plan</button>
+                <button className='select-btn' onClick={()=>{
+                    navigate(`/checkout/${dataGoldPlan.gym_id}/${dataGoldPlan.id_plan}`)
+                }}>select Plan</button>
             </div>
         </div>
         <div className='premium-plan plan' style={dataLProPlan ? {display:"flex"} : {display:"none"}}>
