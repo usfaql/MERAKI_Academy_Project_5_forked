@@ -4,48 +4,25 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setUsers } from "../../Redux/Reducers/CoachPrivate/index";
+import { useSelector } from "react-redux";
 const CoachPrivate = () => {
   const revarse =useRef(null)
   if(revarse.current){
     revarse.current.scrollTop= revarse.current.scrollHeight
   }
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo=localStorage.getItem("userInfo")
   const covertUserInfoToJson = JSON.parse(userInfo);
-  const { token, userId, users } = useSelector((state) => {
+  const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
-      userId: state.auth.userId,
-      users: state.coachPrivate.users,
     };
   });
   const [coachs, setCoachs] = useState([])
   const [header, setHeader] = useState("");
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
-  const [filtered, setFiltered] = useState([]);
-  const removeUserFromPrivate = (user_id, coach_id) => {
-    axios
-      .put(
-        `http://localhost:5000/coachs/user/remove`,
-        { user_id: user_id, coach_id: coach_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const getAllUsers = () => {
+  const getAllCoachs = () => {
     axios
       .get(`http://localhost:5000/coachs/coach`, {
         headers: {
@@ -68,7 +45,7 @@ const CoachPrivate = () => {
       });
   };
   useEffect(() => {
-    getAllUsers();
+    getAllCoachs();
   }, []);
   let messages = [
     {
@@ -102,7 +79,6 @@ const CoachPrivate = () => {
         "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
     },
   ];
-  console.log(coachs);
   return (
     <div className="Coach-Private-Page">
       <div className="Left-Side">
