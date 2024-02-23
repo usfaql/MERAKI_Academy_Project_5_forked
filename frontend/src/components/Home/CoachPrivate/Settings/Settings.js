@@ -51,13 +51,21 @@ const Settings = () => {
       });
   };
   const updatePlan=(name)=>{
+    setAbeled(true);
     axios.put(`http://localhost:5000/coachs/plan`,{name:name,description,numOfMonth,price}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((result)=>{
       console.log(result);
+      setAbeled(false);
+      setSuccess(result.data.success);
+      setMessage(result.data.message);
+      getAllPlans()
     }).catch((error)=>{
+      setSuccess(false);
+          setMessage(error.response.data.message);
+      setAbeled(false);
       console.log(error);
     })
   }
@@ -474,7 +482,7 @@ const Settings = () => {
                     <Button
                       disabled={(plans[i]?.name===ele ?(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price):false)}
                       onClick={() => {
-                        createNewPlan(ele);
+                        updatePlan(ele);
                       }}
                     >
                       Save Changes
