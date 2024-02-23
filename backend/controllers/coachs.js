@@ -302,6 +302,24 @@ const updatePlanByName=(req,res)=>{
       });
     });
 }
+const removePlanByName=(req,res)=>{
+  const name =req.body
+  const value=[name]
+  const query=`DELETE FROM coach_plan WHERE name=$1`
+  pool.query(query,value),then((result)=>{
+    res.status(201).json({
+      success:true,
+      message:`${name} plan Deleted Successfully`
+    })
+
+  }).catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err
+      });
+    });
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -313,5 +331,6 @@ module.exports = {
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId,
   getAllCoachesByUserId,
-  updatePlanByName
+  updatePlanByName,
+  removePlanByName
 };

@@ -11,7 +11,8 @@ const {
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId,
   getAllCoachesByUserId,
-  updatePlanByName
+  updatePlanByName,
+  removePlanByName
 } = require("../controllers/coachs");
 const authentication = require("../middleware/authentication");
 coachRouter.post("/plan", authentication, createNewPlane);
@@ -25,4 +26,5 @@ coachRouter.get("/private", authentication, activePrivate);
 coachRouter.get("/private/disactive",authentication,disActivePrivate)
 coachRouter.get("/openedprivate", authentication, getAllCoachsAreOpenPrivate);
 coachRouter.put('/plan',authentication,updatePlanByName)
+coachRouter.delete('/plan',authentication,removePlanByName)
 module.exports = coachRouter;
