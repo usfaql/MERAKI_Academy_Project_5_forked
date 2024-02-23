@@ -1,16 +1,41 @@
-import React, {useRef, useEffect } from 'react'
+import React, {useRef, useEffect ,useState} from 'react'
 import { useParams } from 'react-router-dom'
 import './style.css';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 // import { IoSettingsOutline } from "react-icons/io5";
 function GymGroup() {
     const {gymid} = useParams();
     const reversChat = useRef(null);
+    const [allCoachs, setAllCoachs] = useState(null);
+    const [allUsers, setAllUsers] = useState(null);
 
+    const state = useSelector((state)=>{
+        return{
+        userId : state.auth.userId,
+        token : state.auth.token
+        }
+    })
+    const config = {
+        headers: { Authorization: `Bearer ${state.token}` }
+    }
 
     useEffect(()=>{
         if(reversChat.current){
             reversChat.current.scrollTop = reversChat.current.scrollHeight;
         };
+
+        axios.get(`http://localhost:5000/gyms/${gymid}/coach`,config).then((result) => {
+            setAllCoachs(result.data.coachs)
+            console.log(result.data.coachs);
+        }).catch((err) => {
+            console.log(err);
+        });
+        axios.get(`http://localhost:5000/gyms/${gymid}/user`, config).then((result) => {
+            setAllUsers(result.data.users)
+        }).catch((err) => {
+            console.log(err);
+        });
     },[])
 
     const generateChatGym = ()=>{
@@ -27,6 +52,33 @@ function GymGroup() {
         return chatLite;
         
     }
+
+    const listCoachs = ()=>{
+        const coachArr = [];
+        for(let i = 0; i < allCoachs?.length; i++){
+            coachArr.push(
+                        <>
+                        <li style={{padding:"5px 15px 0px"}}>{allCoachs[i].firstname + " " + allCoachs[i].lastname}</li>
+                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
+                        </>
+            )
+        }
+        return coachArr;
+    }
+
+    const listUsers = ()=>{
+        const coachArr = [];
+        for(let i = 0; i < allUsers?.length; i++){
+            coachArr.push(
+                        <>
+                        <li style={{padding:"5px 15px 0px"}}>{allUsers[i].firstname + " " + allUsers[i].lastname}</li>
+                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
+                        </>
+            )
+        }
+        return coachArr;
+    }
+
   return (
     <div className='body-group'>
         <div className='group-contener'>
@@ -94,24 +146,15 @@ function GymGroup() {
                 <div>
                     <h6 className='head'>Coach</h6>
                     <ul>
-                        <li style={{padding:"5px 15px 0px"}}>Hamzeh Odeh</li>
-                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
-                        <li style={{padding:"0 15px"}}>Mohammad Odat</li>
-                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
-                        <li style={{padding:"0 15px"}}>Khaled Anas</li>
-                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
+                        {listCoachs()}
+                        
                     </ul>
                 
                 </div>
                 <div>
                     <h6 className='head'>User</h6>
                     <ul>
-                        <li style={{padding:"5px 15px 0px"}}>Omar Ameer</li>
-                        <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
-                        <li style={{padding:"0 15px"}}>Bashar Nehad</li>
-                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
-                        <li style={{padding:"0 15px"}}>Adam Adnan</li>
-                        <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
+                       {listUsers()}
                     </ul>
                 </div>
             </div>
