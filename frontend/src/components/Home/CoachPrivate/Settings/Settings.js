@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Settings.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import CloseButton from 'react-bootstrap/CloseButton';
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPlans,
@@ -165,6 +167,7 @@ const Settings = () => {
           {!arr.includes("Lite") &&
              <div className="Plan">
              <div className="Plan-Title">Lite Plan</div>
+             
              <div className="inputs">
                <div className="Description-Input">
                  <Form.Label>Description Plan Lite</Form.Label>
@@ -398,6 +401,9 @@ const Settings = () => {
           </div>}
           {arr.map((ele, i) => (
             <div className="Plan">
+              <CloseButton
+              title="Remove"
+              style={{backgroundColor:"white" ,alignSelf:"end"}} />
               <div className="Plan-Title">{ele} Plan</div>
               <div className="inputs">
                 <div className="Description-Input">
@@ -477,7 +483,6 @@ const Settings = () => {
                     <p style={{ fontSize: "x-large" }}>$</p>
                   </div>
                 </div>
-                {/* {(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price) || ( */}
                   <div className="Save-Btn">
                     <Button
                       disabled={(plans[i]?.name===ele ?(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price):false)}
@@ -488,7 +493,6 @@ const Settings = () => {
                       Save Changes
                     </Button>
                   </div>
-                {/* )} */}
               </div>
             </div>
           ))}
