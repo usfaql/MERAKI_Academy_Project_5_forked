@@ -71,6 +71,17 @@ const Settings = () => {
       console.log(error);
     })
   }
+  const deletePlan=(name)=>{
+    axios.put(`http://localhost:5000/coachs/remove/plan`,{name:name}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      console.log(result);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  }
   const disActivePrivate = () => {
     axios
       .get(`http://localhost:5000/coachs/private/disactive`, {
@@ -402,8 +413,12 @@ const Settings = () => {
           {arr.map((ele, i) => (
             <div className="Plan">
               <CloseButton
+              onClick={()=>{
+                deletePlan(ele)
+              }}
               title="Remove"
-              style={{backgroundColor:"white" ,alignSelf:"end"}} />
+              style={{backgroundColor:"white" ,alignSelf:"end"}}
+               />
               <div className="Plan-Title">{ele} Plan</div>
               <div className="inputs">
                 <div className="Description-Input">

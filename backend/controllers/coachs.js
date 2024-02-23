@@ -303,10 +303,9 @@ const updatePlanByName=(req,res)=>{
     });
 }
 const removePlanByName=(req,res)=>{
-  const name =req.body
-  const value=[name]
+  const {name} =req.body
   const query=`DELETE FROM coach_plan WHERE name=$1`
-  pool.query(query,value),then((result)=>{
+  pool.query(query,[name]).then((result)=>{
     res.status(201).json({
       success:true,
       message:`${name} plan Deleted Successfully`

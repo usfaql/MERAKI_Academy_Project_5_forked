@@ -26,5 +26,5 @@ coachRouter.get("/private", authentication, activePrivate);
 coachRouter.get("/private/disactive",authentication,disActivePrivate)
 coachRouter.get("/openedprivate", authentication, getAllCoachsAreOpenPrivate);
 coachRouter.put('/plan',authentication,updatePlanByName)
-coachRouter.delete('/plan',authentication,removePlanByName)
+coachRouter.put('/remove/plan',authentication,removePlanByName)
 module.exports = coachRouter;
