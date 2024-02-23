@@ -1,16 +1,39 @@
-import React, {useRef, useEffect } from 'react'
+import React, {useRef, useEffect ,useState} from 'react'
 import { useParams } from 'react-router-dom'
 import './style.css';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 // import { IoSettingsOutline } from "react-icons/io5";
 function GymGroup() {
     const {gymid} = useParams();
     const reversChat = useRef(null);
+    const [allCoachs, setAllCoachs] = useState(null);
+    const [allUsers, setAllUsers] = useState(null);
 
-
+    const state = useSelector((state)=>{
+        return{
+        userId : state.auth.userId,
+        token : state.auth.token
+        }
+    })
+    const config = {
+        headers: { Authorization: `Bearer ${state.token}` }
+      }
     useEffect(()=>{
         if(reversChat.current){
             reversChat.current.scrollTop = reversChat.current.scrollHeight;
         };
+
+        axios.get(`http://localhost:5000/gyms/${gymid}/coach`,config).then((result) => {
+            setAllCoachs(result.data.coachs)
+        }).catch((err) => {
+            console.log(err);
+        });
+        axios.get(`http://localhost:5000/gyms/${gymid}/user`, config).then((result) => {
+            setAllUsers(result.data.users)
+        }).catch((err) => {
+            console.log(err);
+        });
     },[])
 
     const generateChatGym = ()=>{
