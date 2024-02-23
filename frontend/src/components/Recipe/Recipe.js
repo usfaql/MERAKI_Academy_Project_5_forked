@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 import "./Recipe.css";
 import Image from 'react-bootstrap/Image';
 
 const Recipe = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [favorites, setFavorites] = useState([]);
 
     const gymBoxes = [
+        // Recipes data
         {
             id: 1,
             name: 'Chocolate Chip Cookies',
@@ -164,39 +167,58 @@ const Recipe = () => {
 
     const initialRecipeRender = searchQuery === '' ? gymBoxes : filteredRecipes;
 
+    const addToFavorites = (recipe) => {
+        if (!favorites.some(fav => fav.id === recipe.id)) {
+            setFavorites([...favorites, recipe]);
+        }
+    };
+
     return (
         <div className='recipe'>
             <div className='recipe_card'>
                 <div className='search_bar'>
-                <input
-                    type="text"
-                    placeholder="Search recipes..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className='searchbar'
-                />
+                    <input
+                        type="text"
+                        placeholder="Search recipes..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className='searchbar'
+                    />
                 </div>
-               
                 <div className='card'>
-                    <Row xs={88} md={4} className="g-2" style={{background:"#272727"} }>
-                        {initialRecipeRender.map((e, i) => (
-                            <Col key={i}>
-                                <Card style={{}} className='ccard'>
-                                <Col xs={88} md={4}>
-                                    <Image src="https://sallysbakingaddiction.com/wp-content/uploads/2023/06/healthy-breakfast-recipe-ideas.jpg" roundedCircle  className='image_card'/>
-                                      </Col>
-                                   
-                                    <Card.Body  className='cardbody'>
-                                        <Card.Title style={{fontWeight:"bold"}}>{e.name}</Card.Title>
-                                        <Card.Text className='text-card'>
-                                            {e.description}
-                                        </Card.Text>
+                    <Row xs={1} md={4} className="g-2" style={{background:"#272727"} }>
+                        {initialRecipeRender.map((recipe, index) => (
+                            <Col key={index}>
+                                <Card className='ccard'>
+                            <Image src="https://sallysbakingaddiction.com/wp-content/uploads/2023/06/healthy-breakfast-recipe-ideas.jpg" roundedCircle  className='image_card'/>
 
+                                    <Card.Body className='cardbody'>
+                                        <Card.Title style={{fontWeight:"bold"}}>{recipe.name}</Card.Title>
+                                        <Card.Text className='text-card'>
+                                            {recipe.description}
+                                        </Card.Text>
+                                       
                                     </Card.Body>
+                                    <Card.Footer>
+                                        <Button 
+                                            variant="success" 
+                                            onClick={() => addToFavorites(recipe)} style={{background:"#ff0000" , float:"left"}}
+                                        >
+                                            Fav
+                                        </Button>
+                                    </Card.Footer>
                                 </Card>
                             </Col>
                         ))}
                     </Row>
+                </div>
+                <div className="favorites">
+                    <h2>My Favorites</h2>
+                    {favorites.map((fav, index) => (
+                        <div key={index}>
+                            <p>{fav.name}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
