@@ -9,7 +9,7 @@ function GymGroup() {
     const reversChat = useRef(null);
     const [allCoachs, setAllCoachs] = useState(null);
     const [allUsers, setAllUsers] = useState(null);
-
+    const [infoGym, setInfoGym] = useState(null);
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -27,7 +27,6 @@ function GymGroup() {
 
         axios.get(`http://localhost:5000/gyms/${gymid}/coach`,config).then((result) => {
             setAllCoachs(result.data.coachs)
-            console.log(result.data.coachs);
         }).catch((err) => {
             console.log(err);
         });
@@ -35,6 +34,16 @@ function GymGroup() {
             setAllUsers(result.data.users)
         }).catch((err) => {
             console.log(err);
+        });
+        axios.get(`http://localhost:5000/gyms/${gymid}`, config).then((result) => {
+            setInfoGym(result.data.oneGym)
+        }).catch((err) => {
+            
+        });
+        axios.get(`http://localhost:5000/gyms/plan/${gymid}`,config).then((result) => {
+            
+        }).catch((err) => {
+            
         });
     },[])
 
@@ -97,7 +106,7 @@ function GymGroup() {
             <div className='control-gym'>
                 <div style={{display:"flex", alignItems:"center", gap:"10px"}}> 
                     <img style={{width:"48px", height:"48px", borderRadius:"24px"}} src="https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais"/>
-                    <h6>Gym Name</h6>
+                    <h6>{infoGym?.name}</h6>
                 </div>
                 
                 <div style={{display:"flex", gap:"10px",paddingRight:"10px"}}>
