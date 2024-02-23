@@ -1,7 +1,7 @@
 import React, {useRef, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import './style.css';
-import { IoSettingsOutline } from "react-icons/io5";
+// import { IoSettingsOutline } from "react-icons/io5";
 function GymGroup() {
     const {gymid} = useParams();
     const reversChat = useRef(null);
