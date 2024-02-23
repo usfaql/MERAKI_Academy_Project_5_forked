@@ -390,7 +390,7 @@ const Settings = () => {
                       border: "0",
                       color: "white",
                     }}
-                    value={
+                    defaultValue={
                       plans[i]?.name === ele &&
                       plans[i]?.description &&
                       plans[i]?.description
@@ -421,7 +421,7 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
-                      value={
+                      defaultValue={
                         plans[i]?.name === ele &&
                         plans[i]?.numofmonth &&
                         plans[i]?.numofmonth
@@ -445,7 +445,7 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
-                      value={
+                      defaultValue={
                         plans[i]?.name === ele &&
                         plans[i]?.price &&
                         plans[i]?.price
@@ -458,10 +458,10 @@ const Settings = () => {
                     <p style={{ fontSize: "x-large" }}>$</p>
                   </div>
                 </div>
-                {plans[i]?.name === ele || (
+                {/* {(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price) || ( */}
                   <div className="Save-Btn">
                     <Button
-                      disabled={abeled}
+                      disabled={(plans[i]?.name===ele ?(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price):false)}
                       onClick={() => {
                         createNewPlan(ele);
                       }}
@@ -469,7 +469,7 @@ const Settings = () => {
                       Save Changes
                     </Button>
                   </div>
-                )}
+                {/* )} */}
               </div>
             </div>
           ))}
