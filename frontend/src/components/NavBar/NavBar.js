@@ -7,11 +7,15 @@ function NavBar() {
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
   const state = useSelector((state)=>{
-    return{
+  return{
       isLoggedIn : state.auth.isLoggedIn,
       role:state.auth.role
     }
-  })
+  });
+  
+  
+
+
   return (
     <div className='nav-bar'>
         <div>
@@ -41,7 +45,14 @@ function NavBar() {
         <div style={{textAlign:"end"}}>
           {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
             <img style={{width:"48px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
-            <li>{covertUserInfoToJson && covertUserInfoToJson.nameUser}</li></ul>
+            <div>
+              <ul style={{textAlign:"start", listStyle: "none"}}>
+                <li>{covertUserInfoToJson && covertUserInfoToJson.nameUser}</li>
+                <li style={{fontSize:"10px"}}>{covertUserInfoToJson.role === 3 && "<COACH>" || covertUserInfoToJson.role === 2 && "<USER>"}</li>
+              </ul>
+            </div>
+            
+            </ul>
             : 
             <button className='button' onClick={()=>{
               navigate('login')

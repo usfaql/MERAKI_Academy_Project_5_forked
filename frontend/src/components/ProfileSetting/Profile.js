@@ -84,9 +84,9 @@ console.log(userinfo.image);
           <div className="profile_img">
           <Col xs={6} md={4}>
           <Image src={userinfo.image} roundedCircle />
-        </Col>
+          </Col>
           <input type="file" onChange={(e)=>{
-            setImage(e.target.value)
+            setImage(e.target.value);
             console.log(e.target.files[0]);
           }} />
           </div>
