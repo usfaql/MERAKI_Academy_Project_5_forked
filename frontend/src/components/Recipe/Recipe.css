@@ -1,0 +1,13 @@
+.recipe{
+    height: 105vh;
+   
+}
+.recipe_card{
+    width: 70%;
+    height: 70%;
+    background-color: #272727;
+    margin-top: 70px;
+    margin-left: 200px;
+    display: flex;
+    flex-direction: row;
+}
