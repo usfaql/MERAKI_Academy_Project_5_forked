@@ -77,9 +77,12 @@ const Settings = () => {
         Authorization: `Bearer ${token}`,
       },
     }).then((result)=>{
-      console.log(result);
+      getAllPlans()
+      setSuccess(result.data.success);
+      setMessage(result.data.message);
     }).catch((error)=>{
-      console.log(error);
+      setSuccess(false);
+      setMessage(error.response.data.message);
     })
   }
   const disActivePrivate = () => {
