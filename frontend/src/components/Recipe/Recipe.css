@@ -1,8 +1,11 @@
 .recipe {
-  height: 105vh;
+  height: 400vh;
+  background-color: #272727;
 }
 .recipe_card {
-  
+  margin-left: 200px;
+  margin-right: 200px;
+  background-color: #272727;
 }
 .ccard {
   padding: 30px;
@@ -11,8 +14,21 @@
 
 .searchbar{
     width: 30pc;
+    border-radius: 30px;
+    background-color: white;
+    color: black;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+    height: 60px;
     
 }
 .search_bar{
     padding: 60px;
+}
+.cardbody{
+    height: 150px;
+}
+.image_card{
+    height:200px;
+    width: 200px;
 }
