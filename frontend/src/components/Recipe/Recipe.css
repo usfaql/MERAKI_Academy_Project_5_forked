@@ -1,13 +1,18 @@
-.recipe{
-    height: 105vh;
-   
+.recipe {
+  height: 105vh;
 }
-.recipe_card{
-    width: 70%;
-    height: 70%;
-    background-color: #272727;
-    margin-top: 70px;
-    margin-left: 200px;
-    display: flex;
-    flex-direction: row;
+.recipe_card {
+  
+}
+.ccard {
+  padding: 30px;
+}
+
+
+.searchbar{
+    width: 30pc;
+    
+}
+.search_bar{
+    padding: 60px;
 }
