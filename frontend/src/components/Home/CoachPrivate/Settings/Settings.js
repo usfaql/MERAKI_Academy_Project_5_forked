@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Settings.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import CloseButton from 'react-bootstrap/CloseButton';
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPlans,
@@ -23,7 +25,7 @@ const Settings = () => {
   const [message, setMessage] = useState("");
   const [arr, setarr] = useState([]);
   const [abeled, setAbeled] = useState(false);
-  //   const [name, setName] = useState("");
+    // const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
   const [numOfMonth, setNumOfMonth] = useState(null);
@@ -50,6 +52,39 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
+  const updatePlan=(name)=>{
+    setAbeled(true);
+    axios.put(`http://localhost:5000/coachs/plan`,{name:name,description,numOfMonth,price}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      console.log(result);
+      setAbeled(false);
+      setSuccess(result.data.success);
+      setMessage(result.data.message);
+      getAllPlans()
+    }).catch((error)=>{
+      setSuccess(false);
+          setMessage(error.response.data.message);
+      setAbeled(false);
+      console.log(error);
+    })
+  }
+  const deletePlan=(name)=>{
+    axios.put(`http://localhost:5000/coachs/remove/plan`,{name:name}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      getAllPlans()
+      setSuccess(result.data.success);
+      setMessage(result.data.message);
+    }).catch((error)=>{
+      setSuccess(false);
+      setMessage(error.response.data.message);
+    })
+  }
   const disActivePrivate = () => {
     axios
       .get(`http://localhost:5000/coachs/private/disactive`, {
@@ -146,6 +181,7 @@ const Settings = () => {
           {!arr.includes("Lite") &&
              <div className="Plan">
              <div className="Plan-Title">Lite Plan</div>
+             
              <div className="inputs">
                <div className="Description-Input">
                  <Form.Label>Description Plan Lite</Form.Label>
@@ -379,6 +415,13 @@ const Settings = () => {
           </div>}
           {arr.map((ele, i) => (
             <div className="Plan">
+              <CloseButton
+              onClick={()=>{
+                deletePlan(ele)
+              }}
+              title="Remove"
+              style={{backgroundColor:"white" ,alignSelf:"end"}}
+               />
               <div className="Plan-Title">{ele} Plan</div>
               <div className="inputs">
                 <div className="Description-Input">
@@ -390,7 +433,7 @@ const Settings = () => {
                       border: "0",
                       color: "white",
                     }}
-                    value={
+                    defaultValue={
                       plans[i]?.name === ele &&
                       plans[i]?.description &&
                       plans[i]?.description
@@ -421,7 +464,7 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
-                      value={
+                      defaultValue={
                         plans[i]?.name === ele &&
                         plans[i]?.numofmonth &&
                         plans[i]?.numofmonth
@@ -445,7 +488,7 @@ const Settings = () => {
                         border: "0",
                         color: "white",
                       }}
-                      value={
+                      defaultValue={
                         plans[i]?.name === ele &&
                         plans[i]?.price &&
                         plans[i]?.price
@@ -458,18 +501,16 @@ const Settings = () => {
                     <p style={{ fontSize: "x-large" }}>$</p>
                   </div>
                 </div>
-                {plans[i]?.name === ele || (
                   <div className="Save-Btn">
                     <Button
-                      disabled={abeled}
+                      disabled={(plans[i]?.name===ele ?(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price):false)}
                       onClick={() => {
-                        createNewPlan(ele);
+                        updatePlan(ele);
                       }}
                     >
                       Save Changes
                     </Button>
                   </div>
-                )}
               </div>
             </div>
           ))}
