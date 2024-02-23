@@ -176,3 +176,9 @@ fill: #6c3e3e;
   ::-webkit-scrollbar-thumb:hover {
     background: #575757; 
   }
+  .show{
+    position: absolute;
+    top: 4%;
+    left: 6px;
+    fill: #7aad28;
+}
