@@ -1,12 +1,12 @@
 const express = require("express");
 
-const {createGym, 
+const {createGym,
     addNewUserInGym,
     addNewCoachInGym,
     getAllGymByUserId,
-    getAllGym, 
-    getAllUserInGym, 
-    getAllCoachInGym, 
+    getAllGym,
+    getAllUserInGym,
+    getAllCoachInGym,
     deleteUserInGym,
     deleteCoachInGym,
     createPlan,
@@ -17,7 +17,7 @@ const {createGym,
     getAllRoomByGymId,
     getGymByGymId,
     getPlanById} = require("../controllers/Gym");
-    const authentication = require("../middleware/authentication");
+const authentication = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
 gymsRouter.post("/", authentication ,createGym);

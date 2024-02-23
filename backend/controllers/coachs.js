@@ -256,6 +256,33 @@ const getAllUserByCoachId=(req,res)=>{
     });
   });
 }
+const getAllCoachesByUserId=(req,res)=>{
+  const user_id=req.token.userId
+  const value=[user_id]
+  const query=`SELECT room_user.* , users.firstname ,users.lastname FROM room_user 
+  JOIN users ON room_user.coach_id=users.id
+  WHERE room_user.user_id=$1 AND room_user.is_deleted =0 `
+  pool.query(query,value).then((result)=>{
+    if(result.rows.length){
+      res.status(201).json({
+        success:true,
+        message:"All Coach By User",
+        coachs:result.rows
+      })
+    }else{
+      res.status(201).json({
+        success:true,
+        message:"You are not registered with any coach ",
+     })
+  }
+}).catch((err) => {
+  res.status(500).json({
+    success: false,
+    message: "Server error",
+    err
+  });
+});
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -265,5 +292,6 @@ module.exports = {
   activePrivate,
   disActivePrivate,
   getAllCoachsAreOpenPrivate,
-  getAllUserByCoachId
+  getAllUserByCoachId,
+  getAllCoachesByUserId
 };
