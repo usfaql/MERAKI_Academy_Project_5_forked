@@ -283,6 +283,25 @@ const getAllCoachesByUserId=(req,res)=>{
   });
 });
 }
+const updatePlanByName=(req,res)=>{
+  const {name,description,numOfMonth,price}=req.body
+  const value=[name,description||null,numOfMonth||null,price||null]
+  const query=`UPDATE coach_plan SET description=COALESCE($2,description) , numOfMonth=COALESCE($3,numOfMonth),price=COALESCE($4,price) WHERE name=$1 RETURNING *;`
+  pool.query(query,value).then((result=>{
+    res.status(201).json({
+      success:true,
+      message:`${name} Plan Updated Successfully`,
+      plan:result.rows
+      
+    })
+  })).catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err
+      });
+    });
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -293,5 +312,6 @@ module.exports = {
   disActivePrivate,
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId,
-  getAllCoachesByUserId
+  getAllCoachesByUserId,
+  updatePlanByName
 };

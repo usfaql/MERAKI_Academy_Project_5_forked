@@ -23,7 +23,7 @@ const Settings = () => {
   const [message, setMessage] = useState("");
   const [arr, setarr] = useState([]);
   const [abeled, setAbeled] = useState(false);
-  //   const [name, setName] = useState("");
+    // const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
   const [numOfMonth, setNumOfMonth] = useState(null);
@@ -50,6 +50,17 @@ const Settings = () => {
         setMessage(error.response.data.message);
       });
   };
+  const updatePlan=(name)=>{
+    axios.put(`http://localhost:5000/coachs/plan`,{name:name,description,numOfMonth,price}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+      console.log(result);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  }
   const disActivePrivate = () => {
     axios
       .get(`http://localhost:5000/coachs/private/disactive`, {
