@@ -20,6 +20,7 @@ const CoachPrivate = () => {
       users: state.coachPrivate.users,
     };
   });
+  const [start, setStart] = useState(false)
   const [show, setshow] = useState(true);
   const [header, setHeader] = useState("");
   const [success, setSuccess] = useState(null);
@@ -176,6 +177,7 @@ const CoachPrivate = () => {
                     className="User-Name"
                     onClick={() => {
                       setHeader(`${user.firstname} ${user.lastname}`);
+                      setStart(true)
                     }}
                   >
                     <>
@@ -267,7 +269,7 @@ const CoachPrivate = () => {
           style={show ? { width: "75%" } : { width: "100%" }}
         >
           <div className="Header">{header}</div>
-          <div ref={revarse} className="message">
+          {start?<> <div ref={revarse} className="message">
             {messages.map((ele, i) => (
               <div className="msg">
                 <div className="user-pic">
@@ -311,7 +313,8 @@ const CoachPrivate = () => {
                 <Button>Send</Button>
               </div>
             </div>
-          </div>
+          </div></>:<div style={{position:"absolute", left:"50%"}}>Select User To Start Chating</div>}
+         
         </div>
       </div>
     </>
