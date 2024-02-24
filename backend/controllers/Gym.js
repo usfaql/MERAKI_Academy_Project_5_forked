@@ -167,9 +167,9 @@ const getPlanById = (req, res)=>{
 
 const updatePlanById = (req,res)=>{
     const planId = req.params.planid;
-    const {description, numOfMonth, price} = req.body;
-    const value=[description||null, numOfMonth || null, price || null, planId];
-    pool.query(`UPDATE gym_plan SET description_plan=COALESCE($1,description_plan), numOfMonth_plan=COALESCE($2,numOfMonth_plan), price_plan=COALESCE($3,price_plan) WHERE gym_plan.id_plan=$4 RETURNING *`,value).then((result=>{
+    const {name,description, numOfMonth, price} = req.body;
+    const value=[name ,description||null, numOfMonth || null, price || null, planId];
+    pool.query(`UPDATE gym_plan SET name_plan=$1, description_plan=COALESCE($2,description_plan), numOfMonth_plan=COALESCE($3,numOfMonth_plan), price_plan=COALESCE($4,price_plan) WHERE gym_plan.id_plan=$5 RETURNING *`,value).then((result=>{
         res.status(201).json({
             success:true,
             message:`Plan Updated Successfully`,
@@ -179,7 +179,7 @@ const updatePlanById = (req,res)=>{
             res.status(500).json({
               success: false,
               message: "Server error",
-              err
+              error : err.message
             });
           });
 }
