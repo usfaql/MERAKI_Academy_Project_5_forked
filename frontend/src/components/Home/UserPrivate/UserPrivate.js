@@ -18,6 +18,7 @@ const UserPrivate = () => {
       token: state.auth.token,
     };
   });
+  const [start, setstart] = useState(false)
   const [show, setshow] = useState(true);
   const [coachs, setCoachs] = useState([]);
   const [header, setHeader] = useState("");
