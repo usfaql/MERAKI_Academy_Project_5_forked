@@ -59,9 +59,6 @@ function InfoGymSettings() {
                 <textarea className='info-gym-textarea' defaultValue={dataGym && dataGym.name}/>
                 <textarea className='desc-gym-settings info-gym-textarea' defaultValue={dataGym && dataGym.description}/>
             </div>
-            <div className='member-in-gym-settings'>
-                <p>30/50 Member</p>
-            </div>
     </div>
 
     <div className='continer-plan-settings'>
