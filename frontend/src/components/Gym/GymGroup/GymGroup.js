@@ -9,7 +9,9 @@ function GymGroup() {
     const reversChat = useRef(null);
     const [allCoachs, setAllCoachs] = useState(null);
     const [allUsers, setAllUsers] = useState(null);
-
+    const [infoGym, setInfoGym] = useState(null);
+    const [rooms, setRooms] = useState(null);
+    const [roomSelected , setRoomSelected] = useState(null);
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -27,7 +29,6 @@ function GymGroup() {
 
         axios.get(`http://localhost:5000/gyms/${gymid}/coach`,config).then((result) => {
             setAllCoachs(result.data.coachs)
-            console.log(result.data.coachs);
         }).catch((err) => {
             console.log(err);
         });
@@ -35,6 +36,16 @@ function GymGroup() {
             setAllUsers(result.data.users)
         }).catch((err) => {
             console.log(err);
+        });
+        axios.get(`http://localhost:5000/gyms/${gymid}`, config).then((result) => {
+            setInfoGym(result.data.oneGym)
+        }).catch((err) => {
+            
+        });
+        axios.get(`http://localhost:5000/gyms/plan/${gymid}`,config).then((result) => {
+            setRooms(result.data.plans);
+        }).catch((err) => {
+            
         });
     },[])
 
@@ -79,25 +90,37 @@ function GymGroup() {
         return coachArr;
     }
 
+    const listRoom = ()=>{
+        const roomList = [];
+
+        for(let i = 0; i < rooms?.length; i++){
+            roomList.push(
+                    <>
+                    <li style={roomSelected === rooms[i].name_plan ? {fontWeight:"bold", marginBottom:"5px", marginTop:"5px", cursor:"pointer", backgroundColor:"gray"} : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px", cursor:"pointer"}} onClick={()=>{
+                        setRoomSelected(rooms[i].name_plan)
+                    }}># {rooms[i].name_plan}</li>
+                    <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
+                    </>
+            )
+        }
+        return roomList;
+    }
   return (
     <div className='body-group'>
         <div className='group-contener'>
             <div className='contener-room'>
-            <div>
-            <h6 className='head'>Room</h6>
-            <ul >
-                <li style={{fontWeight:"bold", marginBottom:"5px", marginTop:"5px", cursor:"pointer"}}>#Lite Room</li>
-                <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
-                <li style={{fontWeight:"bold", marginBottom:"5px", marginTop:"5px" , cursor:"pointer"}}>#Gold Room</li>
-                <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
-                <li style={{fontWeight:"bold", marginTop:"5px" , cursor:"pointer"}}>#Premium Room</li>
-            </ul>
-            </div>
-            
-            <div className='control-gym'>
+                <div>
+                <h6 className='head'>Room</h6>
+                <ul >
+                    {listRoom()}
+                </ul>
+                </div>
+
+                <div className='control-gym'>
+                    
                 <div style={{display:"flex", alignItems:"center", gap:"10px"}}> 
                     <img style={{width:"48px", height:"48px", borderRadius:"24px"}} src="https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais"/>
-                    <h6>Gym Name</h6>
+                    <h6>{infoGym?.name}</h6>
                 </div>
                 
                 <div style={{display:"flex", gap:"10px",paddingRight:"10px"}}>
@@ -121,11 +144,14 @@ function GymGroup() {
                    
                 </div>
                 
-            </div>
+                </div>
             </div>
             <div className='contener-chat'>
-                    <div style={{ backgroundColor:"#373737",height:"7%", alignItems:"center", display:"flex"}}>
-                        <h6 style={{textAlign:"start", paddingLeft:"5px"}}>#Name Room</h6>
+                {!roomSelected ? <>
+                <div style={{backgroundColor:"#373737",height:"7%", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start"}}>Please Select Room To View Chat</div>
+                </> : <>
+                <div style={{ backgroundColor:"#373737",height:"7%", alignItems:"center", display:"flex"}}>
+                        <h6 style={{textAlign:"start", paddingLeft:"5px"}}># {roomSelected}</h6>
                     </div>
                     <div ref={reversChat} style={{ backgroundColor:"#202020",height:"73%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
                     {generateChatGym()}
@@ -140,7 +166,9 @@ function GymGroup() {
                             </div>
                             <button className='btn-gym-chat'>Send</button>
                         </div>
-                    </div>
+                    </div>                
+                
+                </>}
             </div>
             <div className='contener-member'>
                 <div>
