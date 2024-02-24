@@ -15,6 +15,7 @@ import PaymentPlan from "./components/PaymentPlan/PaymentPlan";
 import AddUserInfo from "./components/AddUserInfo/UserInfo";
 import UserPrivate from "./components/Home/UserPrivate/UserPrivate";
 import GymGroup from "./components/Gym/GymGroup/GymGroup";
+import SettingsGym from "./components/Gym/Settings/Settings";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route path="/checkout/:gymid/:planid" element={<PaymentPlan/>}/>
         <Route path="/user/private" element={<UserPrivate/>}/>
         <Route path="/gym/:gymid" element={<GymGroup/>}/>
+        <Route path="/:gymid/settings" element={<SettingsGym/>}/>
 
       </Routes>
     </div>

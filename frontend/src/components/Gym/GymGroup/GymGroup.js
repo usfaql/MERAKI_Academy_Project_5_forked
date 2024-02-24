@@ -1,11 +1,12 @@
 import React, {useRef, useEffect ,useState} from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import './style.css';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 // import { IoSettingsOutline } from "react-icons/io5";
 function GymGroup() {
     const {gymid} = useParams();
+    const navigate = useNavigate();
     const reversChat = useRef(null);
     const [allCoachs, setAllCoachs] = useState(null);
     const [allUsers, setAllUsers] = useState(null);
@@ -21,11 +22,14 @@ function GymGroup() {
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
-
-    useEffect(()=>{
+    if(roomSelected){
         if(reversChat.current){
             reversChat.current.scrollTop = reversChat.current.scrollHeight;
         };
+    }
+
+    
+    useEffect(()=>{
 
         axios.get(`http://localhost:5000/gyms/${gymid}/coach`,config).then((result) => {
             setAllCoachs(result.data.coachs)
@@ -126,6 +130,7 @@ function GymGroup() {
                 <div style={{display:"flex", gap:"10px",paddingRight:"10px"}}>
                     <div onClick={()=>{
                             console.log("Settings");
+                            navigate(`/${gymid}/settings`);
                         }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                         <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
@@ -133,7 +138,7 @@ function GymGroup() {
                         </svg>
                     </div>
                     
-                    <div onClick={()=>{
+                    <div style={{display:"none"}} onClick={()=>{
                             console.log("Exit");
                         }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="red" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
