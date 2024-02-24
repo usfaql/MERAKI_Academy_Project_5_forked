@@ -256,6 +256,7 @@ const getAllUserByCoachId=(req,res)=>{
     });
   });
 }
+
 const getAllCoachesByUserId=(req,res)=>{
   const user_id=req.token.userId
   const value=[user_id]

@@ -12,14 +12,27 @@ const PrivateHome = () => {
   const dispatch = useDispatch();
   const authState = useSelector(state => state.auth);
   const [selected, setSelected] = useState("private");
+  const [myCoachs, setMyCoachs] = useState([])
   const [coaches, setCoaches] = useState(null);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   
   useEffect(() => {
     getAllCoaches();
+    getAllCoachesByUserId()
   }, []);
-
+const getAllCoachesByUserId =()=>{
+  axios.get(`http://localhost:5000/coachs/coach`, {
+    headers: {
+      Authorization: `Bearer ${authState.token}`,
+    },
+  }).then((result)=>{
+    console.log(result);
+    setMyCoachs(result.data.coachs)
+  }).catch((error)=>{
+    console.log(error);
+  })
+}
   const getAllCoaches = () => {
     axios.get("http://localhost:5000/coachs/openedprivate", {
       headers: {
@@ -61,6 +74,34 @@ const PrivateHome = () => {
           placeholder="Search..."
           className="search_bar-input"
         />  
+        </div>
+        <div className="My-coachs">
+          {myCoachs?.map((item) => (
+              <div className="coach_bar">
+                <div className="coach_info"> 
+                  <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
+                  <div>
+                    <span>{item.firstname}</span>
+                    <span>{item.lastname}</span>
+                    
+                  </div>
+                    
+                    
+                    
+                    </div>
+                    
+                
+                <div className="coach_btn">
+                  <button className="join-private-btn">
+                    OPEN
+                      </button>
+                  
+                
+                </div>
+
+             
+              </div>
+            ))}
         </div>
         
         <div className="coachs">

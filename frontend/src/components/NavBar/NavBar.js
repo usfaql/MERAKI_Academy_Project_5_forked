@@ -51,7 +51,6 @@ function NavBar() {
                 <li style={{fontSize:"10px"}}>{covertUserInfoToJson.role === 3 && "<COACH>" || covertUserInfoToJson.role === 2 && "<USER>"}</li>
               </ul>
             </div>
-            
             </ul>
             : 
             <button className='button' onClick={()=>{
