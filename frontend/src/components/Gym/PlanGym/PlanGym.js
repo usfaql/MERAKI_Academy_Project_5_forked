@@ -53,7 +53,7 @@ function PlanGym() {
       <div className='continer-info-gym'>
         <div className='contener-info-gym'>
             <div className='continer-image-gym'>
-                <img className='image-gym' src='https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais'/>
+                <img className='image-gym' src={dataGym?.image}/>
             </div>
             
             <div className='name-desc-gym'>
