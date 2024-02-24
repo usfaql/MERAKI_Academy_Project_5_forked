@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import "./Recipe.css";
 import Image from 'react-bootstrap/Image';
-
+import axios from 'axios'
 const Recipe = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [favorites, setFavorites] = useState([]);
+    const renderchicken =()=>{
+        axios.get(`https://api.edamam.com/search?q=chicken&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=8&calories=591-722&health=alcohol-free`).then((result)=>{
+            console.log(result);
+        }).then((err)=>{
+            console.log(err);
+        })
+
+
+        
+    }
+    useEffect(()=>{
+       
+    },[])
 
     const gymBoxes = [
         // Recipes data
@@ -184,6 +197,13 @@ const Recipe = () => {
                         onChange={handleSearchChange}
                         className='searchbar'
                     />
+                </div>
+                <div className='recipe_buttons'>
+
+                <Button variant="outline-success">Success</Button>{' '}
+
+
+
                 </div>
                 <div className='card'>
                     <Row xs={1} md={4} className="g-2" style={{background:"#272727"} }>

@@ -37,7 +37,7 @@ const UserInfo  = () => {
 
 const createUserInfo =async()=>{
     try {
-        const result =await axios.put(`http://localhost:5001/users/info/create`, {
+        const result =await axios.put(`http://localhost:5000/users/info/create`, {
           
           image , 
           weight,
