@@ -42,6 +42,7 @@ const Settings = () => {
           dispatch(setPlans(result.data.plans));
           setarr(arr_plans);
         } else {
+          
           setMessage("There is No Plan Yet");
         }
       })
