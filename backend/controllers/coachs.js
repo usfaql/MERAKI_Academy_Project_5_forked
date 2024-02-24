@@ -306,7 +306,7 @@ const removePlanByName=(req,res)=>{
   const {name} =req.body
   const query=`DELETE FROM coach_plan WHERE name=$1`
   pool.query(query,[name]).then((result)=>{
-    res.status(201).json({
+    res.status(200).json({
       success:true,
       message:`${name} plan Deleted Successfully`
     })

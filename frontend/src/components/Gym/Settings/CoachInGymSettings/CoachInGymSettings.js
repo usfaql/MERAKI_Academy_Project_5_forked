@@ -16,8 +16,7 @@ function CoachInGymSettings() {
               <h5>Name User (Lite)</h5>
           </div>
           <div>
-            <button className='btn-user'>Demote to user</button>
-            <button className='btn-user kick'>Kick</button>
+            <button className='btn-user'>Down to User</button>
           </div>
         </div>
 

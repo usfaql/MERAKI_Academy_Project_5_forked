@@ -20,6 +20,24 @@ const createGym = (req,res)=>{
     
 }
 
+const updateGym = (req,res)=>{
+    const gymId = req.params.gymid;
+    const {name,description}=req.body
+    const value=[name, description||null, gymId];
+    pool.query(`UPDATE gyms SET name=COALESCE($1,name), description=COALESCE($2,description) WHERE gyms.id=$3 RETURNING *`,value).then((result=>{
+        res.status(201).json({
+            success:true,
+            message:`${name} Gym Updated Successfully`,
+            gym:result.rows  
+        })
+        })).catch((err) => {
+            res.status(500).json({
+              success: false,
+              message: "Server error",
+              err
+            });
+          });
+}
 const getAllGym = (req, res)=>{
     pool.query(`SELECT * FROM gyms`).then((result) => {
         res.status(201).json({
@@ -399,7 +417,8 @@ module.exports = {
     createRoomInGym,
     getRoomByIdRoom,
     getAllRoomByGymId,
-    getGymByGymId
+    getGymByGymId,
+    updateGym
 }
 
 
