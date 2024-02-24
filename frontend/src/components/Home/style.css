@@ -47,7 +47,7 @@
 
 
 .contener-gym-viewer{
-    height: calc(100vh - 120px);
+    height: 99%;
     margin:0 100px 0 100px;
 }
 .gym-viewer{

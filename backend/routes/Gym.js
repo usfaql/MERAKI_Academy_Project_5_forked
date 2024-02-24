@@ -27,7 +27,7 @@ gymsRouter.get("/", authentication, getAllGym);
 gymsRouter.put("/:gymid", authentication ,updateGym);
 gymsRouter.get("/:gymId", authentication, getGymByGymId);
 gymsRouter.get("/user/:userId", authentication, getAllGymByUserId);
-gymsRouter.get("/:ownerId", authentication,getGymByOwner);
+gymsRouter.get("/owner/:ownerId", authentication,getGymByOwner);
 gymsRouter.post("/:gymid/plan/create", authentication,createPlan);
 gymsRouter.get("/plan/:gymid", authentication ,getPlanByGymId);
 gymsRouter.put("/plan/:planid/update", authentication ,updatePlanById);

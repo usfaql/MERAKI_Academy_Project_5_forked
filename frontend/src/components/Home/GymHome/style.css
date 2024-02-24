@@ -1,3 +1,6 @@
-.contenier-gyms{
-    margin-bottom: 7%;
+.contenier-gyms-g{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
 }

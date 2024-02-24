@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './InfoGymSettings.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
@@ -31,13 +31,20 @@ function InfoGymSettings() {
 
 
     const [showAlert, setShowAlert] = useState(false);
+
+
+    const fileInputRef = useRef(null);
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
+
+
+
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
         token : state.auth.token
         }
       })
-
 
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
@@ -74,11 +81,42 @@ function InfoGymSettings() {
       }
     }, [showAlert]);
 
+
+
+
+    const uploadImage = async(e) => {
+	    const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'yk50quwt');
+        formData.append("cloud_name", "dorpys3di");
+        await fetch('https://api.cloudinary.com/v1_1/dvztsuedi/image/upload', {
+          method: 'post',
+          body: formData,
+        }).then((result)=> result.json()).then((data) => {
+            setImageUrl(data.url);
+            console.log("URL Image =>", data.url);
+        }).catch((err) => {
+        console.log(err);
+        });
+    };
+
+const handleImageClick = () => {
+        fileInputRef.current.click();
+};
   return (
     <div className='info-body'>
         <div className='contener-info-gym-settings'>
             <div className='continer-image-gym-settings'>
-                <img className='image-gym-settings' src='https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais'/>
+                <img className='image-gym-settings' src={imageUrl ? imageUrl : dataGym?.image} 
+                onClick={handleImageClick}/>
+                <input
+                type='file'
+                accept='image/jpeg, image/jpg'
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={uploadImage}
+            />
             </div>
             
             <div className='name-desc-gym-settings'>
@@ -152,8 +190,8 @@ function InfoGymSettings() {
 
         <div style={{height:"5%"}}>
             <button style={{width:"50%", border:"0", backgroundColor:"#A1E533", borderRadius:"4px", padding:"4px"}} onClick={()=>{
-                if(nameGym || descriptionGym){
-                axios.put(`http://localhost:5000/gyms/${gymid}`, {name : nameGym, description : descriptionGym}, config).then((result) => {
+                if(nameGym || descriptionGym || imageUrl){
+                axios.put(`http://localhost:5000/gyms/${gymid}`, {name : nameGym, description : descriptionGym, image : imageUrl}, config).then((result) => {
                     setNameGym(null);
                     setDescriptionGym(null);
                     setShowAlert(true);
