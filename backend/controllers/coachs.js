@@ -101,7 +101,7 @@ const createNewPlane = (req, res) => {
  
 };
 const getAllPlanByCoachId =(req,res)=>{
-  const coach_id=req.token.userId;
+  const coach_id=req.params.coachid;
   const value=[coach_id];
   const query=`SELECT * FROM coach_plan 
   WHERE coach_id=$1
@@ -256,6 +256,7 @@ const getAllUserByCoachId=(req,res)=>{
     });
   });
 }
+
 const getAllCoachesByUserId=(req,res)=>{
   const user_id=req.token.userId
   const value=[user_id]
