@@ -17,7 +17,8 @@ const {createGym,
     getAllRoomByGymId,
     getGymByGymId,
     getPlanById,
-    updateGym} = require("../controllers/Gym");
+    updateGym,
+    updatePlanById} = require("../controllers/Gym");
 const authentication = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
@@ -29,6 +30,7 @@ gymsRouter.get("/user/:userId", authentication, getAllGymByUserId);
 gymsRouter.get("/:ownerId", authentication,getGymByOwner);
 gymsRouter.post("/:gymid/plan/create", authentication,createPlan);
 gymsRouter.get("/plan/:gymid", authentication ,getPlanByGymId);
+gymsRouter.put("/plan/:planid/update", authentication ,updatePlanById);
 gymsRouter.get('/plan/:planid/select', authentication, getPlanById);
 gymsRouter.post("/gym/user",authentication, addNewUserInGym);
 gymsRouter.get("/:gymId/user", authentication,getAllUserInGym);

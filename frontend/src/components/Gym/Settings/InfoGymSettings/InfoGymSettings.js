@@ -12,10 +12,8 @@ function InfoGymSettings() {
     const [dataLitePlan, setDataLitePlan] = useState(null);
     const [dataGoldPlan, setDataGoldPlan] = useState(null);
     const [dataLProPlan, setDataProPlan] = useState(null);
-    
     const [nameGym , setNameGym] = useState(null);
     const [descriptionGym, setDescriptionGym] = useState(null);
-
 
     const [pricePlanLite, setPricePlanLite] = useState(null);
     const [monthSupLite, setMonthSupLite] = useState(null);
@@ -94,10 +92,10 @@ function InfoGymSettings() {
         </div>
 
         <div className='continer-plan-settings'>
-        {dataLitePlan || dataGoldPlan || dataLProPlan ? <>
-            <div className='lite-plan plan-settings' style={dataLitePlan ? {display:"flex"} : {display:"none"}}>
+        
+        <div className='lite-plan plan-settings'>
             <div className='name-price-month-plan-settings'>
-                <h4 className='name-plan-settings'>{dataLitePlan && dataLitePlan.name_plan}</h4>
+                <h4 className='name-plan-settings'>Lite</h4>
                 <h5 className='price-plan-settings' >Price $<input className='price-plan-settings-input' defaultValue={dataLitePlan && dataLitePlan.price_plan} onChange={(e)=>{
                     setPricePlanLite(e.target.value);
                 }}/></h5>
@@ -131,7 +129,7 @@ function InfoGymSettings() {
             </div>
 
         </div>
-        <div className='premium-plan plan-settings' style={dataLProPlan ? {display:"flex"} : {display:"none"}}>
+        <div className='premium-plan plan-settings'>
             <div className='name-price-month-plan-settings'>
                 <h4 className='name-plan-settings'>Premium</h4>
                 <h5 className='price-plan-settings' >Price $<input className='price-plan-settings-input' defaultValue={dataLProPlan && dataLProPlan.price_plan} onChange={(e)=>{
@@ -149,9 +147,7 @@ function InfoGymSettings() {
             </div>
             
         </div>
-        
-        </>: <div style={{width:"100%", height:"100%", alignItems:"center", textAlign:"center"}}>Loading...</div>}
-      
+
         </div>
 
         <div style={{height:"5%"}}>
@@ -166,50 +162,74 @@ function InfoGymSettings() {
                     console.log(err);
                 });
                 }
-                if(!dataLitePlan){
-                    if(pricePlanLite || monthSupLite || descPlanLite){
-                        axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`, 
-                        {name: "Lite", description : descPlanLite, numOfMonth:monthSupLite, price : pricePlanLite},
-                        config).then((result) => {
-                            setShowAlert(true);
-                        }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-                    
-                }else
-                if(pricePlanLite || monthSupLite || descPlanLite){
-                    
-                }
-                
-                if(!dataGoldPlan){
-                    if(pricePlanGold || monthSupGold || descPlanGold){
-                        axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`, 
-                        {name: "Gold", description : descPlanGold, numOfMonth:monthSupGold, price : pricePlanGold},
-                        config).then((result) => {
-                            setShowAlert(true);
-                        }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-                   
-                }else
-                if(pricePlanGold || monthSupGold || descPlanGold){
 
+                if (!dataLitePlan && pricePlanLite && monthSupLite && descPlanLite) {
+                    axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`,
+                        { name: "Lite", description: descPlanLite, numOfMonth: monthSupLite, price: pricePlanLite },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                            setDataLitePlan(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else if (dataLitePlan && (pricePlanLite || monthSupLite || descPlanLite)) {
+                    axios.put(`http://localhost:5000/gyms/plan/${dataLitePlan.id_plan}/update`,
+                        { name: 'Lite', description: descPlanLite, numOfMonth: monthSupLite, price: pricePlanLite },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 }
-                if(!dataLProPlan){
-                    if(pricePlanPro || monthSupPro || descPlanPro){
-                    axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`, 
-                    {name: "Gold", description : descPlanPro, numOfMonth:monthSupPro, price : pricePlanPro},
-                    config).then((result) => {
-                        setShowAlert(true);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                    }
-                }else
-                if(pricePlanPro || monthSupPro || descPlanPro){
-                    
+            
+                if (!dataGoldPlan && pricePlanGold && monthSupGold && descPlanGold) {
+                    axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`,
+                        { name: "Gold", description: descPlanGold, numOfMonth: monthSupGold, price: pricePlanGold },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                            setDataGoldPlan(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else if (dataGoldPlan && (pricePlanGold || monthSupGold || descPlanGold)) {
+                    axios.put(`http://localhost:5000/gyms/plan/${dataGoldPlan.id_plan}/update`,
+                        { name: 'Gold', description: descPlanGold, numOfMonth: monthSupGold, price: pricePlanGold },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            
+                if (!dataLProPlan && pricePlanPro && monthSupPro && descPlanPro) {
+                    axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`,
+                        { name: "Premium", description: descPlanPro, numOfMonth: monthSupPro, price: pricePlanPro },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                            setDataProPlan(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else if (dataLProPlan && (pricePlanPro || monthSupPro || descPlanPro)) {
+                    axios.put(`http://localhost:5000/gyms/plan/${dataLProPlan.id_plan}/update`,
+                        { name: 'Premium', description: descPlanPro, numOfMonth: monthSupPro, price: pricePlanPro },
+                        config)
+                        .then(() => {
+                            setShowAlert(true);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 }
 
             }}>Save Change</button>
@@ -225,5 +245,4 @@ function InfoGymSettings() {
     </div>
   )
 }
-
 export default InfoGymSettings

@@ -164,6 +164,25 @@ const getPlanById = (req, res)=>{
         })
     });
 }
+
+const updatePlanById = (req,res)=>{
+    const planId = req.params.planid;
+    const {name,description, numOfMonth, price} = req.body;
+    const value=[name ,description||null, numOfMonth || null, price || null, planId];
+    pool.query(`UPDATE gym_plan SET name_plan=$1, description_plan=COALESCE($2,description_plan), numOfMonth_plan=COALESCE($3,numOfMonth_plan), price_plan=COALESCE($4,price_plan) WHERE gym_plan.id_plan=$5 RETURNING *`,value).then((result=>{
+        res.status(201).json({
+            success:true,
+            message:`Plan Updated Successfully`,
+            gym:result.rows  
+        })
+        })).catch((err) => {
+            res.status(500).json({
+              success: false,
+              message: "Server error",
+              error : err.message
+            });
+          });
+}
 const addNewUserInGym = (req,res)=>{
     const {gymId, planId, numOfMonth, roomId , userId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
@@ -418,7 +437,8 @@ module.exports = {
     getRoomByIdRoom,
     getAllRoomByGymId,
     getGymByGymId,
-    updateGym
+    updateGym,
+    updatePlanById
 }
 
 
