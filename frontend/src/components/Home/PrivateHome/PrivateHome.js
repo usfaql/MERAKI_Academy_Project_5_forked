@@ -2,13 +2,14 @@ import React from "react";
 import "./style.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import{useNavigate}from 'react-router-dom'
 import axios from "axios";
 import {setLogin,setUserId, setLogout } from '../../Redux/Reducers/Auth/index'
 
 import Button from "react-bootstrap/Button";
 
 const PrivateHome = () => {
+  const navigate=useNavigate()
   const dispatch = useDispatch();
   const authState = useSelector(state => state.auth);
   const [selected, setSelected] = useState("private");
@@ -92,7 +93,12 @@ const getAllCoachesByUserId =()=>{
                     
                 
                 <div className="coach_btn">
-                  <button className="join-private-btn">
+                 
+                  <button  
+                  onClick={()=>{
+                    navigate("/user/private")
+                  }}
+                  className="join-private-btn">
                     OPEN
                       </button>
                   
