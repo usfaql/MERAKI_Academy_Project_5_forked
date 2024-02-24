@@ -1,0 +1,21 @@
+.body-settings{
+    height: calc(100vh - 69px);
+}
+.contener-settings{
+    display: flex;
+    padding: 10px 100px 10px 100px;
+    height: 100%;
+}
+
+.list-contener{
+    width: 10%;
+}
+.list-settings{
+    list-style: none;
+    text-align: start;
+
+}
+.contener-page{
+    width: 90%;
+    height: 100%;
+}

@@ -25,7 +25,6 @@ function PaymentPlan() {
         headers: { Authorization: `Bearer ${state.token}` }
     }
     useEffect(()=>{
-        
         axios.get(`http://localhost:5000/gyms/plan/${planid}/select`, config).then((result) => {
             console.log(result.data.plan);
             setDataPlanForInvoice(result.data.plan);
