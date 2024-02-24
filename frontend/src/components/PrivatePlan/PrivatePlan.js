@@ -61,7 +61,7 @@ const getCoachInfo=()=>{
                 <img className='image-coach' src={coachInfo&&coachInfo.image?coachInfo.image:'https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais'}/>
             </div>
             
-            <div className='name-desc-coach'>
+            <div className='name-coach'>
                 <h3>{coachInfo && coachInfo.firstname} {coachInfo && coachInfo.lastname}</h3>
             </div>
         </div>
