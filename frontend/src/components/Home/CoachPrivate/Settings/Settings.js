@@ -9,17 +9,8 @@ import {
 } from "../../../Redux/Reducers/CoachPrivate/index";
 import axios from "axios";
 import { setActivePrivate } from "../../../Redux/Reducers/Auth";
-import "./Settings.css";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import CloseButton from 'react-bootstrap/CloseButton';
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setPlans,
-  addNewPlan,
-} from "../../../Redux/Reducers/CoachPrivate/index";
-import axios from "axios";
-import { setActivePrivate } from "../../../Redux/Reducers/Auth";
+
 const Settings = () => {
   const dispatch = useDispatch();
   const { token, userId, activePrivate, plans } = useSelector((state) => {
