@@ -16,7 +16,7 @@ const {
 } = require("../controllers/coachs");
 const authentication = require("../middleware/authentication");
 coachRouter.post("/plan", authentication, createNewPlane);
-coachRouter.get("/plan", authentication, getAllPlanByCoachId);
+coachRouter.get("/plan/:coachid", authentication, getAllPlanByCoachId);
 coachRouter.post("/user", authentication, AddUserToPrivate);
 coachRouter.get('/user',authentication,getAllUserByCoachId)
 coachRouter.get('/coach',authentication,getAllCoachesByUserId)

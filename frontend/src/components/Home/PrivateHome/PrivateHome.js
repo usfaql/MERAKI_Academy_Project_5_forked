@@ -128,7 +128,11 @@ const getAllCoachesByUserId =()=>{
                     
                 
                 <div className="coach_btn">
-                  <button className="join-private-btn">
+                  <button 
+                  onClick={()=>{
+                    navigate(`/${item.id}/private/plan`)
+                  }}
+                  className="join-private-btn">
                     JOIN
                       </button>
                   

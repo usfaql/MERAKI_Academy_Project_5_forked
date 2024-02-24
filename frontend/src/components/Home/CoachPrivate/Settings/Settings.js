@@ -31,7 +31,7 @@ const Settings = () => {
   const [numOfMonth, setNumOfMonth] = useState(null);
   const getAllPlans = () => {
     axios
-      .get(`http://localhost:5000/coachs/plan`, {
+      .get(`http://localhost:5000/coachs/plan/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
