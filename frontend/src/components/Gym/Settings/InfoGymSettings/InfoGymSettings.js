@@ -12,7 +12,7 @@ function InfoGymSettings() {
     const [dataLitePlan, setDataLitePlan] = useState(null);
     const [dataGoldPlan, setDataGoldPlan] = useState(null);
     const [dataLProPlan, setDataProPlan] = useState(null);
-    
+    console.log(dataLitePlan);
     const [nameGym , setNameGym] = useState(null);
     const [descriptionGym, setDescriptionGym] = useState(null);
 
@@ -181,7 +181,7 @@ function InfoGymSettings() {
                 if(pricePlanLite || monthSupLite || descPlanLite){
                     
                 }
-                
+
                 if(!dataGoldPlan){
                     if(pricePlanGold || monthSupGold || descPlanGold){
                         axios.post(`http://localhost:5000/gyms/${gymid}/plan/create`, 
