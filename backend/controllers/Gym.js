@@ -147,8 +147,7 @@ const getPlanById = (req, res)=>{
     });
 }
 const addNewUserInGym = (req,res)=>{
-    const userId = req.token.userId;
-    const {gymId, planId, numOfMonth, roomId} = req.body;
+    const {gymId, planId, numOfMonth, roomId , userId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
     const providerS = [userId, gymId, planId, roomId];
 
@@ -221,13 +220,13 @@ const addNewUserInGym = (req,res)=>{
 }
 
 const getAllUserInGym = (req,res)=>{
-    const {gymId} = req.body;
+    const {gymId} = req.params;
     const provider = [gymId]
     pool.query(`SELECT * FROM gym_user INNER JOIN users ON gym_user.user_id = users.id WHERE gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
             message : `All User In Gym`,
-            result : result.rows
+            users : result.rows
         });
     }).catch((err) => {
         res.status(500).json({
@@ -278,11 +277,10 @@ const deleteUserInGym = async(req,res)=>{
 
 
 const addNewCoachInGym = (req,res) =>{
-    const coachId = req.token.userId;
-    const {gymId, roomId} = req.body;
-    const provider = [gymId, coachId, roomId];
-    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,provider).then((result) => {
-        pool.query(`INSERT INTO gym_coach (gym_id, coach_id, room_id) VALUES ($1,$2, $3)`, provider).then((result) => {
+    const {gymId, coachId} = req.body;
+    const provider = [gymId, coachId];
+    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,[gymId, coachId]).then((result) => {
+        pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
             res.status(201).json({
                 success : true,
                 message : `Coach Add Successfully In Gym`,
@@ -346,13 +344,13 @@ const getAllRoomByGymId = (req,res)=>{
 }
 
 const getAllCoachInGym = (req,res)=>{
-    const {gymId} = req.body;
+    const {gymId} = req.params;
     const provider = [gymId];
     pool.query(`SELECT * FROM gym_coach INNER JOIN users ON gym_coach.coach_id = users.id WHERE gym_coach.gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
             message : `All Coach In Gym`,
-            result : result.rows
+            coachs : result.rows
         });
     }).catch((err) => {
         res.status(500).json({

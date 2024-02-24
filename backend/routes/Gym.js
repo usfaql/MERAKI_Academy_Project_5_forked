@@ -29,10 +29,10 @@ gymsRouter.post("/:gymid/plan/create", authentication,createPlan);
 gymsRouter.get("/plan/:gymid", authentication ,getPlanByGymId);
 gymsRouter.get('/plan/:planid/select', authentication, getPlanById);
 gymsRouter.post("/gym/user",authentication, addNewUserInGym);
-gymsRouter.get("/gym/user", authentication,getAllUserInGym);
+gymsRouter.get("/:gymId/user", authentication,getAllUserInGym);
 gymsRouter.delete("/gym/user", authentication,deleteUserInGym);
 gymsRouter.post("/gym/coach", authentication,addNewCoachInGym)
-gymsRouter.get("/gym/coach",authentication, getAllCoachInGym);
+gymsRouter.get(`/:gymId/coach`,authentication, getAllCoachInGym);
 gymsRouter.delete("/delete/coach", authentication,deleteCoachInGym)
 gymsRouter.post("/:gymid/room/create", authentication,createRoomInGym);
 gymsRouter.get("/:gymid/room/:roomid", authentication,getRoomByIdRoom);
