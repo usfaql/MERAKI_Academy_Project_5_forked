@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { setActivePrivate } from "../../../Redux/Reducers/Auth";
 import CloseButton from 'react-bootstrap/CloseButton';
+
 const Settings = () => {
   const dispatch = useDispatch();
   const { token, userId, activePrivate, plans } = useSelector((state) => {
