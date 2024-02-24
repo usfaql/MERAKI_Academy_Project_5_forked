@@ -1,0 +1,35 @@
+.Private-Plan-Page{
+    height: calc(100vh - 69px);
+    margin-left: 100px;
+    margin-right: 100px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    gap: 20px;
+}
+.contener-info-coach{
+    display: flex;
+    height: 15vh;
+    align-items: center;
+    
+}
+.continer-image-coach{
+    width: 10%;
+}
+.image-coach{
+    width: 100px;
+    height: 100px;
+    border-radius: 57.5px;
+}
+.name-desc-coach{
+    width: 80%;
+    margin-left: 10px;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+.container-plans{
+    display: flex;
+}
