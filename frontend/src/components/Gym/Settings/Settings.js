@@ -57,13 +57,13 @@ function Settings() {
 
             <div className='list-contener'>
                 <lu className="list-settings">
-                    <li onClick={()=>{
+                    <li className='li-list-settings' style={SelectedPage === "InfoGym" ? {backgroundColor: "#404040", padding:"5px"} : {backgroundColor:"transparent", padding:"5px"}} onClick={()=>{
                         setSelectedPage("InfoGym")
                     }}>Info Gym</li>
-                    <li onClick={()=>{
+                    <li className='li-list-settings' style={SelectedPage === "user" ? {backgroundColor: "#404040", padding:"5px"} : {backgroundColor:"transparent", padding:"5px"}} onClick={()=>{
                         setSelectedPage("user")
                     }}>User</li>
-                    <li onClick={()=>{
+                    <li className='li-list-settings' style={SelectedPage === "coach" ? {backgroundColor: "#404040", padding:"5px"} : {backgroundColor:"transparent", padding:"5px"}} onClick={()=>{
                         setSelectedPage("coach")
                     }}>Coach</li>
                 </lu>

@@ -10,11 +10,17 @@
 
 .list-contener{
     width: 10%;
+    min-height: calc(100vh - 90px);
+    padding-right: 10px;
+    border-right: 1px solid #A1e533;
 }
 .list-settings{
     list-style: none;
     text-align: start;
-
+}
+.li-list-settings{
+    padding: 5px;
+    cursor: pointer;
 }
 .contener-page{
     width: 90%;
