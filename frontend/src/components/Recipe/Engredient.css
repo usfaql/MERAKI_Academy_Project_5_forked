@@ -3,7 +3,7 @@
 }
 
 .ingredient_page {
-  width: 80%;
+  width: 70%;
   height: 180lvh;
   background-color: #272727;
   margin-top: 70px;
@@ -12,6 +12,7 @@
   flex-direction: row;
 }
 .ingredient_img {
+    padding: 111px;
 }
 .Ingredients{
     width: 100%;
@@ -25,4 +26,7 @@
   border-radius: 30px;
   background-color: #3f3f46;
   color: beige;
+}
+.back{
+    height: 90px;
 }

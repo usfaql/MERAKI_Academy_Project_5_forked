@@ -36,12 +36,12 @@ const rendering =()=>{
            <Container>
       <Row>
         <Col> <img src={ingredient.image} alt="Recipe" /></Col>
-        <Col> <h1 style={{fontFamily:"monospace"}}>calories :</h1>{ingredient.calories}</Col>
+        <Col> <h1 style={{fontFamily:"monospace" ,color:"#4b5563"}}>calories :</h1>{ingredient.calories}</Col>
        
       </Row>
       <Row>
         <Col> <div className='Ingredients'>
-            <h1 style={{fontFamily:"monospace"}}>Ingredients :</h1>
+            <h1 style={{fontFamily:"monospace" ,color:"#4b5563" }}>Ingredients :</h1>
             <h1>--------------------</h1>
             <ul>
               {ingredient.ingredientLines.map((line, index) => (
@@ -50,15 +50,24 @@ const rendering =()=>{
             </ul>
           </div></Col>
         <Col><div className='digest'>
-            <h1 style={{fontFamily:"monospace"}}>Nutrition :</h1>
+            <h1 style={{fontFamily:"monospace",color:"#4b5563"}}>Nutrition :</h1>
             <ul>
               {ingredient.digest.map((item, index) => (
                 <li key={index}>{item.label}: {item.total}</li>
               ))}
             </ul>
           </div></Col>
+
           
       </Row>
+      <Row>
+        <Col><img src='https://cdn-icons-png.flaticon.com/512/93/93634.png' type="submit" onClick={()=>{
+          navigate(-1)
+        }} className='back'/> </Col>
+        <Col> </Col>
+       
+      </Row>
+
     </Container>
          
         </div>

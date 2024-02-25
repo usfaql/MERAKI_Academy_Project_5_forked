@@ -23,7 +23,9 @@ function NavBar() {
         <div style={{ display:"flex", justifyContent:"center"}}>
           {state.isLoggedIn ?
             <ul className="navbar-lu">
-                <li className='nav-map'>Recipes</li>
+                <li className='nav-map' onClick={()=>{
+                  navigate("/recipe")
+                }}>Recipes</li>
                 <li className='nav-map' onClick={()=>{
                   navigate("/home")
                 }}>Dashboard</li>
