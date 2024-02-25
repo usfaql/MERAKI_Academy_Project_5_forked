@@ -43,14 +43,15 @@ function Home() {
 
       <div className='contener-gym-viewer'>
         {selected == 'gym' && <GymHome/>}
-        {selected == 'private' && (covertUserInfoToJson.role===3?navigate("/coach/private"):covertUserInfoToJson.role===2?navigate("/user/private"): <PrivateHome/>)}
+        {selected == 'private' && (covertUserInfoToJson.role===3?navigate("/coach/private"):covertUserInfoToJson.role===2&& <PrivateHome/>)}
         {selected == 'allgym' && <AllGymHome/>}
       </div>
-      <div style={{display:"flex" , margin : "0 100px 0 100px", justifyContent:"center" ,gap:"20px", alignItems:"center", textAlign:"center"}}>
+      {selected === 'allgym' && <div style={{display:"flex" , margin : "0 100px 0 100px", justifyContent:"center" ,gap:"20px", alignItems:"center", textAlign:"center"}}>
 
         <Pagination>{items}</Pagination>
 
       </div>
+      }
     </div>
   )
 }

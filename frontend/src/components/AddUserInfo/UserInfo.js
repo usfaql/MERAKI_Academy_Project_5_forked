@@ -30,15 +30,15 @@ const UserInfo  = () => {
     };
   });
   useEffect(() => {
-    console.log("test");
     createUserInfo();
   }, []);
   
 
 const createUserInfo =async()=>{
     try {
-        const result =await axios.put(`http://localhost:5000/users/info/create`, {
-          
+
+        const result =await axios.put(`http://localhost:5000/users/info/create`, 
+
           image , 
           weight,
           height,

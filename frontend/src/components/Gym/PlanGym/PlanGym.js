@@ -53,7 +53,7 @@ function PlanGym() {
       <div className='continer-info-gym'>
         <div className='contener-info-gym'>
             <div className='continer-image-gym'>
-                <img className='image-gym' src='https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais'/>
+                <img className='image-gym' src={dataGym?.image}/>
             </div>
             
             <div className='name-desc-gym'>
@@ -71,12 +71,12 @@ function PlanGym() {
             <div className='lite-plan plan' style={dataLitePlan ? {display:"flex"} : {display:"none"}}>
             <div className='name-price-month-plan'>
                 <h4 className='name-plan'>{dataLitePlan && dataLitePlan.name_plan}</h4>
-                <h2 className='price-plan'>${dataLitePlan && dataLitePlan.price}</h2>
-                <h5 className='month-plan'>{`per ${dataLitePlan && dataLitePlan.numofmonth} Month`}</h5>
+                <h2 className='price-plan'>${dataLitePlan && dataLitePlan.price_plan}</h2>
+                <h5 className='month-plan'>{`per ${dataLitePlan && dataLitePlan.numofmonth_plan} Month`}</h5>
             </div>
 
             <div className='description-plan'>
-                <p>{dataLitePlan && dataLitePlan.description}</p>
+                <p>{dataLitePlan && dataLitePlan.description_plan}</p>
             </div>
             <div className='select-plan'>
                 <button className='select-btn' onClick={()=>{
@@ -87,12 +87,12 @@ function PlanGym() {
         <div className='gold-plan plan' style={dataGoldPlan ? {display:"flex"} : {display:"none"}}>
             <div className='name-price-month-plan'>
                 <h4 className='name-plan'>{dataGoldPlan && dataGoldPlan.name_plan}</h4>
-                <h2 className='price-plan'>${dataGoldPlan && dataGoldPlan.price}</h2>
-                <h5 className='month-plan'>{`per ${dataGoldPlan && dataGoldPlan.numofmonth} Month`}</h5>
+                <h2 className='price-plan'>${dataGoldPlan && dataGoldPlan.price_plan}</h2>
+                <h5 className='month-plan'>{`per ${dataGoldPlan && dataGoldPlan.numofmonth_plan} Month`}</h5>
             </div>
 
             <div className='description-plan'>
-                <p>{dataGoldPlan && dataGoldPlan.description}</p>
+                <p>{dataGoldPlan && dataGoldPlan.description_plan}</p>
             </div>
             <div className='select-plan'>
                 <button className='select-btn' onClick={()=>{
@@ -103,12 +103,12 @@ function PlanGym() {
         <div className='premium-plan plan' style={dataLProPlan ? {display:"flex"} : {display:"none"}}>
             <div className='name-price-month-plan'>
                 <h4 className='name-plan'>{dataLProPlan && dataLProPlan.name_plan}</h4>
-                <h2 className='price-plan'>${dataLProPlan && dataLProPlan.price}</h2>
-                <h5 className='month-plan'>{`per ${dataLProPlan && dataLProPlan.numofmonth} Month`}</h5>
+                <h2 className='price-plan'>${dataLProPlan && dataLProPlan.price_plan}</h2>
+                <h5 className='month-plan'>{`per ${dataLProPlan && dataLProPlan.numofmonth_plan} Month`}</h5>
             </div>
 
             <div className='description-plan'>
-                <p>{dataLProPlan && dataLProPlan.description}</p>
+                <p>{dataLProPlan && dataLProPlan.description_plan}</p>
             </div>
             <div className='select-plan'>
                 <button className='select-btn'onClick={()=>{

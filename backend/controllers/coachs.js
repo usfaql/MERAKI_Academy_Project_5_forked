@@ -101,7 +101,7 @@ const createNewPlane = (req, res) => {
  
 };
 const getAllPlanByCoachId =(req,res)=>{
-  const coach_id=req.token.userId;
+  const coach_id=req.params.coachid;
   const value=[coach_id];
   const query=`SELECT * FROM coach_plan 
   WHERE coach_id=$1
@@ -256,6 +256,7 @@ const getAllUserByCoachId=(req,res)=>{
     });
   });
 }
+
 const getAllCoachesByUserId=(req,res)=>{
   const user_id=req.token.userId
   const value=[user_id]
@@ -283,6 +284,62 @@ const getAllCoachesByUserId=(req,res)=>{
   });
 });
 }
+const updatePlanByName=(req,res)=>{
+  const {name,description,numOfMonth,price}=req.body
+  const value=[name,description||null,numOfMonth||null,price||null]
+  const query=`UPDATE coach_plan SET description=COALESCE($2,description) , numOfMonth=COALESCE($3,numOfMonth),price=COALESCE($4,price) WHERE name=$1 RETURNING *;`
+  pool.query(query,value).then((result=>{
+    res.status(201).json({
+      success:true,
+      message:`${name} Plan Updated Successfully`,
+      plan:result.rows
+      
+    })
+  })).catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err
+      });
+    });
+}
+const removePlanByName=(req,res)=>{
+  const {name} =req.body
+  const query=`DELETE FROM coach_plan WHERE name=$1`
+  pool.query(query,[name]).then((result)=>{
+    res.status(200).json({
+      success:true,
+      message:`${name} plan Deleted Successfully`
+    })
+
+  }).catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err
+      });
+    });
+}
+const getPlanById=(req,res)=>{
+const id=req.params.plan_id
+const value=[id]
+const query=`SELECT coach_plan.* ,users.firstname ,users.lastname FROM coach_plan 
+JOIN users ON coach_plan.coach_id=users.id
+WHERE coach_plan.id=$1 `
+pool.query(query,value).then((result)=>{
+  res.status(201).json({
+    success:true,
+    message:`all information about Plan With Id =${id}`,
+    plan:result.rows[0]
+  })
+}).catch((err) => {
+  res.status(500).json({
+    success: false,
+    message: "Server error",
+    err
+  });
+});
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -293,5 +350,8 @@ module.exports = {
   disActivePrivate,
   getAllCoachsAreOpenPrivate,
   getAllUserByCoachId,
-  getAllCoachesByUserId
+  getAllCoachesByUserId,
+  updatePlanByName,
+  removePlanByName,
+  getPlanById
 };

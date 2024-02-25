@@ -22,6 +22,7 @@ function AllGymHome() {
     useEffect(()=>{
       axios.get('http://localhost:5000/gyms', config).then((result) => {
         setAllGym(result.data.gym);
+        console.log(result.data.gym);
       }).catch((err) => {
         if(err.response.data.message === "The token is invalid or expired"){
           localStorage.clear();
@@ -55,6 +56,7 @@ function AllGymHome() {
       };
   return (
     <div>
+      
       {generateGymBox()}
     </div>
   )

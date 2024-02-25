@@ -3,26 +3,56 @@ const pool = require("../models/db");
 const createGym = (req,res)=>{
     const userId = req.token.userId;
     const {name, description} = req.body;
-    const provider = [name, description, userId];
-    pool.query(`INSERT INTO gyms (name , description, owner_id) VALUES ($1, $2, $3)`, provider).then((result) => {
-        res.status(201).json({
-            success : true,
-            message : "Gym created successfully",
-            gym : result.rows
-        })
+    const image = "http://res.cloudinary.com/dvztsuedi/image/upload/v1708816631/adpmvtgi7dl1qjh0pgpm.jpg"
+    const provider = [name, description,image, userId];
+    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result) => {
+        console.log(result.rows);
+        if(result.rows.length > 3){
+            res.status(403).json({
+                success:false,
+                message : `You can't Create more 3 Gym`
+            })
+        }else{
+            pool.query(`INSERT INTO gyms (name , description, image, owner_id) VALUES ($1, $2, $3, $4)`, provider).then((result) => {
+                res.status(201).json({
+                    success : true,
+                    message : "Gym created successfully",
+                    gym : result.rows
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    success : false,
+                    message : "Server error",
+                    error : err.message
+                })
+            });
+        }
     }).catch((err) => {
-        res.status(500).json({
-            success : false,
-            message : "Server error",
-            error : err.message
-        })
+        
     });
-    
 }
 
-const getAllGym = (req, res)=>{
-    pool.query(`SELECT * FROM gyms`).then((result) => {
+const updateGym = (req,res)=>{
+    const gymId = req.params.gymid;
+    const {name,description, image}=req.body
+    const value=[name, description||null, image || null, gymId];
+    pool.query(`UPDATE gyms SET name=COALESCE($1,name), description=COALESCE($2,description), image=COALESCE($3, image) WHERE gyms.id=$4 RETURNING *`,value).then((result=>{
         res.status(201).json({
+            success:true,
+            message:`${name} Gym Updated Successfully`,
+            gym:result.rows  
+        })
+        })).catch((err) => {
+            res.status(500).json({
+              success: false,
+              message: "Server error",
+              err
+            });
+          });
+}
+const getAllGym = (req, res)=>{
+    pool.query(`SELECT * FROM gyms WHERE gyms.owner_id != $1 AND is_deleted = 0`, [req.token.userId]).then((result) => {
+        res.status(200).json({
             success : true,
             message : `All Gym`,
             gym : result.rows
@@ -38,7 +68,7 @@ const getAllGym = (req, res)=>{
 
 const getGymByGymId = (req,res)=>{
     const {gymId} = req.params;
-    pool.query(`SELECT name, description FROM gyms WHERE gyms.id = $1`,[gymId]).then((result) => {
+    pool.query(`SELECT name, description, image, owner_id FROM gyms WHERE gyms.id = $1 AND is_deleted = 0`,[gymId]).then((result) => {
         res.status(200).json({
             success: true,
             message : `This Data For Gym :${result.rows[0].name}`,
@@ -55,14 +85,14 @@ const getGymByGymId = (req,res)=>{
 
 const getGymByOwner = (req,res)=>{
     const userId = req.params.ownerId;
-    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result)=>{
+    pool.query(`SELECT * FROM gyms WHERE owner_id = $1 AND is_deleted = 0`, [userId]).then((result)=>{
         if(result.rows.length === 0){
-            return res.status(201).json({
+            return res.status(200).json({
                 success : true,
                 message : `The User Does not have Gym`
             })
         }
-        res.status(201).json({
+        res.status(200).json({
             success : true,
             message : `All Gym By Owner`,
             result : result.rows
@@ -146,15 +176,33 @@ const getPlanById = (req, res)=>{
         })
     });
 }
+
+const updatePlanById = (req,res)=>{
+    const planId = req.params.planid;
+    const {name,description, numOfMonth, price} = req.body;
+    const value=[name ,description||null, numOfMonth || null, price || null, planId];
+    pool.query(`UPDATE gym_plan SET name_plan=$1, description_plan=COALESCE($2,description_plan), numOfMonth_plan=COALESCE($3,numOfMonth_plan), price_plan=COALESCE($4,price_plan) WHERE gym_plan.id_plan=$5 RETURNING *`,value).then((result=>{
+        res.status(201).json({
+            success:true,
+            message:`Plan Updated Successfully`,
+            gym:result.rows  
+        })
+        })).catch((err) => {
+            res.status(500).json({
+              success: false,
+              message: "Server error",
+              error : err.message
+            });
+          });
+}
 const addNewUserInGym = (req,res)=>{
-    const userId = req.token.userId;
-    const {gymId, planId, numOfMonth, roomId} = req.body;
+    const {gymId, planId, numOfMonth , userId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
-    const providerS = [userId, gymId, planId, roomId];
+    const providerS = [userId, gymId, planId];
 
     pool.query(`SELECT * FROM gym_user WHERE gym_id = $1`, [gymId]).then((result) => {
         if(result.rows.length === 0){
-            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2,$3,${endSub}) RETURNING *`, providerS).then((result) => {
                 res.status(201).json({
                     success : true,
                     message : "User Add Successfully In Gym",
@@ -189,7 +237,7 @@ const addNewUserInGym = (req,res)=>{
                                 message : `The User Already Exist Coach In Gym`
                             })
                         }else{
-                            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+                            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2,$3,${endSub}) RETURNING *`, providerS).then((result) => {
                                 res.status(201).json({
                                     success : true,
                                     message : "User Add Successfully In Gym",
@@ -221,13 +269,13 @@ const addNewUserInGym = (req,res)=>{
 }
 
 const getAllUserInGym = (req,res)=>{
-    const {gymId} = req.body;
+    const {gymId} = req.params;
     const provider = [gymId]
     pool.query(`SELECT * FROM gym_user INNER JOIN users ON gym_user.user_id = users.id WHERE gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
             message : `All User In Gym`,
-            result : result.rows
+            users : result.rows
         });
     }).catch((err) => {
         res.status(500).json({
@@ -240,7 +288,7 @@ const getAllUserInGym = (req,res)=>{
 
 const getAllGymByUserId = async (req,res) =>{
     const {userId} = req.params;
-    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1`,[userId]).then((result) => {
+    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1 AND gyms.owner_id != $1`,[userId]).then((result) => {
         res.status(200).json({
             success : true,
             message :`All gyms in which the user is joined => ${userId}`,
@@ -278,11 +326,10 @@ const deleteUserInGym = async(req,res)=>{
 
 
 const addNewCoachInGym = (req,res) =>{
-    const coachId = req.token.userId;
-    const {gymId, roomId} = req.body;
-    const provider = [gymId, coachId, roomId];
-    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,provider).then((result) => {
-        pool.query(`INSERT INTO gym_coach (gym_id, coach_id, room_id) VALUES ($1,$2, $3)`, provider).then((result) => {
+    const {gymId, coachId} = req.body;
+    const provider = [gymId, coachId];
+    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,[gymId, coachId]).then((result) => {
+        pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
             res.status(201).json({
                 success : true,
                 message : `Coach Add Successfully In Gym`,
@@ -346,13 +393,13 @@ const getAllRoomByGymId = (req,res)=>{
 }
 
 const getAllCoachInGym = (req,res)=>{
-    const {gymId} = req.body;
+    const {gymId} = req.params;
     const provider = [gymId];
     pool.query(`SELECT * FROM gym_coach INNER JOIN users ON gym_coach.coach_id = users.id WHERE gym_coach.gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
             message : `All Coach In Gym`,
-            result : result.rows
+            coachs : result.rows
         });
     }).catch((err) => {
         res.status(500).json({
@@ -401,7 +448,9 @@ module.exports = {
     createRoomInGym,
     getRoomByIdRoom,
     getAllRoomByGymId,
-    getGymByGymId
+    getGymByGymId,
+    updateGym,
+    updatePlanById
 }
 
 

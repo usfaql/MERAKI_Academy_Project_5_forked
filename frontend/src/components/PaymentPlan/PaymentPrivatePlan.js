@@ -3,18 +3,17 @@ import './style.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-function PaymentPlan() {
+const PaymentPrivatePlan = () => {
     const navigate = useNavigate();
-    const {gymid, planid} = useParams();
+    const {coachid, planid} = useParams();
     const [numberCard, setNumberCard] = useState(null);
     const [nameOnCard, setNameOnCard] = useState(null);
     const [expirationDate, setExpirationDate] = useState(null);
     const [cVV, setCVV] = useState(null);
     const [dataPlanForInvoice, setDataPlanForInvoice] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [success, setSuccess] = useState(null)
+    const [message, setMessage] = useState("")
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -25,27 +24,21 @@ function PaymentPlan() {
         headers: { Authorization: `Bearer ${state.token}` }
     }
     useEffect(()=>{
-        axios.get(`http://localhost:5000/gyms/plan/${planid}/select`, config).then((result) => {
+        axios.get(`http://localhost:5000/coachs/plans/plan/${planid}`, config).then((result) => {
             setDataPlanForInvoice(result.data.plan);
-            setTotalPrice(Number(result.data.plan.price_plan)+0.48)
+            setTotalPrice(Number(result.data.plan.price)+0.48)
         }).catch((err) => {
-            
+            setSuccess(false);
+            setMessage(err.response.data.message);
         });
        
     },[])
     const handlePay = ()=>{
         if(numberCard && nameOnCard && expirationDate && cVV){
-            console.log("Success");
-            axios.post(`http://localhost:5000/gyms/gym/user`, 
-            {gymId : gymid, planId : planid, numOfMonth : dataPlanForInvoice.numofmonth_plan, userId: state.userId},
-            config).then((result) => {
-                navigate(`/gym/${gymid}`);
-            }).catch((err) => {
-                console.log(err);
-            });
-            
+            navigate(`/user/private`);
         }else{
-            console.log("please fill data");
+            setSuccess(false)
+            setMessage("please fill data")
         }
     }
       return (
@@ -53,19 +46,19 @@ function PaymentPlan() {
             <div className='invoice'>
                 <h2 style={{textAlign:"center"}}>Invoice</h2>
                 <div className='inv'>
-                <h6>Name Gym:</h6>
-                <h6>{dataPlanForInvoice && dataPlanForInvoice.name}</h6>
+                <h6>Coach Name:</h6>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.firstname} {dataPlanForInvoice && dataPlanForInvoice.lastname}</h6>
                 </div>
                 <div className='inv'>
-                    <h6>Name Plan:</h6>
-                <h6>{dataPlanForInvoice && dataPlanForInvoice.name_plan}</h6></div>
+                    <h6>Plan Name:</h6>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.name}</h6></div>
                 <div className='inv'>
                     <h6>Month:</h6>
-                    <h6>{dataPlanForInvoice && dataPlanForInvoice.numofmonth_plan}</h6>
+                    <h6>{dataPlanForInvoice && dataPlanForInvoice.numofmonth}</h6>
                 </div>
                 <div className='inv'>
                     <h6>Price:</h6>
-                    <h6>${dataPlanForInvoice && dataPlanForInvoice.price_plan}</h6>
+                    <h6>${dataPlanForInvoice && dataPlanForInvoice.price}</h6>
                 </div>
                 <div style={{borderBottom:"1px solid gray"}}></div>
                 <div className='inv'>
@@ -110,9 +103,16 @@ function PaymentPlan() {
                 </div>
                 <button className='pay-btn' onClick={handlePay}>Pay Now</button>
             </div>
-            
+            <div
+        className={
+          success ? message && "SuccessMessage" : message && "ErrorMessage"
+        }
+        style={{ padding: "5px" }}
+      >
+        <span style={{ visibility: "hidden" }}>:</span>
+        {message}
+      </div>
         </div>
       );
 };
-
-export default PaymentPlan
+export default PaymentPrivatePlan

@@ -43,7 +43,7 @@ const Login = () => {
                   gender : result.data.userInfo.gender,
                   private : result.data.userInfo.private,
                   image : result.data.userInfo.image,
-                  role:result.data.userInfo.role_id
+                  role : result.data.userInfo.role_id
                 }));
               navigate('/home');
             }).catch((error)=>{

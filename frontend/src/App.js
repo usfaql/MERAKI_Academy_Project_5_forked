@@ -15,9 +15,14 @@ import PaymentPlan from "./components/PaymentPlan/PaymentPlan";
 import AddUserInfo from "./components/AddUserInfo/UserInfo";
 import UserPrivate from "./components/Home/UserPrivate/UserPrivate";
 import GymGroup from "./components/Gym/GymGroup/GymGroup";
+
+
+
+import SettingsGym from "./components/Gym/Settings/Settings";
+import PrivatePlan from "./components/PrivatePlan/PrivatePlan";
+import PaymentPrivatePlan from "./components/PaymentPlan/PaymentPrivatePlan";
 import Recipe from "./components/Recipe/Recipe";
 import Ingredients from "./components/Recipe/Ingredients";
-
 
 function App() {
   return (
@@ -38,10 +43,11 @@ function App() {
         <Route path="/checkout/:gymid/:planid" element={<PaymentPlan/>}/>
         <Route path="/user/private" element={<UserPrivate/>}/>
         <Route path="/gym/:gymid" element={<GymGroup/>}/>
-        <Route path="/recipe" element={<Recipe/>}/>
+        <Route path="/:gymid/settings" element={<SettingsGym/>}/>
+        <Route path="/:coachid/private/plan" element={<PrivatePlan/>}/>
+        <Route path="/checkout/private/:coachid/:planid" element={<PaymentPrivatePlan/>}/>
+           <Route path="/recipe" element={<Recipe/>}/>
         <Route path="/recipe/:id/ingredients" element={<Ingredients/>}/>
-
-
       </Routes>
     </div>
   );
