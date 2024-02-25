@@ -13,7 +13,7 @@
 
 
 .searchbar{
-    width: 30pc;
+    width: 40pc;
     border-radius: 30px;
     background-color: white;
     color: black;
@@ -25,9 +25,11 @@
 }
 .search_bar{
 padding-top: 50px;
+;
 }
 .cardbody{
-    height: 150px;
+    height: 200px;
+    border-radius: 100px;
 }
 .image_card{
     height:200px;
@@ -38,4 +40,13 @@ padding-top: 50px;
 }
 .recipe_buttons.Button{
     padding-left: 20px;
+}
+.text-card{
+    border-radius: 10px;
+}
+.calory{
+    font-size: small;
+    border-radius: 10px;
+    background-color: beige;
+    
 }

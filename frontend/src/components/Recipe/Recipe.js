@@ -66,13 +66,21 @@ const Recipe = () => {
                     <Row xs={1} md={4} className="g-2" style={{ background: "#272727" }}>
                         {filteredRecipes.map((recipe, index) => (
                             <Col key={index}>
-                                <Card className='ccard'>
-                                    <Image src={recipe.recipe.image} roundedCircle className='image_card' />
+                                <Card className='ccard' style={{display:"flex"
+                            ,justifyContent:"space-between"}}>
+                                    <Image src={recipe.recipe.image} roundedCircle className='image_card'  type="button" onClick={()=>{
+
+                                        
+                                    }}/>
                                     <Card.Body className='cardbody'>
                                         <Card.Title style={{ fontWeight: "bold" }}>{recipe.recipe.label}</Card.Title>
                                         <Card.Text className='text-card'>
-                                            {recipe.recipe.calories}
+                                        <div className='calory' >
+                                       <div style={{color:"red"}}>CALORIES</div>  {recipe.recipe.calories} 
+                                        </div>
                                         </Card.Text>
+                                        
+                                         
                                     </Card.Body>
                                     <Card.Footer>
                                         
