@@ -1,20 +1,19 @@
 import React from 'react'
 import './style.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import { setLogout } from '../Redux/Reducers/Auth';
 function NavBar() {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
+  const dispatch = useDispatch()
   const state = useSelector((state)=>{
   return{
       isLoggedIn : state.auth.isLoggedIn,
       role:state.auth.role
     }
   });
-  
-  
-
 
   return (
     <div className='nav-bar'>
@@ -43,16 +42,26 @@ function NavBar() {
         </div>
 
         <div style={{textAlign:"end"}}>
-          {state.isLoggedIn? <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
+          {state.isLoggedIn? 
+          <div style={{display:"flex" , gap:"10px"}}>
+            <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
             <img style={{width:"48px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
             <div>
-              <ul style={{textAlign:"start", listStyle: "none"}}>
+              <ul style={{textAlign:"start", listStyle: "none",padding:"0"}}>
                 <li>{covertUserInfoToJson && covertUserInfoToJson.nameUser}</li>
-                <li style={{fontSize:"10px"}}>{covertUserInfoToJson.role === 3 && "<COACH>" || covertUserInfoToJson.role === 2 && "<USER>"}</li>
+                <li style={{fontSize:"10px"}}>{covertUserInfoToJson?.role === 3 && "<COACH>" || covertUserInfoToJson?.role === 2 && "<USER>"}</li>
               </ul>
             </div>
             
             </ul>
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <button style={{border:"0", borderRadius:"4px", fontWeight:"bold", backgroundColor:"rgb(255,100,100)"}} onClick={()=>{
+              localStorage.clear();
+              dispatch(setLogout());
+              navigate('/login');
+            }}>Logout</button>
+            </div>
+            </div>
             : 
             <button className='button' onClick={()=>{
               navigate('login')

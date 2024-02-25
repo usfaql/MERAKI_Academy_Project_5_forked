@@ -68,7 +68,7 @@ const getAllGym = (req, res)=>{
 
 const getGymByGymId = (req,res)=>{
     const {gymId} = req.params;
-    pool.query(`SELECT name, description, image FROM gyms WHERE gyms.id = $1 AND is_deleted = 0`,[gymId]).then((result) => {
+    pool.query(`SELECT name, description, image, owner_id FROM gyms WHERE gyms.id = $1 AND is_deleted = 0`,[gymId]).then((result) => {
         res.status(200).json({
             success: true,
             message : `This Data For Gym :${result.rows[0].name}`,
@@ -196,13 +196,13 @@ const updatePlanById = (req,res)=>{
           });
 }
 const addNewUserInGym = (req,res)=>{
-    const {gymId, planId, numOfMonth, roomId , userId} = req.body;
+    const {gymId, planId, numOfMonth , userId} = req.body;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
-    const providerS = [userId, gymId, planId, roomId];
+    const providerS = [userId, gymId, planId];
 
     pool.query(`SELECT * FROM gym_user WHERE gym_id = $1`, [gymId]).then((result) => {
         if(result.rows.length === 0){
-            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2,$3,${endSub}) RETURNING *`, providerS).then((result) => {
                 res.status(201).json({
                     success : true,
                     message : "User Add Successfully In Gym",
@@ -237,7 +237,7 @@ const addNewUserInGym = (req,res)=>{
                                 message : `The User Already Exist Coach In Gym`
                             })
                         }else{
-                            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, room_id, endSub) VALUES ($1,$2,$3, $4,${endSub}) RETURNING *`, providerS).then((result) => {
+                            pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2,$3,${endSub}) RETURNING *`, providerS).then((result) => {
                                 res.status(201).json({
                                     success : true,
                                     message : "User Add Successfully In Gym",

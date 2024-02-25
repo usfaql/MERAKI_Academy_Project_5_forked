@@ -27,6 +27,7 @@ function GymHome() {
       }else{
         axios.get(`http://localhost:5000/gyms/owner/${state.userId}`,config).then((result) => {
           console.log(result);
+          console.log("result", result);
           setOwnerGym(result.data.result); 
         }).catch((err) => {
           console.log(err);
@@ -70,6 +71,7 @@ function GymHome() {
 
     const generateGymOwner = () => {
       const gymOwner = [];
+      console.log(state.auth);
       {ownerGym && ownerGym.map((e,i)=>{
         gymOwner.push(
         <Col key={1}>

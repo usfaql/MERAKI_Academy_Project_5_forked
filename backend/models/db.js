@@ -104,13 +104,11 @@ const createTable = () => {
       user_id INT,
       gym_id INT,
       plan_id INT,
-      room_id INT,
       endSub TIMESTAMP DEFAULT NULL,
-      created_at TIMESTAMP DEFAULT NOW(),
+      created_at_plan TIMESTAMP DEFAULT NOW(),
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (gym_id) REFERENCES gyms(id),
       FOREIGN KEY (plan_id) REFERENCES gym_plan(id),
-      FOREIGN KEY (room_id) REFERENCES room_gym(id),
       is_deleted SMALLINT DEFAULT 0,
       PRIMARY KEY (id)
   );
