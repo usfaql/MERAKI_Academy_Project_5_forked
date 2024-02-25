@@ -271,12 +271,26 @@ const addNewUserInGym = (req,res)=>{
 const getAllUserInGym = (req,res)=>{
     const {gymId} = req.params;
     const provider = [gymId]
-    pool.query(`SELECT * FROM gym_user INNER JOIN users ON gym_user.user_id = users.id WHERE gym_id = $1`, provider).then((result) => {
-        res.status(200).json({
-            success : true,
-            message : `All User In Gym`,
-            users : result.rows
-        });
+    pool.query(`
+    SELECT * 
+    FROM gym_user 
+    INNER JOIN users ON gym_user.user_id = users.id 
+    INNER JOIN gym_plan ON gym_plan.id_plan = gym_user.plan_id 
+    WHERE gym_user.gym_id = $1 AND gym_user.is_deleted = 0`, provider).then((result) => {
+        if(!result.rows.length){
+            res.status(200).json({
+                success : true,
+                message : `No User In Gym`,
+                users : result.rows
+            });
+        }else{
+            res.status(200).json({
+                success : true,
+                message : `All User In Gym`,
+                users : result.rows
+            });
+        }
+
     }).catch((err) => {
         res.status(500).json({
             success : false,
@@ -328,13 +342,29 @@ const deleteUserInGym = async(req,res)=>{
 const addNewCoachInGym = (req,res) =>{
     const {gymId, coachId} = req.body;
     const provider = [gymId, coachId];
-    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE user_id = $2 AND gym_id = $1`,[gymId, coachId]).then((result) => {
-        pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
-            res.status(201).json({
-                success : true,
-                message : `Coach Add Successfully In Gym`,
-                result : result.rows
-            });
+    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE gym_user.user_id = $2 AND gym_user.gym_id = $1`,[gymId, coachId]).then((result) => {
+        pool.query(`SELECT * FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then((result) => {
+            console.log(result);
+            if(!result.rows.length){
+                pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
+                    res.status(201).json({
+                        success : true,
+                        message : `Coach Add Successfully In Gym`,
+                        result : result.rows
+                    });
+                }).catch((err) => {
+                    res.status(500).json({
+                        success : false,
+                        message : `Server Error`,
+                        error : err.message
+                    });
+                });
+            }else{
+                res.status(200).json({
+                    success: false,
+                    message : 'The User Already in Coach'
+                })
+            }
         }).catch((err) => {
             res.status(500).json({
                 success : false,
@@ -342,6 +372,7 @@ const addNewCoachInGym = (req,res) =>{
                 error : err.message
             });
         });
+
     }).catch((err) => {
         res.status(500).json({
             success : false,
