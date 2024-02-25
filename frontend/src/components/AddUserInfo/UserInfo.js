@@ -85,7 +85,7 @@ const createUserInfo =async()=>{
       <div className='a'>
          <div className="profile_img">
           <Col xs={6} md={4}>
-          <Image src={image?image:logo} roundedCircle  style={{width:"100%"}}
+          <Image src={image?image:logo} roundedCircle  style={{width:"50%"}}
            onClick={handleImageClick}/>
           </Col>
           <input
