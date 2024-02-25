@@ -1,44 +1,45 @@
-import React from 'react'
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-
-
-
-
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Ingredients = () => {
+  const { id } = useParams();
+  const [ingrediant, setIngrediant] = useState(null); 
+  const navigate = useNavigate();
 
-    const { query } = useParams();
-    const [order, setOrder] = useState(undefined);
-    const [isConfirmed, setIsConfirmed] = useState(false);
-    const navigate = useNavigate();
+  useEffect(()=>{
+    rendering();
+  },[]);
+const rendering =()=>{
 
-    useEffect(() => {
-    
-        axios
-          .get( `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=20&calories=591-722&health=alcohol-free`, {
-            
-          })
-          .then((response) => {
-            if (response) {
-                console.log(response);
-              setOrder(response.data.data);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }, []);
+  axios.get(`https://api.edamam.com/api/recipes/v2/${id}?type=public&app_id=3cfe5e06&app_key=28c3a03ea304f6aaa97589f1f1bd8877`).then((result)=>{
+    console.log(result);
+  }).catch((err)=>{
+    console.log(err)
+
+  })
+}
+
 
 
   return (
-    <div className='ingrediant'>
-        
-      
-    </div>
-  )
-}
+    <div className="ingredient">
+     <div className='ingrediant_page'>
+     {ingrediant ? (
+        <ul>
+          {ingrediant.hits.map(hit => (
+            <li key={hit.recipe.uri}>{hit.recipe.label}</li>
+          ))}
+        </ul>
+      ) : (
+        <div>No data available</div>
+      )}
 
-export default Ingredients
+
+     </div>
+     
+    </div>
+  );
+};
+
+export default Ingredients;

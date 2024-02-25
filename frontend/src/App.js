@@ -39,7 +39,7 @@ function App() {
         <Route path="/user/private" element={<UserPrivate/>}/>
         <Route path="/gym/:gymid" element={<GymGroup/>}/>
         <Route path="/recipe" element={<Recipe/>}/>
-        <Route path="/ingrediant" element={<Ingredients/>}/>
+        <Route path="/recipe/:id/ingredients" element={<Ingredients/>}/>
 
 
       </Routes>
