@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Spinner from 'react-bootstrap/Spinner';
 const UserPrivate = () => {
   const revarse = useRef(null);
   if (revarse.current) {
@@ -24,6 +25,7 @@ const UserPrivate = () => {
   const [header, setHeader] = useState("");
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
+  const [userLoading,setUserLoading] = useState(true);
   const getAllCoachs = () => {
     axios
       .get(`http://localhost:5000/coachs/coach`, {
@@ -36,14 +38,17 @@ const UserPrivate = () => {
           console.log(result.data.coachs);
           setCoachs(result.data.coachs);
           setSuccess(result.data.success);
+          setUserLoading(false)
         } else {
           setSuccess(result.data.success);
           setMessage(result.data.message);
+          setUserLoading(false)
         }
       })
       .catch((error) => {
         setSuccess(false);
         setMessage(error.response.data.message);
+        setUserLoading(false)
       });
   };
   useEffect(() => {
@@ -113,7 +118,10 @@ const UserPrivate = () => {
       <div className="Coach-Private-Page">
         {show && (
           <div className="Left-Side">
-            {success ? (
+            {userLoading ? <div style={userLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
+                <Spinner animation="border" style={{color:"#A1E533"}}  />
+                <label>Loading...</label>
+                </div>: success? (
               <div className="User-List">
                 {coachs?.map((user, i) => (
                   <div
@@ -238,7 +246,7 @@ const UserPrivate = () => {
                 <Button>Send</Button>
               </div>
             </div>
-          </div></>:<div style={{position:"absolute", left:"50%"}}>Select User To Start Chating</div>}
+          </div></>:<div style={{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}}>Select User To Start Chating</div>}
          
         </div>
       </div>
