@@ -13,22 +13,42 @@
 
 
 .searchbar{
-    width: 30pc;
+    width: 40pc;
     border-radius: 30px;
     background-color: white;
     color: black;
     font-size: large;
     font-family: 'Courier New', Courier, monospace;
     height: 60px;
+    margin: 0%;
+   
     
 }
 .search_bar{
-    padding: 60px;
+padding-top: 50px;
+;
 }
 .cardbody{
-    height: 150px;
+    height: 200px;
+    border-radius: 100px;
+    background-color: beige;
 }
 .image_card{
-    height:200px;
-    width: 200px;
+    height:100%;
+    width: 100%;
+}
+.recipe_buttons{
+    margin-bottom: 100px;
+}
+.recipe_buttons.Button{
+    padding-left: 20px;
+}
+.text-card{
+    border-radius: 10px;
+}
+.calory{
+    font-size: small;
+    border-radius: 10px;
+    background-color: beige;
+    
 }
