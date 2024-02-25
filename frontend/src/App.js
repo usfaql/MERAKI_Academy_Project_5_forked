@@ -16,6 +16,7 @@ import AddUserInfo from "./components/AddUserInfo/UserInfo";
 import UserPrivate from "./components/Home/UserPrivate/UserPrivate";
 import GymGroup from "./components/Gym/GymGroup/GymGroup";
 import Recipe from "./components/Recipe/Recipe";
+import Ingredients from "./components/Recipe/Ingredients";
 
 
 function App() {
@@ -38,6 +39,8 @@ function App() {
         <Route path="/user/private" element={<UserPrivate/>}/>
         <Route path="/gym/:gymid" element={<GymGroup/>}/>
         <Route path="/recipe" element={<Recipe/>}/>
+        <Route path="/ingrediant" element={<Ingredients/>}/>
+
 
       </Routes>
     </div>
