@@ -1,18 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import "./UserInfo.css"
 import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Col from 'react-bootstrap/Col';
 import Button from "react-bootstrap/Button";
-
-
-
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import logo from "../assets/user.png"
 const UserInfo  = () => {
+  const fileInputRef=useRef(null)
     const [image, setImage] = useState("");
     const [userinfo, setUserInfo] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -32,7 +30,25 @@ const UserInfo  = () => {
   useEffect(() => {
     createUserInfo();
   }, []);
-  
+  const uploadImage = async(e) => {
+    const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'yk50quwt');
+      formData.append("cloud_name", "dorpys3di");
+      await fetch('https://api.cloudinary.com/v1_1/dvztsuedi/image/upload', {
+        method: 'post',
+        body: formData,
+      }).then((result)=> result.json()).then((data) => {
+          setImage(data.url);
+          console.log("URL Image =>", data.url);
+      }).catch((err) => {
+      console.log(err);
+      });
+  };
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+};
 
 const createUserInfo =async()=>{
     try {
@@ -65,16 +81,20 @@ const createUserInfo =async()=>{
     <Stack gap={3}>
         
       
-      <h1 className="Title" style={{fontFamily:'-moz-initial'}}>Extra information</h1>
-
-      <div className="profile_img">
+      <h1 className="Title" style={{fontFamily:'-moz-initial'}}>Extra Information</h1>
+      <div className='a'>
+         <div className="profile_img">
           <Col xs={6} md={4}>
-          <Image src={userinfo.image} roundedCircle />
-        </Col>
-          <input type="file" onChange={(e)=>{
-            setImage(e.target.value)
-            console.log(e.target.files[0]);
-          }} />
+          <Image src={image?image:logo} roundedCircle  style={{width:"100%"}}
+           onClick={handleImageClick}/>
+          </Col>
+          <input
+                type='file'
+                accept='image/jpeg, image/jpg'
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={uploadImage}
+            />
           </div>
         <div className="height-width">
           <div className="height">
@@ -118,7 +138,9 @@ setWeight(e.target.value)
           <Button onClick={()=>{
             createUserInfo()
           }} >next</Button>
-        </div>
+        </div></div>
+
+     
         
     </Stack>
         )}

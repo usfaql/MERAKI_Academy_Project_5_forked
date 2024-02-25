@@ -10,8 +10,22 @@
     margin-top: 70px;
     margin-left: 200px;
     display: flex;
-    flex-direction: row;
-
+    flex-direction: column;
+border-radius: 16px;
+padding: 0 35px 0 35px;
+}
+.a{
+  height:70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.profile_img {
+  display: flex;
+  justify-content: center;
+  border-radius: 32px;
+  margin-bottom: 30px;
 }
 .inpuut{
     width: 40px;
@@ -42,6 +56,7 @@
   
 }
 .submit-Btn Button{
+  align-self:end;
     margin-top: 10px;
     width: 100%;
     border: 0;

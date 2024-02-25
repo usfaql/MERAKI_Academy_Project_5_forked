@@ -34,7 +34,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<NotFound/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="userinfo" element={<AddUserInfo/>}/>
+        <Route path="/userinfo" element={<AddUserInfo/>}/>
         <Route path="/gym/create" element={<CreateGym/>}/>
         <Route path="/coach/private" element={<CoachPrivate/>}/>
         <Route path="/Profile" element={<ProfileSetting/>}/>
