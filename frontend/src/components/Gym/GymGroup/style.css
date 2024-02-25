@@ -35,6 +35,8 @@
     border-right: 1px solid gray;
 }
 .contener-member{
+    display: flex;
+    flex-direction: column;
     width: 20%;
 }
 
