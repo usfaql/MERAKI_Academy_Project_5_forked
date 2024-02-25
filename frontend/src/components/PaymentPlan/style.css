@@ -76,3 +76,27 @@
     background-color: #A1E533;
     font-weight: bold;
 }
+.SuccessMessage {
+    margin-top: 10px;
+    align-self: center;
+    border-radius: 4px;
+    height: 60px;
+    width: 25%;
+    background-color: #A1E533;
+    color: black;
+    text-align: center;
+    align-items: center;
+
+  }
+  
+  .ErrorMessage {
+    margin-top: 10px;
+    border-radius: 4px;
+    align-self: center;
+    padding: 5px;
+    width: 25%;
+    background-color: hsla(0, 100%, 50%, 0.402);
+    color: white;
+    text-align: center;
+    align-items: center;
+  }
