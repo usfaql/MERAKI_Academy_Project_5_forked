@@ -101,10 +101,8 @@ console.log(userinfo.image);
         <div className="profile_form">
               
           <div className="profile_img">
-          <Col xs={6} md={4}>
-          <Image src={image?image:userinfo?.image} roundedCircle  style={{width:"100%",justifySelf:"center"}}
+          <img src={image?image:userinfo?.image}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
            onClick={handleImageClick}/>
-          </Col>
           <input
                 type='file'
                 accept='image/jpeg, image/jpg'
@@ -118,18 +116,18 @@ console.log(userinfo.image);
         <Form.Group as={Col} controlId="formGridEmail" style={{textAlign:"start"}}  >
           <Form.Label style={{color:"white",fontSize:"18px"}}>First Name:</Form.Label>
           
-          <Form.Control type="text" placeholder="first name" value={userinfo.firstname}style={{  border: "0", color: "#272727"}} />
+          <Form.Control type="text" placeholder="first name" value={userinfo.firstname}style={{  border: "0",backgroundColor:"#101010", color: "white"}} />
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridPassword" style={{textAlign:"start"}}>
           <Form.Label style={{color:"white",fontSize:"18px"}}>Last Name:</Form.Label>
-          <Form.Control type="text" placeholder="last name"  value={userinfo.lastname}   style={{ border: "0", color: "#272727"}} />
+          <Form.Control type="text" placeholder="last name"  value={userinfo.lastname}   style={{ border: "0", backgroundColor:"#101010", color: "white"}} />
         </Form.Group>
       </Row>
 
       <Form.Group className="mb-3" controlId="formGridAddress1" style={{textAlign:"start"}}>
         <Form.Label style={{color:"white",fontSize:"18px"}}>email:</Form.Label>
-        <Form.Control placeholder="email"  value={userinfo.email}  style={{ border: "0",color: "#272727"}} />
+        <Form.Control placeholder="email"  value={userinfo.email}  style={{ border: "0",backgroundColor:"#101010", color: "white"}} />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formGridAddress2" style={{textAlign:"start"}}>
@@ -137,7 +135,7 @@ console.log(userinfo.image);
         <Form.Control defaultValue={userinfo.goal}    onChange={(e)=>{
             setGoal(e.target.value)
             console.log(e.target.value);
-          }}  style={{  border: "0", color: "#272727"}}/>
+          }}  style={{  border: "0",backgroundColor:"#101010", color: "white"}}/>
       </Form.Group>
 
       <Row className="mb-3">
@@ -145,24 +143,24 @@ console.log(userinfo.image);
           <Form.Label style={{color:"white",fontSize:"18px"}}>height:</Form.Label>
           <Form.Control  defaultValue={userinfo.height} type="number"   onChange={(e)=>{
             setHeight(e.target.value)
-          }} style={{border: "0",color: "#272727"}}/>
+          }} style={{border: "0",backgroundColor:"#101010", color: "white"}}/>
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridZip" style={{textAlign:"start"}}>
           <Form.Label style={{color:"white",fontSize:"18px"}}>weight:</Form.Label>
           <Form.Control  defaultValue={userinfo.weight} type="number"  onChange={(e)=>{
             setWeight(e.target.value)
-          }}  style={{border: "0", color: "#272727"}}/>
+          }}  style={{border: "0",backgroundColor:"#101010", color: "white"}}/>
         </Form.Group>
       </Row>
 
        
 
-      <Button  style={{backgroundColor :"#A1E533",border:"0", color:"black"}} type="submit" onClick={(e)=>{
+      <Button  style={{backgroundColor :"#A1E533",border:"0", color:"black",fontWeight:"bold"}} type="submit" onClick={(e)=>{
         e.preventDefault()
         updateUserInfo()
       }}>
-        save change
+        Save Change
       </Button>
     </Form>
 

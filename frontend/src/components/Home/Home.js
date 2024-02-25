@@ -1,21 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import Pagination from 'react-bootstrap/Pagination';
 import GymHome from './GymHome/GymHome';
 
 import PrivateHome from './PrivateHome/PrivateHome';
 import { useDispatch, useSelector } from "react-redux";
-
 import AllGymHome from './AllGymHome/AllGymHome';
 import CoachPrivate from './CoachPrivate/CoachPrivate';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 function Home() {
+  const {token,userId} = useSelector((state) => {
+    return {
+      userId: state.auth.userId,
+      token: state.auth.token,
+    };
+  });
   const navigate=useNavigate()
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
   const [selected , setSelected] = useState('gym');
   const items = [];
   const [PageNumber, setPageNumber] = useState(1); 
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+useEffect(()=>{
+  axios.get(`http://localhost:5000/users/info/${userId}`,config).then((result)=>{
+    if(!result.data.success){
+      console.log(result);
+      navigate('/userinfo')
+    }
+
+  }).catch((err)=>{
+    console.log(err);
+  })
+},[])
+
   for (let number = 1; number <= 5; number++) {
     items.push(
       <Pagination.Item key={number} linkStyle={PageNumber === number ? {backgroundColor:"#A1E533", border:"0", color:"#101010"} : {backgroundColor:"#404040",border:"0", color:"white"}}  active={number === PageNumber} onClick={()=>{

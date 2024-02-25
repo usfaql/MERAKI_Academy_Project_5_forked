@@ -9,27 +9,22 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/user.png"
+import { useNavigate } from 'react-router-dom';
 const UserInfo  = () => {
+  const navigate=useNavigate()
   const fileInputRef=useRef(null)
     const [image, setImage] = useState("");
-    const [userinfo, setUserInfo] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
     const [weight, setWeight] = useState("");
     const [height, setHeight] = useState("");
-    const [status, setStatus] = useState(false);
-    const [goal, setGoal] = useState('');
-    const dispatch = useDispatch();
+    const [success, setSuccess] = useState(null);
+    const [message, setMessage] = useState("")
+    const [goal, setGoal] = useState('')
   const state = useSelector((state) => {
     return {
       userId: state.auth.userId,
       token: state.auth.token,
     };
   });
-  useEffect(() => {
-    createUserInfo();
-  }, []);
   const uploadImage = async(e) => {
     const file = e.target.files[0];
       const formData = new FormData();
@@ -41,7 +36,7 @@ const UserInfo  = () => {
         body: formData,
       }).then((result)=> result.json()).then((data) => {
           setImage(data.url);
-          console.log("URL Image =>", data.url);
+          setSuccess(true)
       }).catch((err) => {
       console.log(err);
       });
@@ -49,45 +44,41 @@ const UserInfo  = () => {
   const handleImageClick = () => {
     fileInputRef.current.click();
 };
-
 const createUserInfo =async()=>{
-    try {
-
-        const result =await axios.put(`http://localhost:5000/users/info/create`, 
+  if(weight&&height&&goal){
+     try {
+        const result =await axios.post(`http://localhost:5000/users/info/create`, 
 {
           image , 
           weight,
           height,
           goal
-  
         },
         {headers: {
           Authorization: `Bearer ${state.token}`,
         }});
-  
-        setUserInfo({...userinfo,...result})//
-        console.log(result);
+        navigate('/home')
       } catch (error) {
+        setSuccess(false)
+        setMessage(error.response.data.message)
         console.log(error);
       }
-    };
-
-
-
+    }else{
+setSuccess(false)
+setMessage("Please Fill All Field")
+    }
+  }
   return (
     <div className='user_info'>
         <div className='userinfo_form'>
-        {userinfo && (
     <Stack gap={3}>
         
       
-      <h1 className="Title" style={{fontFamily:'-moz-initial'}}>Extra Information</h1>
+      <h1 className="Title" style={{fontFamily:'-moz-initial',margin:"0"}}>Extra Information</h1>
       <div className='a'>
          <div className="profile_img">
-          <Col xs={6} md={4}>
-          <Image src={image?image:logo} roundedCircle  style={{width:"50%"}}
+          <img src={image?image:logo}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
            onClick={handleImageClick}/>
-          </Col>
           <input
                 type='file'
                 accept='image/jpeg, image/jpg'
@@ -112,7 +103,7 @@ const createUserInfo =async()=>{
             />
           </div>
           <div className="weight">
-            <Form.Label>weight:</Form.Label>
+            <Form.Label>Weight:</Form.Label>
             <Form.Control onChange={(e)=>{
 setWeight(e.target.value)
             }}
@@ -126,7 +117,7 @@ setWeight(e.target.value)
           </div>
         </div>
         <div className="goal">
-          <Form.Label> your goal:</Form.Label>
+          <Form.Label> Your Goal:</Form.Label>
           <Form.Control onChange={(e)=>{
             setGoal(e.target.value)
           }}
@@ -137,13 +128,21 @@ setWeight(e.target.value)
         <div className="submit-Btn">
           <Button onClick={()=>{
             createUserInfo()
-          }} >next</Button>
+          }} >Next</Button>
         </div></div>
 
-     
+        <div
+        className={
+          success ? message && "SuccessMessage" : message && "ErrorMessage"
+        }
+        style={{ padding: "5px" }}
+      >
+        <span style={{ visibility: "hidden" }}>:</span>
+        {message}
+      </div>
         
     </Stack>
-        )}
+        
         </div>
         
     </div>
