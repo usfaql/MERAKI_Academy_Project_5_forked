@@ -3,9 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import './style.css';
 import axios, { all } from 'axios';
 import { useSelector } from 'react-redux';
+import Spinner from 'react-bootstrap/Spinner';
 // import { IoSettingsOutline } from "react-icons/io5";
 function GymGroup() {
     const {gymid} = useParams();
+    const userInfo = localStorage.getItem("userInfo");
+    const covertUserInfoToJson = JSON.parse(userInfo);
     const navigate = useNavigate();
     const reversChat = useRef(null);
     const [allCoachs, setAllCoachs] = useState(null);
@@ -13,6 +16,12 @@ function GymGroup() {
     const [infoGym, setInfoGym] = useState(null);
     const [rooms, setRooms] = useState(null);
     const [roomSelected , setRoomSelected] = useState(null);
+
+
+    const [roomLoading , setRoomLoading] = useState(true);
+    const [coachLoading, setCoachLoading] = useState(true);
+    const [userLoading,setUserLoading] = useState(true);
+    const [infoGymLoading, setInfoGymLoading] = useState(true);
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -29,21 +38,31 @@ function GymGroup() {
     }
 
     
-    useEffect(()=>{
-        Promise.all([
-            axios.get(`http://localhost:5000/gyms/${gymid}/coach`, config),
-            axios.get(`http://localhost:5000/gyms/${gymid}/user`, config),
-            axios.get(`http://localhost:5000/gyms/${gymid}`, config),
-            axios.get(`http://localhost:5000/gyms/plan/${gymid}`, config)
-        ]).then(([coachResult, userResult, gymResult, planResult]) => {
-            setAllCoachs(coachResult.data.coachs);
-            setAllUsers(userResult.data.users);
-            setInfoGym(gymResult.data.oneGym);
-            setRooms(planResult.data.plans);
-        }).catch((err) => {
-            console.log(err);
-        });
-    },[])
+    useEffect(() => {
+        axios.get(`http://localhost:5000/gyms/${gymid}/coach`, config)
+            .then(coachResult => {
+                setAllCoachs(coachResult.data.coachs);
+                setCoachLoading(false);
+                return axios.get(`http://localhost:5000/gyms/${gymid}/user`, config);
+            })
+            .then(userResult => {
+                setAllUsers(userResult.data.users);
+                setUserLoading(false);
+                return axios.get(`http://localhost:5000/gyms/${gymid}`, config);
+            })
+            .then(gymResult => {
+                setInfoGymLoading(false);
+                setInfoGym(gymResult.data.oneGym);
+                return axios.get(`http://localhost:5000/gyms/plan/${gymid}`, config);
+            })
+            .then(planResult => {
+                setRooms(planResult.data.plans);
+                setRoomLoading(false)
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
 
     const generateChatGym = ()=>{
         const chatLite = [];
@@ -51,7 +70,7 @@ function GymGroup() {
             chatLite.push(
                 <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px"}}>
                     <img src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png' style={{width:"52px", height:"52px"}}/>
-                    <div style={{backgroundColor:"gray", width:"90%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus tincidunt auctor. Nulla maximus velit sit amet est sagittis efficitur. Nam tellus nisl, sollicitudin vitae turpis a, auctor suscipit nisl. Nam id lacus in ex ultrices laoreet a vitae purus. Proin tristique velit odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent rutrum aliquam lectus eget porta. Quisque viverra efficitur molestie. Duis a efficitur tortor, nec tincidunt purus. Nunc mattis arcu sit amet tincidunt porttitor. Suspendisse congue semper lorem, eu consectetur ex tempor at. {i}</div>
+                    <div style={{backgroundColor:"#202020", width:"90%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus tincidunt auctor. Nulla maximus velit sit amet est sagittis efficitur. Nam tellus nisl, sollicitudin vitae turpis a, auctor suscipit nisl. Nam id lacus in ex ultrices laoreet a vitae purus. Proin tristique velit odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent rutrum aliquam lectus eget porta. Quisque viverra efficitur molestie. Duis a efficitur tortor, nec tincidunt purus. Nunc mattis arcu sit amet tincidunt porttitor. Suspendisse congue semper lorem, eu consectetur ex tempor at. {i}</div>
                 </div>
             )
         }
@@ -62,7 +81,7 @@ function GymGroup() {
 
     const listCoachs = ()=>{
         const coachArr = [];
-        if(!allCoachs || allCoachs?.length ===0 && state.auth.role === 3){
+        if(!allCoachs || allCoachs?.length ===0){
             coachArr.push(
                 <>
                 <li style={{padding:"5px 15px 10px",color:"rgb(170,170,170,0.7)"}}>There is no coach</li>
@@ -86,7 +105,6 @@ function GymGroup() {
         for(let i = 0; i < allUsers?.length ; i++){
             const endDate = new Date(allUsers[i].endsub);
             const now = new Date();
-            console.log(`NOW DATE => ${now} // END DATE => ${endDate}`);
             const difference = endDate - now;
 
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -124,22 +142,33 @@ function GymGroup() {
     <div className='body-group'>
         <div className='group-contener'>
             <div className='contener-room'>
-                <div>
+                <div style={{height:"100%"}}>
                 <h6 className='head'>Room</h6>
-                <ul >
+                <div style={roomLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
+                <Spinner animation="border" style={{color:"#A1E533"}}  />
+                <label>Loading...</label>
+                </div>
+                
+                <ul style={roomLoading ? {display:"none"} : {display:"block"}}>
                     {listRoom()}
                 </ul>
                 </div>
 
                 <div className='control-gym'>
-                    
-                <div style={{display:"flex", alignItems:"center", gap:"10px"}}> 
+                    {infoGymLoading ? 
+                    <div style={{width:"100%", display:"flex", flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+                    <Spinner animation="border" style={{color:"#A1E533"}}  />
+                    <label>Loading...</label>
+                    </div>
+                    :
+                    <>
+                                    <div style={{display:"flex", alignItems:"center", gap:"10px"}}> 
                     <img style={{width:"48px", height:"48px", borderRadius:"24px"}} src={infoGym?.image}/>
                     <h6>{infoGym?.name}</h6>
                 </div>
                 
                 <div style={{display:"flex", gap:"10px",paddingRight:"10px"}}>
-                    {infoGym?.owner_id === state.userId && 
+                    {infoGym?.owner_id === Number(state.userId) && 
 
                     <div onClick={()=>{
                         navigate(`/${gymid}/settings`);
@@ -161,20 +190,25 @@ function GymGroup() {
                     </div>
                    
                 </div>
+                    </>
+                    }
+                
+
                 
                 </div>
             </div>
+
             <div className='contener-chat'>
                 {!roomSelected ? <>
-                <div style={{backgroundColor:"#373737",height:"7%", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start"}}>Please Select Room To View Chat</div>
+                <div style={{backgroundColor:"#303030",color:"#A1E533",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%"}}>Please Select Room To View Chat</div>
                 </> : <>
-                <div style={{ backgroundColor:"#373737",height:"7%", alignItems:"center", display:"flex"}}>
-                        <h6 style={{textAlign:"start", paddingLeft:"5px"}}># {roomSelected}</h6>
+                <div style={{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
+                        <h6 style={{textAlign:"start", paddingLeft:"5px",fontWeight:"bold", margin:"0",padding:"1%"}}># {roomSelected}</h6>
                     </div>
-                    <div ref={reversChat} style={{ backgroundColor:"#202020",height:"73%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
+                    <div ref={reversChat} style={{ backgroundColor:"#101010",height:"75%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
                     {generateChatGym()}
                     </div>
-                    <div style={{ backgroundColor:"#373737",height:"20%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px"}}>
+                    <div style={{ backgroundColor:"#202020",height:"20%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px"}}>
                         <textarea style={{width:"95%", height:"50%", borderRadius:"4px"}}/>
                         <div style={{height:"45%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
                             <div style={{display:"flex", gap:"5px"}}>
@@ -188,11 +222,16 @@ function GymGroup() {
                 
                 </>}
             </div>
+
             <div className='contener-member'>
                 <div style={{height:"50%", display:"flex",flexDirection:"column"}}>
                     <h6 className='head'>Coach</h6>
+                    <div style={coachLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
+                        <Spinner animation="border" style={{color:"#A1E533"}}  />
+                        <label>Loading...</label>
+                    </div>
                     <div style={{overflowY:"scroll"}}>
-                        <ul>
+                        <ul style={coachLoading ? {display:"none"} : {display:"block"}}>
                             {listCoachs()}
                         </ul>
                     </div>
@@ -201,8 +240,12 @@ function GymGroup() {
                 </div>
                 <div style={{height:"50%", display:"flex",flexDirection:"column"}}>
                     <h6 className='head'>User</h6>
+                    <div style={userLoading ? {height:"100%",display:"flex", flexDirection:"column",placeItems:"center",justifyContent:"center"} : {display:"none"}} >
+                        <Spinner animation="border" style={{color:"#A1E533"}}  />
+                        <label>Loading...</label>
+                    </div>
                     <div style={{overflowY:"scroll"}}>
-                        <ul>
+                        <ul style={userLoading ? {display:"none"} : {display:"block"}}>
                         {listUsers()}
                         </ul>
                     </div>
