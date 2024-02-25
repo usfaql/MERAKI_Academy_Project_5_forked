@@ -3,6 +3,7 @@ import "./CoachPrivate.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import Spinner from 'react-bootstrap/Spinner';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUsers } from "../../Redux/Reducers/CoachPrivate/index";
@@ -20,6 +21,7 @@ const CoachPrivate = () => {
       users: state.coachPrivate.users,
     };
   });
+  const [userLoading,setUserLoading] = useState(true);
   const [start, setStart] = useState(false)
   const [show, setshow] = useState(true);
   const [header, setHeader] = useState("");
@@ -65,14 +67,17 @@ const CoachPrivate = () => {
           dispatch(setUsers(newUserArr));
           setFiltered(newUserArr);
           setSuccess(result.data.success);
+          setUserLoading(false)
         } else {
           setSuccess(result.data.success);
           setMessage(result.data.message);
+          setUserLoading(false)
         }
       })
       .catch((error) => {
         setSuccess(false);
-        setMessage(error.response.data.message);
+          setUserLoading(false)
+          setMessage(error.response.data.message);
       });
   };
   useEffect(() => {
@@ -170,7 +175,10 @@ const CoachPrivate = () => {
                 <option value="Premium">Premium Users</option>
               </Form.Select>
             </div>
-            {success ? (
+            {userLoading? <div style={userLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
+                <Spinner animation="border" style={{color:"#A1E533"}}  />
+                <label>Loading...</label>
+                </div>: success ? (
               <div className="User-List">
                 {filtered.map((user, i) => (
                   <div
