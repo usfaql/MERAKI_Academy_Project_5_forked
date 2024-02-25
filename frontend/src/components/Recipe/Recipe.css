@@ -21,6 +21,7 @@
     font-family: 'Courier New', Courier, monospace;
     height: 60px;
     margin: 0%;
+   
     
 }
 .search_bar{
@@ -30,10 +31,11 @@ padding-top: 50px;
 .cardbody{
     height: 200px;
     border-radius: 100px;
+    background-color: beige;
 }
 .image_card{
-    height:200px;
-    width: 200px;
+    height:100%;
+    width: 100%;
 }
 .recipe_buttons{
     margin-bottom: 100px;
