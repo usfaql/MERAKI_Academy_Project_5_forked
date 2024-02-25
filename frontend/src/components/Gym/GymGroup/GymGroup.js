@@ -46,6 +46,7 @@ function GymGroup() {
                 return axios.get(`http://localhost:5000/gyms/${gymid}/user`, config);
             })
             .then(userResult => {
+                console.log(userResult);
                 setAllUsers(userResult.data.users);
                 setUserLoading(false);
                 return axios.get(`http://localhost:5000/gyms/${gymid}`, config);
@@ -108,9 +109,6 @@ function GymGroup() {
             const difference = endDate - now;
 
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((difference / (1000 * 60)) % 60);
-
 
             userArr.push(
                         <>
