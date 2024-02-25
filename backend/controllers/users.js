@@ -126,7 +126,7 @@ const AddUserinfo = (req, res) => {
 };
 
 const getUserInfoByUserId = (req, res) => {
-  const user_id = req.params.userId;
+  const user_id = req.params.userId; 
   const value = [user_id];
   const query = `SELECT * FROM user_info INNER JOIN users On users.id=user_info.user_id WHERE user_id=$1`;
   pool

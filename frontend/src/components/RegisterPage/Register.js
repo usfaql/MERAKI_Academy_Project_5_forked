@@ -183,14 +183,6 @@ setAge(e.target.value)
             </div>
           </div>
         </div>
-        {/* <div className="Check-Forget">
-          <div className="Check">
-            <small>check</small>
-          </div>
-          <div className="Forget">
-            <small>Forget Password?</small>
-          </div>
-        </div> */}
         <div className="Register-Btn">
           <Button onClick={()=>{
             createNewAccount()
