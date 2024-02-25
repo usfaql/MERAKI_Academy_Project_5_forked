@@ -8,20 +8,32 @@ import axios from "axios";
 import "./Recipe.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 const Recipe = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [recipes,setRecipes]=useState([])
   const [search, setSearch] = useState("");
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [calorieRange, setCalorieRange] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { token, userId } = useSelector((state) => {
+    return {
+      token: state.auth.token,
+      userId: state.auth.userId,
+    };
+  });
 
   const fetchRecipes = (query) => {
     axios
       .get(
-        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=20&calories=0-2000&health=alcohol-free`
-      )
+        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=20&calories=0-2000&health=alcohol-free`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      
       .then((response) => {
         console.log( "recipes",response);
         setRecipes(response.data.hits);

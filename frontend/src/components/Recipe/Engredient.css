@@ -1,0 +1,32 @@
+.ingredient {
+  height: 210lvh;
+}
+
+.ingredient_page {
+  width: 70%;
+  height: 180lvh;
+  background-color: #272727;
+  margin-top: 70px;
+  margin-left: 200px;
+  display: flex;
+  flex-direction: row;
+}
+.ingredient_img {
+    padding: 111px;
+}
+.Ingredients{
+    width: 100%;
+
+}
+
+.digest {
+  display: flex;
+  flex-direction: column;
+  float: right;
+  border-radius: 30px;
+  background-color: #3f3f46;
+  color: beige;
+}
+.back{
+    height: 90px;
+}
