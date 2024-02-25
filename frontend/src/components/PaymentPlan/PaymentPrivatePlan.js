@@ -12,6 +12,8 @@ const PaymentPrivatePlan = () => {
     const [cVV, setCVV] = useState(null);
     const [dataPlanForInvoice, setDataPlanForInvoice] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [success, setSuccess] = useState(null)
+    const [message, setMessage] = useState("")
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
@@ -23,20 +25,20 @@ const PaymentPrivatePlan = () => {
     }
     useEffect(()=>{
         axios.get(`http://localhost:5000/coachs/plans/plan/${planid}`, config).then((result) => {
-            console.log(result.data.plan);
             setDataPlanForInvoice(result.data.plan);
             setTotalPrice(Number(result.data.plan.price)+0.48)
         }).catch((err) => {
-            console.log(err);
+            setSuccess(false);
+            setMessage(err.response.data.message);
         });
        
     },[])
     const handlePay = ()=>{
         if(numberCard && nameOnCard && expirationDate && cVV){
-            console.log("Success");
             navigate(`/user/private`);
         }else{
-            console.log("please fill data");
+            setSuccess(false)
+            setMessage("please fill data")
         }
     }
       return (
@@ -44,19 +46,19 @@ const PaymentPrivatePlan = () => {
             <div className='invoice'>
                 <h2 style={{textAlign:"center"}}>Invoice</h2>
                 <div className='inv'>
-                <h6>Name Gym:</h6>
-                <h6>{dataPlanForInvoice && dataPlanForInvoice.name}</h6>
+                <h6>Coach Name:</h6>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.firstname} {dataPlanForInvoice && dataPlanForInvoice.lastname}</h6>
                 </div>
                 <div className='inv'>
-                    <h6>Name Plan:</h6>
-                <h6>{dataPlanForInvoice && dataPlanForInvoice.name_plan}</h6></div>
+                    <h6>Plan Name:</h6>
+                <h6>{dataPlanForInvoice && dataPlanForInvoice.name}</h6></div>
                 <div className='inv'>
                     <h6>Month:</h6>
-                    <h6>{dataPlanForInvoice && dataPlanForInvoice.numofmonth_plan}</h6>
+                    <h6>{dataPlanForInvoice && dataPlanForInvoice.numofmonth}</h6>
                 </div>
                 <div className='inv'>
                     <h6>Price:</h6>
-                    <h6>${dataPlanForInvoice && dataPlanForInvoice.price_plan}</h6>
+                    <h6>${dataPlanForInvoice && dataPlanForInvoice.price}</h6>
                 </div>
                 <div style={{borderBottom:"1px solid gray"}}></div>
                 <div className='inv'>
@@ -101,7 +103,15 @@ const PaymentPrivatePlan = () => {
                 </div>
                 <button className='pay-btn' onClick={handlePay}>Pay Now</button>
             </div>
-            
+            <div
+        className={
+          success ? message && "SuccessMessage" : message && "ErrorMessage"
+        }
+        style={{ padding: "5px" }}
+      >
+        <span style={{ visibility: "hidden" }}>:</span>
+        {message}
+      </div>
         </div>
       );
 };
