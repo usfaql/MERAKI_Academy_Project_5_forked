@@ -23,7 +23,7 @@
 
 .profile_img {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   border-radius: 32px;
   margin-bottom: 30px;
 }

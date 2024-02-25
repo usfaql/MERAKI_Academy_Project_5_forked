@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserId } from "../Redux/Reducers/Auth/index";
 import Button from 'react-bootstrap/Button';
@@ -11,7 +11,7 @@ import Image from 'react-bootstrap/Image';
 import axios from "axios";
 
 const Profile = () => {
-
+const fileInputRef=useRef(null)
   const [image, setImage] = useState("");
   const [userinfo, setUserInfo] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -72,6 +72,25 @@ const Profile = () => {
       console.log(error);
     }
   };
+  const uploadImage = async(e) => {
+    const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'yk50quwt');
+      formData.append("cloud_name", "dorpys3di");
+      await fetch('https://api.cloudinary.com/v1_1/dvztsuedi/image/upload', {
+        method: 'post',
+        body: formData,
+      }).then((result)=> result.json()).then((data) => {
+          setImage(data.url);
+          console.log("URL Image =>", data.url);
+      }).catch((err) => {
+      console.log(err);
+      });
+  };
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+};
 console.log(userinfo.image);
   return (
     <div className="profile">
@@ -83,12 +102,16 @@ console.log(userinfo.image);
               
           <div className="profile_img">
           <Col xs={6} md={4}>
-          <Image src={userinfo.image} roundedCircle />
+          <Image src={image?image:userinfo?.image} roundedCircle  style={{width:"100%",justifySelf:"center"}}
+           onClick={handleImageClick}/>
           </Col>
-          <input type="file" onChange={(e)=>{
-            setImage(e.target.value);
-            console.log(e.target.files[0]);
-          }} />
+          <input
+                type='file'
+                accept='image/jpeg, image/jpg'
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={uploadImage}
+            />
           </div>
            <Form style={{width:"50%"}}>
       <Row className="mb-3">
