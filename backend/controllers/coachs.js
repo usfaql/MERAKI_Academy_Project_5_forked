@@ -320,6 +320,26 @@ const removePlanByName=(req,res)=>{
       });
     });
 }
+const getPlanById=(req,res)=>{
+const id=req.params.plan_id
+const value=[id]
+const query=`SELECT coach_plan.* ,users.firstname ,users.lastname FROM coach_plan 
+JOIN users ON coach_plan.coach_id=users.id
+WHERE coach_plan.id=$1 `
+pool.query(query,value).then((result)=>{
+  res.status(201).json({
+    success:true,
+    message:`all information about Plan With Id =${id}`,
+    plan:result.rows[0]
+  })
+}).catch((err) => {
+  res.status(500).json({
+    success: false,
+    message: "Server error",
+    err
+  });
+});
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -332,5 +352,6 @@ module.exports = {
   getAllUserByCoachId,
   getAllCoachesByUserId,
   updatePlanByName,
-  removePlanByName
+  removePlanByName,
+  getPlanById
 };

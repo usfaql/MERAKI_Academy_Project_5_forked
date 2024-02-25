@@ -80,7 +80,7 @@ const getCoachInfo=()=>{
                </div>
                <div className='select-plan'>
                    <button className='select-btn' onClick={()=>{
-                       navigate(`/checkout/${plan.coach_id}/${plan.id}`)
+                       navigate(`/checkout/private/${plan.coach_id}/${plan.id}`)
                    }}>select Plan</button>
                </div>
            </div>
