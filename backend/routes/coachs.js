@@ -15,7 +15,7 @@ const {
   removePlanByName,
   getPlanById
 } = require("../controllers/coachs");
-const authentication = require("../middleware/authentication");
+const {authentication} = require("../middleware/authentication");
 coachRouter.post("/plan", authentication, createNewPlane);
 coachRouter.get("/plan/:coachid", authentication, getAllPlanByCoachId);
 coachRouter.post("/user", authentication, AddUserToPrivate);

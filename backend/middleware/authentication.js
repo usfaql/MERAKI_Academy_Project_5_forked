@@ -16,6 +16,7 @@ const authentication = (req, res, next) => {
         });
       } else {
         req.token = result;
+        
         next();
       }
     });
@@ -23,5 +24,14 @@ const authentication = (req, res, next) => {
     res.status(403).json({ message: "forbidden" });
   }
 };
+const auth=(socket,next)=>{
+  const headers=socket.handshake.headers
+  if(!headers.token){
+       next(new Error("invalid"))
+  }else{
+    socket.user={token:headers.token,user_id:headers.user_id}
+        next();
+  }
+}
+module.exports = {authentication,auth};
 
-module.exports = authentication;
