@@ -143,10 +143,9 @@ function GymGroup() {
                 <div style={{height:"100%"}}>
                 <h6 className='head'>Room</h6>
                 <div style={roomLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                <Spinner animation="border" style={{color:"#A1E533"}}  />
+                <Spinner animation="border" style={{color:"#A1E533"}} />
                 <label>Loading...</label>
                 </div>
-                
                 <ul style={roomLoading ? {display:"none"} : {display:"block"}}>
                     {listRoom()}
                 </ul>

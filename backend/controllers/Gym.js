@@ -268,6 +268,52 @@ const addNewUserInGym = (req,res)=>{
 
 }
 
+const downCoachToUser = (req,res)=>{
+    const {gymid , userid , name_plan} = req.body;
+
+    pool.query(`SELECT * FROM gym_plan WHERE gym_plan.name_plan = $1 AND gym_id = $2`, [name_plan, gymid]).then((plan) => {
+        const endSub = `CURRENT_TIMESTAMP + INTERVAL '${plan.rows[0].numofmonth_plan} months'`;
+        if(plan.rows.length){
+            pool.query(`DELETE FROM gym_coach WHERE gym_coach.coach_id = $1 AND gym_coach.gym_id = $2`, [userid, gymid]).then((resultcoach) => {
+                console.log(plan.rows[0].id_plan);
+                pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2, ${plan.rows[0].id_plan}, ${endSub}) RETURNING *`, [userid, gymid]).then((result) => {
+                    res.status(201).json({
+                        success : true,
+                        message : "User Add Successfully In Gym",
+                        result : result.rows
+                    })
+                }).catch((err) => {
+                    res.status(500).json({
+                        success : false,
+                        message : `Server error`,
+                        error : err.message
+                    });
+                });
+            }).catch((err) => {
+                res.status(500).json({
+                    success : false,
+                    message : `Server error`,
+                    error : err.message
+                });
+            });
+            
+        }else{
+            res.status(200).json({
+                success : false,
+                message : `This Plan not Exist`,
+                plan : result.rows
+            })
+        }
+        
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        })
+    });
+}
+
 const getAllUserInGym = (req,res)=>{
     const {gymId} = req.params;
     const provider = [gymId]
@@ -342,9 +388,8 @@ const deleteUserInGym = async(req,res)=>{
 const addNewCoachInGym = (req,res) =>{
     const {gymId, coachId} = req.body;
     const provider = [gymId, coachId];
-    pool.query(`UPDATE gym_user SET is_deleted = 1 WHERE gym_user.user_id = $2 AND gym_user.gym_id = $1`,[gymId, coachId]).then((result) => {
+    pool.query(`DELETE FROM gym_user WHERE gym_user.user_id = $2 AND gym_user.gym_id = $1`,[gymId, coachId]).then((result) => {
         pool.query(`SELECT * FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then((result) => {
-            console.log(result);
             if(!result.rows.length){
                 pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
                     res.status(201).json({
@@ -481,7 +526,8 @@ module.exports = {
     getAllRoomByGymId,
     getGymByGymId,
     updateGym,
-    updatePlanById
+    updatePlanById,
+    downCoachToUser
 }
 
 

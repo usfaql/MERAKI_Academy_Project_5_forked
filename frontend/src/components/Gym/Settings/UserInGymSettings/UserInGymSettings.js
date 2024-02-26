@@ -3,10 +3,13 @@ import './UserInGymSettings.css'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 function UserInGymSettings() {
   const {gymid} = useParams();
   const [userInGym, setUserInGym] = useState(null);
+  const [indexUserInArr,setIndexUserInArr] = useState(null);
+
   const state = useSelector((state)=>{
     return{
     userId : state.auth.userId,
@@ -25,6 +28,13 @@ function UserInGymSettings() {
       console.log(err);
     });
   },[]);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
    const viewUserInList = ()=>{
     const userArray = [];
     for(let i = 0; i < userInGym?.length; i++){
@@ -47,11 +57,8 @@ function UserInGymSettings() {
           </div>
           <div>
             <button className='btn-user' onClick={()=>{
-              axios.post(`http://localhost:5000/gyms/gym/coach`, {gymId : gymid, coachId : userInGym[i].id}, config).then((result) => {
-                console.log(i," ===", result);
-              }).catch((err) => {
-                
-              });
+              setIndexUserInArr(i);
+              handleShow()
             }}>Up to Coach</button>
           </div>
         </div>
@@ -63,6 +70,7 @@ function UserInGymSettings() {
     return userArray;
    }
 
+
   return (
     
       <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>
@@ -73,7 +81,28 @@ function UserInGymSettings() {
         <div style={{width:"100%", height:"80vh", overflowY:"scroll"}}>
           {viewUserInList()}
         </div>
-        
+        <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Role  {userInGym && userInGym[indexUserInArr]?.firstname} To Coach</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>you are sure? please choose the plan</Modal.Body>
+        <Modal.Footer>
+          
+          <Button style={{backgroundColor:"#101010", color:"white",fontWeight:"bold", border:"0"}} onClick={handleClose}>
+            No
+          </Button>
+          <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
+            axios.post(`http://localhost:5000/gyms/gym/coach`, {gymId : gymid, coachId : userInGym[indexUserInArr].id}, config).then((result) => {
+              userInGym.splice(indexUserInArr, 1);
+              handleClose()
+            }).catch((err) => {
+              
+            });
+          }}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       </div>
   )
