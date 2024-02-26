@@ -65,7 +65,7 @@ const reviMessage = (data)=>{
 
 
 const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage});
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage });
 }
 
 const disconnectServer = ()=>{
@@ -232,7 +232,7 @@ const disconnectServer = ()=>{
                     className="User-Name"
                     onClick={() => {
                       setToId(user.user_id)
-                      setSocket(socketInit({user_id : userId, token :token, room :user.user_id}));
+                      setSocket(socketInit({user_id : userId, token :token, room :user.user_id }));
                       setHeader(`${user.firstname} ${user.lastname}`);
                       setStart(true)
                     }}
@@ -358,6 +358,7 @@ const disconnectServer = ()=>{
               onChange={(e)=>{
                 setInputMessage(e.target.value)
               }}
+              value={inputMessage}
                 type="text"
                 id="inputPassword5"
                 aria-describedby="passwordHelpBlock"
@@ -371,7 +372,11 @@ const disconnectServer = ()=>{
               </div>
               <div className="right">
                 <Button onClick={()=>{
-                  sendMessage()
+                  if(inputMessage){
+                    setInputMessage("");
+                    sendMessage()
+                  }
+                  
                 }}>Send</Button>
               </div>
             </div>

@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import socketInit from '../../Gym/socket.server';
 import Spinner from 'react-bootstrap/Spinner';
 const UserPrivate = () => {
   const revarse = useRef(null);
@@ -14,9 +15,10 @@ const UserPrivate = () => {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
-  const { token } = useSelector((state) => {
+  const { token,userId } = useSelector((state) => {
     return {
       token: state.auth.token,
+      userId:state.auth.userId
     };
   });
   const [start, setStart] = useState(false)
@@ -26,6 +28,52 @@ const UserPrivate = () => {
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
   const [userLoading,setUserLoading] = useState(true);
+//-----------------------------------------------------------
+const [toId , setToId] = useState("");
+const [from , setFrom] = useState("");
+const [clearInput, setClearInput] = useState("");
+const [inputMessage , setInputMessage] = useState("");
+const [socket, setSocket] = useState(null);
+const [allMessages, setAllMessages] = useState([]);
+
+useEffect(()=>{
+  socket?.on('connect', ()=>{
+      console.log(true)
+  })
+ 
+  return()=>{
+      socket?.close();
+      socket?.removeAllListeners();
+  }
+},[socket]);
+
+
+useEffect(()=>{
+  socket?.on("messagePrivate", reviMessage);
+  return()=>{
+      socket?.off("messagePrivate", reviMessage)
+  }
+},[inputMessage]);
+
+
+const reviMessage = (data)=>{
+  console.log(data);
+  setAllMessages(prevMessages => [...prevMessages, data]);
+
+};
+
+
+const sendMessage = ()=>{
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage});
+}
+
+const disconnectServer = ()=>{
+  socket?.disconnect();      
+}
+
+
+
+
   const getAllCoachs = () => {
     axios
       .get(`http://localhost:5000/coachs/coach`, {
@@ -54,38 +102,38 @@ const UserPrivate = () => {
   useEffect(() => {
     getAllCoachs();
   }, []);
-  let messages = [
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
-    },
-  ];
+  // let messages = [
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  //   },
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  //   },
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old.",
+  //   },
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  //   },
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  //   },
+  //   {
+  //     name: "Mohammed Odat",
+  //     message:
+  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
+  //   },
+  // ];
   return (
     <>
       {" "}
@@ -127,6 +175,8 @@ const UserPrivate = () => {
                   <div
                     className="User-Name"
                     onClick={() => {
+                      setToId(userId)
+                      setSocket(socketInit({user_id : userId, token :token, room :userId}));
                       setHeader(`${user.firstname} ${user.lastname}`);
                       setStart(true)
                     }}
@@ -203,7 +253,7 @@ const UserPrivate = () => {
         >
           <div className="Header">{header}</div>
           {start?<> <div ref={revarse} className="message">
-            {messages.map((ele, i) => (
+            {allMessages?.map((ele, i) => (
               <div className="msg">
                 <div className="user-pic">
                   <svg
@@ -231,6 +281,10 @@ const UserPrivate = () => {
           <div className="Input-Button">
             <div className="Input">
               <Form.Control
+              onChange={(e)=>{
+                setInputMessage(e.target.value)
+              }}
+                value={inputMessage}
                 type="text"
                 id="inputPassword5"
                 aria-describedby="passwordHelpBlock"
@@ -243,7 +297,15 @@ const UserPrivate = () => {
                 <Button>File</Button>
               </div>
               <div className="right">
-                <Button>Send</Button>
+                <Button
+                onClick={()=>{
+                  if(inputMessage){
+                    setInputMessage("")
+                    sendMessage()
+                  }
+                 
+                }}
+                >Send</Button>
               </div>
             </div>
           </div></>:<div style={show?{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}:{position:"absolute", left:"0",top:"8%",color:"#A1E533"}}>Select Coach To Start Chating</div>}
