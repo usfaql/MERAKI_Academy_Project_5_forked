@@ -6,13 +6,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 function CoachInGymSettings() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [coachsInGym, setCoachInGym] = useState(null);
+  const [indexUserInArr,setIndexUserInArr] = useState(null);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
+  console.log(coachsInGym);
   const {gymid} = useParams();
   const state = useSelector((state)=>{
     return{
@@ -45,28 +42,9 @@ function CoachInGymSettings() {
             <h5>{coachsInGym[i].firstname} {coachsInGym[i].lastname}</h5>
           </div>
          <button className='btn-user' onClick={()=>{
+          setIndexUserInArr(i);
           handleShow()
          }}>Down To User</button>
-
-        <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Change Role {coachsInGym[i].firstname} To User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>you are sure? please choose the plan</Modal.Body>
-        <Modal.Footer>
-          <Button style={{backgroundColor:"gray", color:"white",fontWeight:"bold", border:"0"}} onClick={handleClose}>
-            Lite
-          </Button>
-          <Button style={{backgroundColor:"gold", color:"#101010",fontWeight:"bold", border:"0"}} onClick={handleClose}>
-            Gold
-          </Button>
-          <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
-            
-          }}>
-            Premium
-          </Button>
-        </Modal.Footer>
-      </Modal>
         </div>
         
       );
@@ -87,12 +65,50 @@ function CoachInGymSettings() {
   return (
     <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>
       <div className='member-in-gym-settings'>
-        <p>{viewUserInList().length}/3 Coach</p>
+        
+        <p>{coachsInGym?.length}/3 Coach</p>
       </div>
       <input style={{width:"50%", padding:"5px", borderRadius:"4px", border:"0", color:"white", backgroundColor:"#404040"}} placeholder='Search...'/>
       {viewUserInList()}
     
-      
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Role  {coachsInGym && coachsInGym[indexUserInArr]?.firstname} To User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>you are sure? please choose the plan</Modal.Body>
+        <Modal.Footer>
+          <Button style={{backgroundColor:"gray", color:"white",fontWeight:"bold", border:"0"}} onClick={()=>{
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Lite"}, config).then((result) => {
+              coachsInGym.splice(indexUserInArr, 1);
+              handleClose()
+            }).catch((err) => {
+              console.log(err);
+            });
+          }}>
+            Lite
+          </Button>
+          <Button style={{backgroundColor:"gold", color:"#101010",fontWeight:"bold", border:"0"}} onClick={()=>{
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Gold"}, config).then((result) => {
+              coachsInGym.splice(indexUserInArr, 1);
+              handleClose()
+            }).catch((err) => {
+              console.log(err);
+            });
+          }}>
+            Gold
+          </Button>
+          <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Premium"}, config).then((result) => {
+              coachsInGym.splice(indexUserInArr, 1);
+              handleClose()
+            }).catch((err) => {
+              console.log(err);
+            });
+          }}>
+            Premium
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }

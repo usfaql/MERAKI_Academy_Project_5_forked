@@ -18,7 +18,8 @@ const {createGym,
     getGymByGymId,
     getPlanById,
     updateGym,
-    updatePlanById} = require("../controllers/Gym");
+    updatePlanById,
+    downCoachToUser} = require("../controllers/Gym");
 const authentication = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
@@ -41,5 +42,6 @@ gymsRouter.delete("/delete/coach", authentication,deleteCoachInGym)
 gymsRouter.post("/:gymid/room/create", authentication,createRoomInGym);
 gymsRouter.get("/:gymid/room/:roomid", authentication,getRoomByIdRoom);
 gymsRouter.get("/:gymid/room/", authentication,getAllRoomByGymId);
+gymsRouter.post("/coach/down", authentication,downCoachToUser);
 
 module.exports = gymsRouter
