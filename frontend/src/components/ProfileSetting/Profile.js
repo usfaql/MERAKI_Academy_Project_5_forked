@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./Profile.css";
 import Image from 'react-bootstrap/Image';
-
+import logo from '../assets/user.png'
 import axios from "axios";
 
 const Profile = () => {
@@ -43,8 +43,8 @@ const fileInputRef=useRef(null)
         },
       })
       .then((result) => {
-        console.log(result.data.info[0]);
-        setUserInfo(result.data.info[0]);
+        console.log(result.data.info);
+        setUserInfo(result.data.info);
         setMessage(result.data.message);
       })
       .catch((error) => {
@@ -91,7 +91,6 @@ const fileInputRef=useRef(null)
   const handleImageClick = () => {
     fileInputRef.current.click();
 };
-console.log(userinfo.image);
   return (
     <div className="profile">
       <div className="prifile-title">
@@ -101,7 +100,7 @@ console.log(userinfo.image);
         <div className="profile_form">
               
           <div className="profile_img">
-          <img src={image?image:userinfo?.image}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
+          <img src={image?image:userinfo.image}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
            onClick={handleImageClick}/>
           <input
                 type='file'

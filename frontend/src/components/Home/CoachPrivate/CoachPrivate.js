@@ -22,6 +22,8 @@ const CoachPrivate = () => {
       users: state.coachPrivate.users,
     };
   });
+  const userInfo = localStorage.getItem("userInfo");
+  const covertUserInfoToJson = JSON.parse(userInfo);
   const [userLoading,setUserLoading] = useState(true);
   const [start, setStart] = useState(false)
   const [show, setshow] = useState(true);
@@ -30,13 +32,22 @@ const CoachPrivate = () => {
   const [message, setMessage] = useState("");
   const [filtered, setFiltered] = useState([]);
 // -----------------------------------------------------
+const [image, setImage] = useState("")
 const [toId , setToId] = useState("");
 const [from , setFrom] = useState("");
 const [clearInput, setClearInput] = useState("");
 const [inputMessage , setInputMessage] = useState("");
 const [socket, setSocket] = useState(null);
 const [allMessages, setAllMessages] = useState([]);
-
+useEffect(()=>{
+  axios.get(`http://localhost:5000/users/info/${userId}`,{headers:{
+    Authorization:`Bearer ${token}`
+  }}).then((result)=>{
+    setImage(result.data.info.image)
+  }).catch((error)=>{
+    console.log(error);
+  })
+},[])
 useEffect(()=>{
   socket?.on('connect', ()=>{
       console.log(true)
@@ -65,7 +76,7 @@ const reviMessage = (data)=>{
 
 
 const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage });
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:covertUserInfoToJson.nameUser,image });
 }
 
 const disconnectServer = ()=>{
@@ -264,22 +275,10 @@ const disconnectServer = ()=>{
             <div className="My-Private">
               <div className="img-title">
                 <div className="Private-img">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="60"
-                    height="60"
-                    fill="white"
-                    class="bi bi-person-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-                    />
-                  </svg>
+                <img src={image&&image
+                }  style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
                 </div>
-                <div className="Private-Title">My Private</div>
+                <div className="Private-Title">{covertUserInfoToJson.nameUser}</div>
                 <svg
                   onClick={() => {
                     navigate("setting");
@@ -328,28 +327,14 @@ const disconnectServer = ()=>{
           <div className="Header">{header}</div>
           {start?<> <div ref={revarse} className="message">
             {allMessages?.map((ele, i) => (
-              <div className="msg">
-                <div className="user-pic">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="60"
-                    height="60"
-                    fill="currentColor"
-                    class="bi bi-person-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-                    />
-                  </svg>
-                </div>
-                <div className="user-message">
-                  {/* <p>{ele.name}</p> */}
-                  <p>{ele.message}</p>
-                </div>
-              </div>
+               <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
+               <img src={`${ele.image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
+               <div style={{width:"90%"}}>
+               <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{ele.name}</h6>
+               <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{ele.message}</div>
+              
+               </div>
+           </div>
             ))}
           </div>
           <div className="Input-Button">
