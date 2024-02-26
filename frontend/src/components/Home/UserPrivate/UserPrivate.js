@@ -246,7 +246,7 @@ const UserPrivate = () => {
                 <Button>Send</Button>
               </div>
             </div>
-          </div></>:<div style={{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}}>Select User To Start Chating</div>}
+          </div></>:<div style={show?{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}:{position:"absolute", left:"0",top:"8%",color:"#A1E533"}}>Select Coach To Start Chating</div>}
          
         </div>
       </div>
