@@ -24,13 +24,16 @@ const authentication = (req, res, next) => {
     res.status(403).json({ message: "forbidden" });
   }
 };
+
+
 const auth=(socket,next)=>{
-  const headers=socket.handshake.headers
+  const headers = socket.handshake.headers
   if(!headers.token){
        next(new Error("invalid"))
   }else{
-    socket.user={token:headers.token,user_id:headers.user_id}
-        next();
+    socket.join("room-" + headers.room)
+    socket.user = {token:headers.token,user_id:headers.user_id}
+    next();
   }
 }
 module.exports = {authentication,auth};
