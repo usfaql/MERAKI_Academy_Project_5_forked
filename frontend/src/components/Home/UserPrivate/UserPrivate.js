@@ -62,7 +62,7 @@ useEffect(()=>{
   return()=>{
       socket?.off("messagePrivate", reviMessage)
   }
-},[inputMessage]);
+},[socket]);
 
 
 const reviMessage = (data)=>{
@@ -73,7 +73,7 @@ const reviMessage = (data)=>{
 
 
 const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:userInfo.nameUser,image});
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage, name:covertUserInfoToJson.nameUser,image});
 }
 
 const disconnectServer = ()=>{
