@@ -1,6 +1,8 @@
 import React from 'react'
 import{useState,useEffect} from 'react'
 import './Login.css'
+import { GoogleLogin } from "@react-oauth/google";
+import { decodeToken } from "react-jwt";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 import { UseDispatch,useDispatch,useSelector } from 'react-redux'
@@ -38,7 +40,81 @@ const Login = () => {
     const [message, setMessage] = useState("");
 
     const [success, setSuccess] = useState(null)
-
+    const responseMessage = (response) => {
+      const user = decodeToken(response.credential);
+      axios
+        .post("http://localhost:5000/users/register", {
+          firstName: user.given_name,
+          lastName: user.family_name,
+          email: user.email,
+          password: user.sub,
+          gender:"male",
+          role_id: "2",
+        })
+        .then((result) => {
+          axios
+            .post("http://localhost:5000/users/login", {
+              email: user.email,
+              password: user.sub,
+            })
+            .then((result) => {
+              dispatch(setLogin(result?.data));
+              dispatch(setUserId(result.data.userId));
+              dispatch(setActivePrivate(result.data.private));
+              setMessage("");
+              localStorage.setItem("token",result.data.token);
+              localStorage.setItem("userId",result.data.userId);
+              localStorage.setItem("userInfo", JSON.stringify({
+                  nameUser : result.data.userInfo.firstname + " "+ result.data.userInfo.lastname,
+                  email : result.data.userInfo.email,
+                  gender : result.data.userInfo.gender,
+                  private : result.data.userInfo.private,
+                  image : result.data.userInfo.image,
+                  role : result.data.userInfo.role_id
+                }))
+                navigate('/home')
+            })
+            .catch((err) => {
+              console.log(err);
+              setSuccess(false)
+              setMessage(err.response.data);
+            });
+        })
+        .catch((err) => {
+          if (err.response.data.message === "The email already exists") {
+            axios
+              .post("http://localhost:5000/users/login", {
+                email: user.email,
+                password: user.sub,
+              })
+              .then((result) => {
+                dispatch(setLogin(result?.data));
+                dispatch(setUserId(result.data.userId));
+                dispatch(setActivePrivate(result.data.private));
+                setMessage("");
+                localStorage.setItem("token",result.data.token);
+                localStorage.setItem("userId",result.data.userId);
+                localStorage.setItem("userInfo", JSON.stringify({
+                    nameUser : result.data.userInfo.firstname + " "+ result.data.userInfo.lastname,
+                    email : result.data.userInfo.email,
+                    gender : result.data.userInfo.gender,
+                    private : result.data.userInfo.private,
+                    image : result.data.userInfo.image,
+                    role : result.data.userInfo.role_id
+                  }))
+                  navigate('/home')
+              })
+              .catch((err) => {
+                setSuccess(false)
+                setMessage(err.response.data);
+              });
+          }
+          console.log(err);
+        });
+    };
+    const errorMessage = (error) => {
+      console.log(error);
+    };
 
 
     const login = ()=>{
@@ -106,6 +182,9 @@ const Login = () => {
         <button className="button-login" style={!onTheme? {backgroundColor:"A1E533"} : {backgroundColor:"#e333e5"}} onClick={()=>{
         login()
       }} >Login</button>
+      <div style={{ alignSelf: "center" }}>
+        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+      </div>
       <span style={{cursor:"default" , textAlign:"start"}}>
         don't have an account?  <span style={ !onTheme? {color:"#A1E533" , cursor:"pointer", textAlign:"start"} : {color:"#e333e5" , cursor:"pointer", textAlign:"start"}}  onClick={()=>{
           navigate("/register")
