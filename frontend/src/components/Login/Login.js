@@ -12,6 +12,25 @@ const Login = () => {
   const navigate = useNavigate();
     const dispatch = useDispatch()
 
+    
+    const [onTheme, setOnTheme] = useState(false);
+    const state = useSelector((state)=>{
+    return{
+        isLoggedIn : state.auth.isLoggedIn,
+        role:state.auth.role,
+        theme : state.auth.theme
+      }
+    });
+  
+    useEffect(()=>{
+      if(state.theme === "female"){
+        setOnTheme(true);
+      }else{
+        setOnTheme(false);
+      }
+    },[state.theme]);
+
+
     const [email ,setEmail] = useState("")
      
     const [password,setPassword]=useState("")
@@ -84,14 +103,13 @@ const Login = () => {
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
           />
         </div>
-        <button className="button-login" onClick={()=>{
+        <button className="button-login" style={!onTheme? {backgroundColor:"A1E533"} : {backgroundColor:"#e333e5"}} onClick={()=>{
         login()
       }} >Login</button>
-
       <span style={{cursor:"default" , textAlign:"start"}}>
-        don't have an account?  <span style={{color:"#A1E533" , cursor:"pointer", textAlign:"start34"}} onClick={()=>{
+        don't have an account?  <span style={ !onTheme? {color:"#A1E533" , cursor:"pointer", textAlign:"start"} : {color:"#e333e5" , cursor:"pointer", textAlign:"start"}}  onClick={()=>{
           navigate("/register")
-        }}>signup</span>
+        }}>Sign Up</span>
         </span>
            <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"} style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
     

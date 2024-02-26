@@ -5,16 +5,19 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import logo from "../assets/pngwing.com.png";
 import { useNavigate } from "react-router-dom";
+import { setTheme } from '../Redux/Reducers/Auth/index';
+import { useDispatch } from "react-redux";
 const Register = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [gender, setGender] = useState("male");
+  const [gender, setGender] = useState(localStorage.getItem("gender") == "female" ? "female" : "male");
   const [age, setAge] = useState(null);
   const [roleId, setRoleId] = useState(null);
-  const [success, setSuccess] = useState(null)
+  const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("")
   const createNewAccount=()=>{
     if(firstName&& lastName&& age&& gender&& email&&password&&roleId){
@@ -64,7 +67,7 @@ const Register = () => {
           <div className="LastName">
             <Form.Label>Last Name:</Form.Label>
             <Form.Control onChange={(e)=>{
-setLastName(e.target.value)
+              setLastName(e.target.value)
             }}
               type="text"
               style={{
@@ -78,7 +81,7 @@ setLastName(e.target.value)
         <div className="Email">
           <Form.Label>Email:</Form.Label>
           <Form.Control onChange={(e)=>{
-setEmail(e.target.value)
+            setEmail(e.target.value)
           }}
             type="email"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
@@ -87,7 +90,7 @@ setEmail(e.target.value)
         <div className="Password">
           <Form.Label>Password:</Form.Label>
           <Form.Control onChange={(e)=>{
-setPassword(e.target.value)
+            setPassword(e.target.value)
           }}
             type="password"
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
@@ -97,7 +100,7 @@ setPassword(e.target.value)
           <div className="Age">
             <Form.Label>Age:</Form.Label>
             <Form.Control onChange={(e)=>{
-setAge(e.target.value)
+              setAge(e.target.value)
             }}
               type="number"
               style={{
@@ -126,6 +129,8 @@ setAge(e.target.value)
                     checked={gender === "male"}
                     onChange={() => {
                       setGender("male");
+                      localStorage.setItem("gender", "male");
+                      dispatch(setTheme({gender: "male"}))
                     }}
                   />
                   Male
@@ -139,6 +144,8 @@ setAge(e.target.value)
                     checked={gender === "female"}
                     onChange={() => {
                       setGender("female");
+                      localStorage.setItem("gender", "female");
+                      dispatch(setTheme({gender: "female"}))
                     }}
                   />
                   Female
@@ -184,16 +191,16 @@ setAge(e.target.value)
           </div>
         </div>
         <div className="Register-Btn">
-          <Button onClick={()=>{
+          <Button style={localStorage.getItem("gender") == "male"  ?{ backgroundColor: "#A1E533" ,cursor:"pointer"} : {backgroundColor: "#e333e5" ,cursor:"pointer"}} onClick={()=>{
             createNewAccount()
           }} >Register</Button>
         </div>
         <div className="doYou">
           <span style={{cursor:"default"}}>
             Do you have account?
-            <soan style={{ color: "#A1E533" ,cursor:"pointer"}} onClick={()=>{
+            <span style={localStorage.getItem("gender") === "male" ?{ color: "#A1E533" ,cursor:"pointer"} : {color: "#e333e5" ,cursor:"pointer"}} onClick={()=>{
               navigate("/login");
-            }}>Login Now</soan>
+            }}> Login Now</span>
           </span>
         </div>
         <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"}  style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>

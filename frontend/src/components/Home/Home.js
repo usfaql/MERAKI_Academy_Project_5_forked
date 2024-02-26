@@ -17,10 +17,30 @@ function Home() {
     };
   });
   const navigate=useNavigate()
+
+  const [onTheme, setOnTheme] = useState(false);
+  const state = useSelector((state)=>{
+  return{
+      isLoggedIn : state.auth.isLoggedIn,
+      role:state.auth.role,
+      theme : state.auth.theme
+    }
+  });
+
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
+
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
   const [selected , setSelected] = useState('gym');
   const items = [];
+
+
   const [PageNumber, setPageNumber] = useState(1); 
   const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -50,13 +70,13 @@ useEffect(()=>{
     <div className='contener-home'>
       <div>
         <ul className='contener-navbar-home'>
-            <li className={selected === "gym" ? "nav-home gyms-selected": "nav-home gyms"} onClick={()=>{
+            <li className={selected === "gym" ? "nav-home gyms-selected": "nav-home gyms"} style={selected === 'gym' ? !onTheme ? {backgroundColor:"#A1E553"}: {backgroundColor:"#E333E5"} : {backgroundColor:"#404040"}}  onClick={()=>{
               setSelected("gym")
             }}>Gyms</li>
-            <li className={selected === "private" ? "nav-home private-selected" : "nav-home private"} onClick={()=>{
+            <li className={selected === "private" ? "nav-home private-selected" : "nav-home private"} style={selected === 'private' ? !onTheme ? {backgroundColor:"#A1E553"}: {backgroundColor:"#E333E5"} : {backgroundColor:"#404040"}} onClick={()=>{
               setSelected("private")
             }}>Private</li>
-            <li className={selected === "allgym" ? "nav-home all-gyms-selected" : "nav-home all-gyms"} onClick={()=>{
+            <li className={selected === "allgym" ? "nav-home all-gyms-selected" : "nav-home all-gyms"} style={selected === 'allgym' ? !onTheme ? {backgroundColor:"#A1E553"}: {backgroundColor:"#E333E5"} : {backgroundColor:"#404040"}} onClick={()=>{
               setSelected("allgym")
             }}>All Gyms</li>
         </ul>
@@ -67,12 +87,7 @@ useEffect(()=>{
         {selected == 'private' && (covertUserInfoToJson.role===3?navigate("/coach/private"):covertUserInfoToJson.role===2&& <PrivateHome/>)}
         {selected == 'allgym' && <AllGymHome/>}
       </div>
-      {selected === 'allgym' && <div style={{display:"flex" , margin : "0 100px 0 100px", justifyContent:"center" ,gap:"20px", alignItems:"center", textAlign:"center"}}>
-
-        <Pagination>{items}</Pagination>
-
-      </div>
-      }
+      
     </div>
   )
 }
