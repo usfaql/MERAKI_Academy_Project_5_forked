@@ -20,7 +20,7 @@ const {createGym,
     updateGym,
     updatePlanById,
     downCoachToUser} = require("../controllers/Gym");
-const authentication = require("../middleware/authentication");
+const {authentication} = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
 gymsRouter.post("/", authentication ,createGym);

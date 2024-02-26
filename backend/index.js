@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config()
+const{Server} = require('socket.io')
+const {auth}=require("./middleware/authentication")
+ require("dotenv").config()
 require("./models/db");
 const app = express();
 const PORT = process.env.PORT;
@@ -20,6 +22,24 @@ app.use("/permissions",permissionRouter)
 app.use("/role_permission",rolePermissionRouter)
 app.use("/coachs",coachRouterRouter)
 
+const io=new Server(8080,{cors:{origin:"*"}});
+const client={}
+io.use(auth);
+io.on("connection",(socket)=>{
+  console.log(socket.id);
+  const user_id=socket.handshake.headers.user_id
+  client[user_id]={socket_id:socket.id,user_id}
+  console.log(client);
+  socket.on("disconnect",()=>{
+    for (const key in client) {
+     if(client[key].socket_id===socket.id){
+      delete client[key]
+     }
+    }
+    console.log(client);
+  })
+
+})
 
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 
