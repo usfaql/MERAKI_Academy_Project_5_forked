@@ -44,7 +44,7 @@ function GymHome() {
 
     },[])
     
-
+    console.log(myGym);
     const generateGymBox = () => {
       const gymBoxes = [];
       {myGym.length !== 0 && myGym.map((e,i)=>{
@@ -71,7 +71,7 @@ function GymHome() {
 
     const generateGymOwner = () => {
       const gymOwner = [];
-      console.log(state.auth);
+      
       {ownerGym && ownerGym.map((e,i)=>{
         gymOwner.push(
         <Col key={1}>

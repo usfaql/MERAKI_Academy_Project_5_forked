@@ -20,7 +20,7 @@ function GymGroup() {
     const [infoGym, setInfoGym] = useState(null);
     const [rooms, setRooms] = useState(null);
     const [roomSelected , setRoomSelected] = useState(null);
-
+    const [isCoach, setIsCoach] = useState(false);
 
     const [roomLoading , setRoomLoading] = useState(true);
     const [coachLoading, setCoachLoading] = useState(true);
@@ -85,7 +85,7 @@ function GymGroup() {
 
 
     const sendMessage = ()=>{
-        socket?.emit("messageGym", {room : roomSelected, from : 7, message});
+        socket?.emit("messageGym", {room : roomSelected, from : 7, message, name : covertUserInfoToJson?.nameUser , image : infoGym?.image});
     }
 
     const disconnectServer = ()=>{
@@ -111,7 +111,6 @@ function GymGroup() {
     }
 
     
-
     
     useEffect(() => {
         axios.get(`http://localhost:5000/gyms/${gymid}/coach`, config)
@@ -121,6 +120,7 @@ function GymGroup() {
                 return axios.get(`http://localhost:5000/gyms/${gymid}/user`, config);
             })
             .then(userResult => {
+                
                 setAllUsers(userResult.data.users);
                 setUserLoading(false);
                 return axios.get(`http://localhost:5000/gyms/${gymid}`, config);
@@ -133,21 +133,37 @@ function GymGroup() {
             .then(planResult => {
                 setRooms(planResult.data.plans);
                 setRoomLoading(false)
+                
             })
             .catch(err => {
                 console.log(err);
             });
     }, []);
 
-    
 
+    useEffect(()=>{
+    if(infoGym?.owner_id === Number(state.userId)){
+            setIsCoach(true);
+    }
+    console.log(allCoachs);
+    for(let i = 0; i < allCoachs?.length; i++){
+        if(allCoachs[i].coach_id === Number(state.userId)){
+            return setIsCoach(true)
+        }else{
+            continue;
+        }
+    }
+    },[roomLoading]);
     const generateChatGym = ()=>{
         const chatLite = [];
         for (let i = 0; i < allMessages.length; i++) {
             chatLite.push(
-                <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px"}}>
-                    <img src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png' style={{width:"52px", height:"52px"}}/>
-                    <div style={{backgroundColor:"#202020", width:"90%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{allMessages[i].message}</div>
+                <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
+                    <img src={`${allMessages[i].image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
+                    <div style={{width:"90%"}}>
+                    <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{allMessages[i].message}</div>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>Coach : {allMessages[i].name}</h6>
+                    </div>
                 </div>
             )
         }
@@ -214,6 +230,8 @@ function GymGroup() {
         return roomList;
     }
 
+    
+    
   return (
     <div className='body-group'>
         <div className='group-contener'>
@@ -277,35 +295,47 @@ function GymGroup() {
                 {!roomSelected ? <>
                 <div style={!onTheme? {backgroundColor:"#303030",color:"#A1E533",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%"} : {backgroundColor:"#303030",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%" ,color:"#e333e5"}}>Please Select Room To View Chat</div>
                 </> : <>
-                <div style={!onTheme?{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"} : {backgroundColor:"#e333e5", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
+                    <div style={!onTheme?{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"} : {backgroundColor:"#e333e5", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
                         <h6 style={{textAlign:"start", paddingLeft:"5px",fontWeight:"bold", margin:"0",padding:"1%"}}># {roomSelected}</h6>
                     </div>
-                    <div ref={reversChat} style={{ backgroundColor:"#101010",height:"75%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
+
+
+                    <div ref={reversChat} style={isCoach? { backgroundColor:"#101010",height:"75%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"} : { backgroundColor:"#101010",height:"90%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
                     {generateChatGym()}
                     </div>
+                    {isCoach ? 
                     <div style={{ backgroundColor:"#202020",height:"20%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px"}}>
+                       
+                        
                         <textarea style={{width:"95%", height:"50%", borderRadius:"4px"}} value={message} onChange={(e)=>{
                             setMessage(e.target.value);
                         }}/>
+                        
                         <div style={{height:"45%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
-                            <div style={{display:"flex", gap:"5px"}}>
-                                <button className='btn-gym-chat'>Image</button>
-                                <button className='btn-gym-chat'>Video</button>
-                                <button className='btn-gym-chat' onClick={()=>{
-                                    disconnectServer()
-                                }}>File</button>
-                            </div>
+                        <div style={{display:"flex", gap:"5px"}}>
+                            <button className='btn-gym-chat'>Image</button>
+                            <button className='btn-gym-chat'>Video</button>
                             <button className='btn-gym-chat' onClick={()=>{
-                                if(message){
-                                    sendMessage();
-                                    setMessage("");
-                                    
-                                }
-                                    
-                            }}>Send</button>
+                                disconnectServer()
+                            }}>File</button>
                         </div>
+                        <button className='btn-gym-chat' onClick={()=>{
+                            if(message){
+                                sendMessage();
+                                setMessage("");
+                                
+                            }
+                                
+                        }}>Send</button>
+                        </div>
+                       
+                        
                     </div>                
-                
+                    :
+                    <div style={{backgroundColor:"#202020",height:"5%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px", color:"#707070"}}>
+                     Only certain people can post in this Room. 
+                    </div>
+                 }
                 </>}
             </div>
 

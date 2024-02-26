@@ -348,12 +348,35 @@ const getAllUserInGym = (req,res)=>{
 
 const getAllGymByUserId = async (req,res) =>{
     const {userId} = req.params;
-    pool.query(`SELECT * FROM gym_user INNER JOIN gyms ON gym_user.gym_id = gyms.id WHERE gym_user.user_id = $1 AND gyms.owner_id != $1`,[userId]).then((result) => {
-        res.status(200).json({
-            success : true,
-            message :`All gyms in which the user is joined => ${userId}`,
-            gyms : result.rows
-        })
+    pool.query(`SELECT * FROM gym_user 
+    INNER JOIN gyms ON gym_user.gym_id = gyms.id 
+    WHERE gym_user.user_id = $1 
+    AND gyms.owner_id != $1`,[userId]).then((result) => {
+        if(!result.rows.length){
+            pool.query(`SELECT * FROM gym_coach
+            INNER JOIN gyms ON gym_coach.gym_id = gyms.id 
+            WHERE gym_coach.coach_id = $1 
+            AND gyms.owner_id != $1`, [userId]).then((result) => {
+                res.status(200).json({
+                    success : true,
+                    message :`All gyms in which the user is joined => ${userId}`,
+                    gyms : result.rows
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    success : false,
+                    message : `Server Error`,
+                    error : err
+                })
+            });
+        }else{
+            res.status(200).json({
+                success : true,
+                message :`All gyms in which the user is joined => ${userId}`,
+                gyms : result.rows
+            })
+        }
+        
     }).catch((err) => {
         res.status(500).json({
             success : false,
