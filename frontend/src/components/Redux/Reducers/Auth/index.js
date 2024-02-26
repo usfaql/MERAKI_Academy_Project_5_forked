@@ -5,7 +5,8 @@ export const authSlice=createSlice({
     token: localStorage.getItem("token")||null,
     userId:localStorage.getItem("userId")||null,
     isLoggedIn: localStorage.getItem("token") ? true:false,
-    activePrivate:localStorage.getItem("activePrivate")||null
+    activePrivate:localStorage.getItem("activePrivate")||null,
+    theme : localStorage.getItem("gender") || "male"
     },
     
     reducers:{
@@ -28,6 +29,9 @@ export const authSlice=createSlice({
             state.userId=null;
             state.isLoggedIn=false;
             localStorage.clear()
+        },
+        setTheme: (state, action)=>{
+            state.theme = action.payload.gender
         }
     }
 })
@@ -36,6 +40,7 @@ export const {
     setUserId,
     setActivePrivate,
     setLogout,
-    setRole
+    setRole,
+    setTheme
 }=authSlice.actions;
 export default authSlice.reducer

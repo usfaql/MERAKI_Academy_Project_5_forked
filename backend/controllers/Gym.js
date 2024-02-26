@@ -51,7 +51,7 @@ const updateGym = (req,res)=>{
           });
 }
 const getAllGym = (req, res)=>{
-    pool.query(`SELECT * FROM gyms WHERE gyms.owner_id != $1 AND is_deleted = 0`, [req.token.userId]).then((result) => {
+    pool.query(`SELECT * FROM gyms WHERE gyms.owner_id != $1  AND gyms.is_deleted = 0`, [req.token.userId]).then((result) => {
         res.status(200).json({
             success : true,
             message : `All Gym`,

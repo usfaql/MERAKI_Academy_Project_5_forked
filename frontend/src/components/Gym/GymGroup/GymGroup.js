@@ -22,12 +22,27 @@ function GymGroup() {
     const [coachLoading, setCoachLoading] = useState(true);
     const [userLoading,setUserLoading] = useState(true);
     const [infoGymLoading, setInfoGymLoading] = useState(true);
+
+    const [onTheme, setOnTheme] = useState(false);
     const state = useSelector((state)=>{
-        return{
-        userId : state.auth.userId,
+    return{
         token : state.auth.token,
-        }
-    })
+        isLoggedIn : state.auth.isLoggedIn,
+        role:state.auth.role,
+        theme : state.auth.theme,
+        userId : state.auth.userId
+      }
+    });
+  
+    useEffect(()=>{
+      if(state.theme === "female"){
+        setOnTheme(true);
+      }else{
+        setOnTheme(false);
+      }
+    },[state.theme]);
+
+
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
@@ -141,9 +156,9 @@ function GymGroup() {
         <div className='group-contener'>
             <div className='contener-room'>
                 <div style={{height:"100%"}}>
-                <h6 className='head'>Room</h6>
+                <h6 className='head' style={!onTheme?{color:"#A1E553"}:{color:"#e333e5"}}>Room</h6>
                 <div style={roomLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                <Spinner animation="border" style={{color:"#A1E533"}} />
+                <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#e333e5"}} />
                 <label>Loading...</label>
                 </div>
                 <ul style={roomLoading ? {display:"none"} : {display:"block"}}>
@@ -154,7 +169,7 @@ function GymGroup() {
                 <div className='control-gym'>
                     {infoGymLoading ? 
                     <div style={{width:"100%", display:"flex", flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-                    <Spinner animation="border" style={{color:"#A1E533"}}  />
+                    <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#e333e5"}}  />
                     <label>Loading...</label>
                     </div>
                     :
@@ -197,9 +212,9 @@ function GymGroup() {
 
             <div className='contener-chat'>
                 {!roomSelected ? <>
-                <div style={{backgroundColor:"#303030",color:"#A1E533",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%"}}>Please Select Room To View Chat</div>
+                <div style={!onTheme? {backgroundColor:"#303030",color:"#A1E533",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%"} : {backgroundColor:"#303030",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%" ,color:"#e333e5"}}>Please Select Room To View Chat</div>
                 </> : <>
-                <div style={{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
+                <div style={!onTheme?{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"} : {backgroundColor:"#e333e5", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
                         <h6 style={{textAlign:"start", paddingLeft:"5px",fontWeight:"bold", margin:"0",padding:"1%"}}># {roomSelected}</h6>
                     </div>
                     <div ref={reversChat} style={{ backgroundColor:"#101010",height:"75%", alignItems:"center", display:"flex", flexDirection:"column", overflowY:"scroll", padding:"5px"}}>
@@ -222,9 +237,9 @@ function GymGroup() {
 
             <div className='contener-member'>
                 <div style={{height:"50%", display:"flex",flexDirection:"column"}}>
-                    <h6 className='head'>Coach</h6>
+                    <h6 className='head' style={!onTheme?{color:"#A1E553"}:{color:"#e333e5"}}>Coach</h6>
                     <div style={coachLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                        <Spinner animation="border" style={{color:"#A1E533"}}  />
+                        <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#e333e5"}}  />
                         <label>Loading...</label>
                     </div>
                     <div style={{overflowY:"scroll"}}>
@@ -236,9 +251,9 @@ function GymGroup() {
                 
                 </div>
                 <div style={{height:"50%", display:"flex",flexDirection:"column"}}>
-                    <h6 className='head'>User</h6>
+                    <h6 className='head' style={!onTheme?{color:"#A1E553"}:{color:"#e333e5"}}>User</h6>
                     <div style={userLoading ? {height:"100%",display:"flex", flexDirection:"column",placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                        <Spinner animation="border" style={{color:"#A1E533"}}  />
+                        <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#e333e5"}}  />
                         <label>Loading...</label>
                     </div>
                     <div style={{overflowY:"scroll"}}>
