@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import socketInit from '../../Gym/socket.server';
 import Spinner from 'react-bootstrap/Spinner';
 const UserPrivate = () => {
   const revarse = useRef(null);
@@ -14,11 +15,13 @@ const UserPrivate = () => {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
-  const { token } = useSelector((state) => {
+  const { token,userId } = useSelector((state) => {
     return {
       token: state.auth.token,
+      userId:state.auth.userId
     };
   });
+  const [image, setImage] = useState("")
   const [start, setStart] = useState(false)
   const [show, setshow] = useState(true);
   const [coachs, setCoachs] = useState([]);
@@ -26,6 +29,57 @@ const UserPrivate = () => {
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
   const [userLoading,setUserLoading] = useState(true);
+//-----------------------------------------------------------
+const [toId , setToId] = useState("");
+const [from , setFrom] = useState("");
+const [clearInput, setClearInput] = useState("");
+const [inputMessage , setInputMessage] = useState("");
+const [socket, setSocket] = useState(null);
+const [allMessages, setAllMessages] = useState([]);
+useEffect(()=>{
+  axios.get(`http://localhost:5000/users/info/${userId}`,{headers:{
+    Authorization:`Bearer ${token}`
+  }}).then((result)=>{
+    setImage(result.data.info.image)
+  }).catch((error)=>{
+    console.log(error);
+  })
+},[])
+useEffect(()=>{
+  socket?.on('connect', ()=>{
+      console.log(true)
+  })
+ 
+  return()=>{
+      socket?.close();
+      socket?.removeAllListeners();
+  }
+},[socket]);
+
+
+useEffect(()=>{
+  socket?.on("messagePrivate", reviMessage);
+  return()=>{
+      socket?.off("messagePrivate", reviMessage)
+  }
+},[inputMessage]);
+
+
+const reviMessage = (data)=>{
+  console.log(data);
+  setAllMessages(prevMessages => [...prevMessages, data]);
+
+};
+
+
+const sendMessage = ()=>{
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:userInfo.nameUser,image});
+}
+
+const disconnectServer = ()=>{
+  socket?.disconnect();      
+}
+
   const getAllCoachs = () => {
     axios
       .get(`http://localhost:5000/coachs/coach`, {
@@ -54,38 +108,7 @@ const UserPrivate = () => {
   useEffect(() => {
     getAllCoachs();
   }, []);
-  let messages = [
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-    },
-    {
-      name: "Mohammed Odat",
-      message:
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
-    },
-  ];
+  
   return (
     <>
       {" "}
@@ -127,6 +150,8 @@ const UserPrivate = () => {
                   <div
                     className="User-Name"
                     onClick={() => {
+                      setToId(userId)
+                      setSocket(socketInit({user_id : userId, token :token, room :userId}));
                       setHeader(`${user.firstname} ${user.lastname}`);
                       setStart(true)
                     }}
@@ -151,20 +176,7 @@ const UserPrivate = () => {
             <div className="My-Private">
               <div className="img-title">
                 <div className="Private-img">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="60"
-                    height="60"
-                    fill="white"
-                    class="bi bi-person-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-                    />
-                  </svg>
+                <img src={image&&image}  style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
                 </div>
                 <div className="Private-Title">
                   {covertUserInfoToJson.nameUser}
@@ -203,34 +215,24 @@ const UserPrivate = () => {
         >
           <div className="Header">{header}</div>
           {start?<> <div ref={revarse} className="message">
-            {messages.map((ele, i) => (
-              <div className="msg">
-                <div className="user-pic">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="60"
-                    height="60"
-                    fill="currentColor"
-                    class="bi bi-person-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-                    />
-                  </svg>
-                </div>
-                <div className="user-message">
-                  <p>{ele.name}</p>
-                  <p>{ele.message}</p>
-                </div>
-              </div>
+            {allMessages?.map((ele, i) => (
+                   <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
+                   <img src={`${ele.image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
+                   <div style={{width:"90%"}}>
+                   <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{ele.name}</h6>
+                   <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{ele.message}</div>
+                  
+                   </div>
+               </div>
             ))}
           </div>
           <div className="Input-Button">
             <div className="Input">
               <Form.Control
+              onChange={(e)=>{
+                setInputMessage(e.target.value)
+              }}
+                value={inputMessage}
                 type="text"
                 id="inputPassword5"
                 aria-describedby="passwordHelpBlock"
@@ -243,7 +245,15 @@ const UserPrivate = () => {
                 <Button>File</Button>
               </div>
               <div className="right">
-                <Button>Send</Button>
+                <Button
+                onClick={()=>{
+                  if(inputMessage){
+                    setInputMessage("")
+                    sendMessage()
+                  }
+                 
+                }}
+                >Send</Button>
               </div>
             </div>
           </div></>:<div style={show?{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}:{position:"absolute", left:"0",top:"8%",color:"#A1E533"}}>Select Coach To Start Chating</div>}

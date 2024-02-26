@@ -136,7 +136,7 @@ const getUserInfoByUserId = (req, res) => {
         res.status(201).json({
           success: true,
           message: `All Info For user_id=${user_id}`,
-          info: result.rows,
+          info: result.rows[0],
         });
       } else {
         res.status(201).json({
