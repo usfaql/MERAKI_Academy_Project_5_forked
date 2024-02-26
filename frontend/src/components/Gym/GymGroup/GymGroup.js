@@ -1,11 +1,15 @@
 import React, {useRef, useEffect ,useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './style.css';
-import axios, { all } from 'axios';
+import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
-// import { IoSettingsOutline } from "react-icons/io5";
+import socketInit from '../socket.server';
+
+
 function GymGroup() {
+
+    
     const {gymid} = useParams();
     const userInfo = localStorage.getItem("userInfo");
     const covertUserInfoToJson = JSON.parse(userInfo);
@@ -24,6 +28,16 @@ function GymGroup() {
     const [infoGymLoading, setInfoGymLoading] = useState(true);
 
     const [onTheme, setOnTheme] = useState(false);
+
+    const [room , setRoom] = useState("");
+    const [from , setFrom] = useState("");
+    const [clearInput, setClearInput] = useState("");
+    const [message , setMessage] = useState("");
+
+    const [socket, setSocket] = useState(null);
+
+    const [allMessages, setAllMessages] = useState([]);
+
     const state = useSelector((state)=>{
     return{
         token : state.auth.token,
@@ -41,16 +55,62 @@ function GymGroup() {
         setOnTheme(false);
       }
     },[state.theme]);
+    
+
+    useEffect(()=>{
+        socket?.on('connect', ()=>{
+            console.log(true)
+        })
+       
+        return()=>{
+            socket?.close();
+            socket?.removeAllListeners();
+        }
+    },[socket]);
 
 
-    const config = {
-        headers: { Authorization: `Bearer ${state.token}` }
+    useEffect(()=>{
+        socket?.on("messageGym", reviMessage);
+        return()=>{
+            socket?.off("messageGym", reviMessage)
+        }
+    },[message]);
+
+
+    const reviMessage = (data)=>{
+        console.log(data);
+        setAllMessages(prevMessages => [...prevMessages, data]);
+
+    };
+
+
+    const sendMessage = ()=>{
+        socket?.emit("messageGym", {room : roomSelected, from : 7, message});
     }
+
+    const disconnectServer = ()=>{
+        socket?.disconnect();      
+    }
+
+
+    useEffect(()=>{
+        if(roomSelected){
+            if(reversChat.current){
+                reversChat.current.scrollTop = reversChat.current.scrollHeight;
+            };
+        }
+    },[allMessages.length])
+
     if(roomSelected){
         if(reversChat.current){
             reversChat.current.scrollTop = reversChat.current.scrollHeight;
         };
     }
+    const config = {
+        headers: { Authorization: `Bearer ${state.token}` }
+    }
+
+    
 
     
     useEffect(() => {
@@ -61,7 +121,6 @@ function GymGroup() {
                 return axios.get(`http://localhost:5000/gyms/${gymid}/user`, config);
             })
             .then(userResult => {
-                console.log(userResult);
                 setAllUsers(userResult.data.users);
                 setUserLoading(false);
                 return axios.get(`http://localhost:5000/gyms/${gymid}`, config);
@@ -80,13 +139,15 @@ function GymGroup() {
             });
     }, []);
 
+    
+
     const generateChatGym = ()=>{
         const chatLite = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < allMessages.length; i++) {
             chatLite.push(
                 <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px"}}>
                     <img src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png' style={{width:"52px", height:"52px"}}/>
-                    <div style={{backgroundColor:"#202020", width:"90%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus tincidunt auctor. Nulla maximus velit sit amet est sagittis efficitur. Nam tellus nisl, sollicitudin vitae turpis a, auctor suscipit nisl. Nam id lacus in ex ultrices laoreet a vitae purus. Proin tristique velit odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent rutrum aliquam lectus eget porta. Quisque viverra efficitur molestie. Duis a efficitur tortor, nec tincidunt purus. Nunc mattis arcu sit amet tincidunt porttitor. Suspendisse congue semper lorem, eu consectetur ex tempor at. {i}</div>
+                    <div style={{backgroundColor:"#202020", width:"90%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{allMessages[i].message}</div>
                 </div>
             )
         }
@@ -142,7 +203,9 @@ function GymGroup() {
             roomList.push(
                     <>
                     <li style={roomSelected === rooms[i].name_plan ? {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",marginRight:"5px", cursor:"pointer", backgroundColor:"#A1E533", color:"#101010", padding:"5px", borderRadius:"4px"} : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",padding:"5px", cursor:"pointer"}} onClick={()=>{
-                        setRoomSelected(rooms[i].name_plan)
+                        setRoomSelected(rooms[i].name_plan);
+                        console.log("NamePlanClickLi", rooms[i].name_plan);
+                        setSocket(socketInit({user_id : state.userId, token : state.token, room : rooms[i].name_plan}));
                     }}># {rooms[i].name_plan}</li>
                     <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
                     </>
@@ -221,14 +284,25 @@ function GymGroup() {
                     {generateChatGym()}
                     </div>
                     <div style={{ backgroundColor:"#202020",height:"20%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px"}}>
-                        <textarea style={{width:"95%", height:"50%", borderRadius:"4px"}}/>
+                        <textarea style={{width:"95%", height:"50%", borderRadius:"4px"}} value={message} onChange={(e)=>{
+                            setMessage(e.target.value);
+                        }}/>
                         <div style={{height:"45%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
                             <div style={{display:"flex", gap:"5px"}}>
                                 <button className='btn-gym-chat'>Image</button>
                                 <button className='btn-gym-chat'>Video</button>
-                                <button className='btn-gym-chat'>File</button>
+                                <button className='btn-gym-chat' onClick={()=>{
+                                    disconnectServer()
+                                }}>File</button>
                             </div>
-                            <button className='btn-gym-chat'>Send</button>
+                            <button className='btn-gym-chat' onClick={()=>{
+                                if(message){
+                                    sendMessage();
+                                    setMessage("");
+                                    
+                                }
+                                    
+                            }}>Send</button>
                         </div>
                     </div>                
                 
