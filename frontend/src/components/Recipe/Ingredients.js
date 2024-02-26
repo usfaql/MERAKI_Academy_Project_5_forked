@@ -64,7 +64,7 @@ const Ingredients = () => {
               </h1>
                <h2 style={{ fontFamily: "monospace", color: "beige" }}>
                 calories :
-             {ingredient.calories}
+             {ingredient.calories=parseInt(ingredient.calories)}
 
               </h2></div>
             </Col>
