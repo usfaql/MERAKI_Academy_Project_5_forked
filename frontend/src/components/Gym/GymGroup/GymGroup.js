@@ -38,6 +38,7 @@ function GymGroup() {
 
     const [allMessages, setAllMessages] = useState([]);
 
+
     const state = useSelector((state)=>{
     return{
         token : state.auth.token,
@@ -70,22 +71,21 @@ function GymGroup() {
 
 
     useEffect(()=>{
-        socket?.on("messageGym", reviMessage);
+        const handleNewMessage = (data) => {
+            setAllMessages(prevMessages => [...prevMessages, data]);
+        };
+        socket?.on("messageGym", handleNewMessage);
+        
         return()=>{
-            socket?.off("messageGym", reviMessage)
+            socket?.off("messageGym", handleNewMessage);
         }
-    },[message]);
-
-
-    const reviMessage = (data)=>{
-        console.log(data);
-        setAllMessages(prevMessages => [...prevMessages, data]);
-
-    };
+    },[socket]);
 
 
     const sendMessage = ()=>{
-        socket?.emit("messageGym", {room : roomSelected, from : 7, message, name : covertUserInfoToJson?.nameUser , image : infoGym?.image});
+        socket?.emit("messageGym",{
+            room : roomSelected, from : 7, message, name  : covertUserInfoToJson?.nameUser , image : infoGym?.image
+        } );
     }
 
     const disconnectServer = ()=>{
@@ -99,7 +99,7 @@ function GymGroup() {
                 reversChat.current.scrollTop = reversChat.current.scrollHeight;
             };
         }
-    },[allMessages.length])
+    },[allMessages?.length])
 
     if(roomSelected){
         if(reversChat.current){
@@ -145,7 +145,6 @@ function GymGroup() {
     if(infoGym?.owner_id === Number(state.userId)){
             setIsCoach(true);
     }
-    console.log(allCoachs);
     for(let i = 0; i < allCoachs?.length; i++){
         if(allCoachs[i].coach_id === Number(state.userId)){
             return setIsCoach(true)
@@ -156,7 +155,7 @@ function GymGroup() {
     },[roomLoading]);
     const generateChatGym = ()=>{
         const chatLite = [];
-        for (let i = 0; i < allMessages.length; i++) {
+        for (let i = 0; i < allMessages?.length; i++) {
             chatLite.push(
                 <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
                     <img src={`${allMessages[i].image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
@@ -220,7 +219,6 @@ function GymGroup() {
                     <>
                     <li style={roomSelected === rooms[i].name_plan ? {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",marginRight:"5px", cursor:"pointer", backgroundColor:"#A1E533", color:"#101010", padding:"5px", borderRadius:"4px"} : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",padding:"5px", cursor:"pointer"}} onClick={()=>{
                         setRoomSelected(rooms[i].name_plan);
-                        console.log("NamePlanClickLi", rooms[i].name_plan);
                         setSocket(socketInit({user_id : state.userId, token : state.token, room : rooms[i].name_plan}));
                     }}># {rooms[i].name_plan}</li>
                     <div style={{borderBottom:"1px solid #373737",margin:"5px 20px"}}></div>
@@ -274,7 +272,6 @@ function GymGroup() {
                     }
 
                     <div style={{display:"none"}} onClick={()=>{
-                            console.log("Exit");
                         }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="red" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>

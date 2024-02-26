@@ -65,7 +65,7 @@ useEffect(()=>{
   return()=>{
       socket?.off("messagePrivate", reviMessage)
   }
-},[inputMessage]);
+},[socket]);
 
 
 const reviMessage = (data)=>{
