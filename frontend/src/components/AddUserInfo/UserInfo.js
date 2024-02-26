@@ -48,7 +48,7 @@ const createUserInfo =async()=>{
   if(weight&&height&&goal){
     try {
 
-        const result =await axios.put(`http://localhost:5000/users/info/create`, 
+        const result =await axios.post(`http://localhost:5000/users/info/create`, 
 
         {
 
