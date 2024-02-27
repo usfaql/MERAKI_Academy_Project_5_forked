@@ -1,32 +1,102 @@
-.ingredient {
-  height: 210lvh;
+/* .ingredient {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(1, 1, 1);
+  display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: center;
 }
 
-.ingredient_page {
-  width: 70%;
-  height: 180lvh;
-  background-color: #272727;
-  margin-top: 70px;
-  margin-left: 200px;
-  display: flex;
-  flex-direction: row;
-}
-.ingredient_img {
-    padding: 111px;
-}
+ */
+/* 
 .Ingredients{
     width: 100%;
 
 }
 
+
+ */
+.back {
+  height: 50px;
+  background-color: beige;
+ float: left;
+  border-radius: 50%;
+}
+.ingredients {
+  /* height: 100vh; */
+  /* width: 100vw; */
+  background-color: rgb(1, 1, 1);
+  display: flex;
+  padding: 1.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.ingredient_page {
+  border-radius: 0.5rem;
+  padding: 5rem;
+  width: 70%;
+  height: 50%;
+  background-color: #272727;
+  margin: auto;
+}
+ .ingredient_img  {
+   
+  display: flex;
+  padding: 1.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+
+
+} 
 .digest {
+  padding: 1.5rem;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  float: right;
   border-radius: 30px;
-  background-color: #3f3f46;
+  background-color: #4d4d52;
+
   color: beige;
 }
-.back{
-    height: 90px;
+#ul {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr ;
+  height: 90%;
+  text-align: left;
+  align-self: center;
+column-gap: 6rem;
+font-size:11px ;
+}
+.Row{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: start;
+    justify-content: center;
+  border-radius: 30px;
+  padding: 1.5rem;
+
+
+}
+ul{
+    padding: 1.5rem;
+    height: 90%;
+    text-align: left;
+    align-self: center;
+  font-size:18px ;
+ 
+}
+.Ing{
+ 
+        padding: 1.5rem;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 30px;
+        color: beige;
+     
 }

@@ -1,5 +1,5 @@
 .recipe {
-  height: 400vh;
+  height: 500vh;
   background-color: #272727;
 }
 .recipe_card {
@@ -13,20 +13,25 @@
 
 
 .searchbar{
-    width: 40pc;
+    width: 70%;
     border-radius: 30px;
     background-color: white;
     color: black;
     font-size: large;
     font-family: 'Courier New', Courier, monospace;
     height: 60px;
-    margin: 0%;
+    margin: 0;
    
     
 }
+
 .search_bar{
-padding-top: 50px;
-;
+padding-top: 1rem;
+display: flex;
+font-display: row;
+justify-content: space-evenly;
+align-items: center;
+
 }
 .cardbody{
     height: 200px;
@@ -50,5 +55,15 @@ padding-top: 50px;
     font-size: small;
     border-radius: 10px;
     background-color: beige;
+    
+}
+#dropDown .show{
+    fill: "#7aad28";
+   
+    
+}
+.show{
+    color:yellowgreen;
+    background-color: #272727;
     
 }
