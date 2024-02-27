@@ -18,13 +18,8 @@ function Settings() {
     const [SelectedPage , setSelectedPage] = useState("InfoGym");
 
     const [onTheme, setOnTheme] = useState(false);
-    useEffect(()=>{
-        if(state.theme === "female"){
-          setOnTheme(true);
-        }else{
-          setOnTheme(false);
-        }
-      },[state.theme]);
+
+
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,

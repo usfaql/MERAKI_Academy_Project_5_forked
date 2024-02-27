@@ -56,7 +56,6 @@ function AllGymHome() {
       };
   return (
     <div>
-      
       {generateGymBox()}
     </div>
   )

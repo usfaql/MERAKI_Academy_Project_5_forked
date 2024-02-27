@@ -2,13 +2,34 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Engredient.css";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useSelector } from "react-redux";
 const Ingredients = () => {
   const { id } = useParams();
   const [ingredient, setIngredient] = useState(null);
+  const [onTheme, setOnTheme] = useState(false);
+  const [isFlip, setIsFlip] = useState(false);
   const navigate = useNavigate();
+
+  const state = useSelector((state)=>{
+    return{
+        token : state.auth.token,
+        isLoggedIn : state.auth.isLoggedIn,
+        role:state.auth.role,
+        theme : state.auth.theme,
+        userId : state.auth.userId
+      }
+    });
+
+    
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
 
   useEffect(() => {
     rendering();
@@ -26,90 +47,64 @@ const Ingredients = () => {
         console.log(err);
       });
   };
-
+  console.log(ingredient && ingredient);
   return (
-    <div className="ingredient">
-      
-      {/* <div className='ingredient_page'> */}
-      {ingredient ? (
-        // <div className='ingredient_img'>
+    <div className="ingredient-page">
+      <div className="name-recipe">
+        <h3>{ingredient?.label}</h3>
+      </div>
+      <div className="contenter-content">
+        <div className="img-some-info">
+          <div>
+            <img style={{borderRadius:"4px", marginTop:"10%"}} src={ingredient?.image}/>
+          </div>
+          
+          <div className="info-recipe">
+            <h6><span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}>Calories:</span> {Math.floor(ingredient?.calories)} Calories</h6>
+            <h6><span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}>Meal:</span> {ingredient?.mealType}</h6>
+            <h6><span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}>Cuisine:</span> {ingredient?.cuisineType}</h6>
+            <h6><span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}>Dish:</span> {ingredient?.dishType}</h6>
+            <lu>
+              <span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}>Diet Labels:</span>
+            {ingredient && ingredient.dietLabels.map((e,i)=>
+              <li>{e}</li>
+            )}
+            </lu>
+          </div>
+          
+        </div>
 
-        <Container className="ingredient_page">
-           <Row>
-        z    <Col>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/93/93634.png"
-                type="submit"
-                alt="backBtn"
-                onClick={() => {
-                  navigate(-1);
-                }}
-                className="back"
-              />
-            </Col>
-           
-          </Row>
-          <Row className="Ingredients">
-            <Col className="ingredient_img">
-              <img
-                src={ingredient.image}
-                style={{ borderRadius: ".5rem" }}
-                alt="Recipe"
-              />
-              <div style={{display:"flex",flexDirection:"column",justifyContent:"space-around",height:"100%",alignSelf:"center"}}>
-               <h1 style={{ fontFamily: "monospace",color:"#7aad28" }}>
-                
-             {ingredient.label}
+        <div className="flip-card">
+            <div className="flip-card-inner">
+              <div className="flip-card-front">
+                    <h3 style={!onTheme ? {color: "#A1E553"} : {color: "#E333E5"}}>Nutrition Value</h3>
+                    <div style={{height:"90%", marginTop:"2%", fontSize:"18px"}}>
+                      <ul className="ul-list">
+                        {ingredient?.digest.map((e,i)=>{
+                          return <li >{e.label}: {e.total}{e.unit}</li>
+                        })}
+                      </ul>
+                    </div>
+                </div>
 
-              </h1>
-               <h2 style={{ fontFamily: "monospace", color: "beige" }}>
-                calories :
-             {ingredient.calories=parseInt(ingredient.calories)}
+                <div className="flip-card-back">
+                    <h3 style={!onTheme ? {color: "#A1E553"} : {color: "#E333E5"}}>Ingredients</h3>
+                    <div style={{height:"90%", marginTop:"2%", fontSize:"18px"}}>
+                      <ul className="ul-list">
+                        {ingredient?.ingredients.map((e,i)=>{
+                          return <li >
+                            {e.text}, 
+                            <span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}> Quantity: </span>
+                            {e.quantity},
+                            <span style={!onTheme ? {color : "#A1E553"} : {color: "#E333E5"}}> Weight: </span> {e.weight}g</li>
+                        })}
+                      </ul>
+                    </div>
+                </div>
+            </div>
 
-              </h2></div>
-            </Col>
-
-           
-          </Row>
-          <Row className="Row">
-
-          <Col className="Ing">
-             
-             {/* <div className='Ingredients'> */}
-             <h1 style={{ fontFamily: "monospace", color: "beige" }}>
-               Ingredients 
-             </h1>
-             <ul>
-               {ingredient.ingredientLines.map((line, index) => (
-                 <li key={index}>{line}</li>
-               ))}
-             </ul>
-             {/* </div> */}
-           </Col>
-        
-         
-            <Col className="digest" >
-              {/* <div className='digest'> */}
-              <h1 style={{ fontFamily: "monospace", color: "beige"}}>
-                Nutrition 
-              </h1>
-              <ul id="ul">
-                {ingredient.digest.map((item, index) => (
-                  <li key={index}>
-                    {item.label}: {item.total}
-                  </li>
-                ))}
-              </ul>
-              {/* </div> */}
-            </Col>
-          </Row>
-         
-        </Container>
-      ) : (
-        // </div>
-        <div>No data available</div>
-      )}
-      {/* </div> */}
+        </div>
+      </div>
     </div>
   );
 };
