@@ -1,4 +1,5 @@
 const pool = require("../models/db");
+const PrivateMessagesModel=require('../models/PrivateMessage')
 const activePrivate=(req,res)=>{
   const coach_id=req.token.userId
   const value=[coach_id]
@@ -340,6 +341,24 @@ pool.query(query,value).then((result)=>{
   });
 });
 }
+
+const getMessageByPrivate = (req,res)=>{
+  const {coach_id, user_id} = req.params;
+
+  PrivateMessagesModel.findOne({coach_id,user_id}).then((result) => {
+      res.status(200).json({
+          success : true,
+          messages : result.messages
+      });
+  }).catch((err) => {
+      res.status(500).json({
+          success : false,
+          message : `Server Error`,
+          error : err
+      });
+  });
+
+}
 module.exports = {
   createNewPlane,
   AddUserToPrivate,
@@ -353,5 +372,7 @@ module.exports = {
   getAllCoachesByUserId,
   updatePlanByName,
   removePlanByName,
-  getPlanById
+  getPlanById,
+  getMessageByPrivate
+
 };

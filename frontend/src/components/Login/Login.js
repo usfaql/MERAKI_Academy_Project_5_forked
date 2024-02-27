@@ -143,7 +143,7 @@ const Login = () => {
               navigate('/home');
             }).catch((error)=>{
               setSuccess(false)
-              setMessage(error.response.data.message);
+              setMessage(error.message);
               console.log(error);
             })
           }

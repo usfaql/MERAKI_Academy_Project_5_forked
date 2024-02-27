@@ -5,8 +5,8 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import socketInit from '../../Gym/socket.server';
-import Spinner from 'react-bootstrap/Spinner';
+import socketInit from "../../Gym/socket.server";
+import Spinner from "react-bootstrap/Spinner";
 const UserPrivate = () => {
   const revarse = useRef(null);
   if (revarse.current) {
@@ -15,70 +15,77 @@ const UserPrivate = () => {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
-  const { token,userId } = useSelector((state) => {
+  const { token, userId } = useSelector((state) => {
     return {
       token: state.auth.token,
-      userId:state.auth.userId
+      userId: state.auth.userId,
     };
   });
-  const [image, setImage] = useState("")
-  const [start, setStart] = useState(false)
+  const [image, setImage] = useState("");
+  const [start, setStart] = useState(false);
   const [show, setshow] = useState(true);
   const [coachs, setCoachs] = useState([]);
   const [header, setHeader] = useState("");
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState("");
-  const [userLoading,setUserLoading] = useState(true);
-//-----------------------------------------------------------
-const [toId , setToId] = useState("");
-const [from , setFrom] = useState("");
-const [clearInput, setClearInput] = useState("");
-const [inputMessage , setInputMessage] = useState("");
-const [socket, setSocket] = useState(null);
-const [allMessages, setAllMessages] = useState([]);
-useEffect(()=>{
-  axios.get(`http://localhost:5000/users/info/${userId}`,{headers:{
-    Authorization:`Bearer ${token}`
-  }}).then((result)=>{
-    setImage(result.data.info.image)
-  }).catch((error)=>{
-    console.log(error);
-  })
-},[])
-useEffect(()=>{
-  socket?.on('connect', ()=>{
-      console.log(true)
-  })
- 
-  return()=>{
+  const [userLoading, setUserLoading] = useState(true);
+  //-----------------------------------------------------------
+  const [toId, setToId] = useState("");
+  const [from, setFrom] = useState("");
+  const [clearInput, setClearInput] = useState("");
+  const [inputMessage, setInputMessage] = useState("");
+  const [socket, setSocket] = useState(null);
+  const [allMessages, setAllMessages] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/info/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        setImage(result.data.info.image);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  useEffect(() => {
+    socket?.on("connect", () => {
+      console.log(true);
+    });
+
+    return () => {
       socket?.close();
       socket?.removeAllListeners();
-  }
-},[socket]);
+    };
+  }, [socket]);
 
+  useEffect(() => {
+    socket?.on("messagePrivate", reviMessage);
+    return () => {
+      socket?.off("messagePrivate", reviMessage);
+    };
+  }, [socket]);
 
-useEffect(()=>{
-  socket?.on("messagePrivate", reviMessage);
-  return()=>{
-      socket?.off("messagePrivate", reviMessage)
-  }
-},[socket]);
+  const reviMessage = (data) => {
+    console.log(data);
+    setAllMessages((prevMessages) => [...prevMessages, data]);
+  };
 
+  const sendMessage = () => {
+    socket?.emit("messagePrivate", {
+      room: toId,
+      from: userId,
+      message: inputMessage,
+      name: covertUserInfoToJson.nameUser,
+      image,
+    });
+  };
 
-const reviMessage = (data)=>{
-  console.log(data);
-  setAllMessages(prevMessages => [...prevMessages, data]);
-
-};
-
-
-const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage, name:covertUserInfoToJson.nameUser,image});
-}
-
-const disconnectServer = ()=>{
-  socket?.disconnect();      
-}
+  const disconnectServer = () => {
+    socket?.disconnect();
+  };
 
   const getAllCoachs = () => {
     axios
@@ -92,68 +99,62 @@ const disconnectServer = ()=>{
           console.log(result.data.coachs);
           setCoachs(result.data.coachs);
           setSuccess(result.data.success);
-          setUserLoading(false)
+          setUserLoading(false);
         } else {
           setSuccess(result.data.success);
           setMessage(result.data.message);
-          setUserLoading(false)
+          setUserLoading(false);
         }
       })
       .catch((error) => {
         setSuccess(false);
         setMessage(error.response.data.message);
-        setUserLoading(false)
+        setUserLoading(false);
       });
   };
   useEffect(() => {
     getAllCoachs();
   }, []);
-  
+
   return (
     <>
       {" "}
-      <div style={{ cursor: "pointer" }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          fill="currentColor"
-          class="bi bi-arrow-left"
-          viewBox="0 0 16 16"
-          className="show"
-          onClick={() => {
-            setshow(!show);
-          }}
-        >
-          {show ? (
-            <path
-              fill-rule="evenodd"
-              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-            />
-          ) : (
-            <path
-              fill-rule="evenodd"
-              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-            />
-          )}
-        </svg>
-      </div>
       <div className="Coach-Private-Page">
         {show && (
           <div className="Left-Side">
-            {userLoading ? <div style={userLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                <Spinner animation="border" style={{color:"#A1E533"}}  />
+            {userLoading ? (
+              <div
+                style={
+                  userLoading
+                    ? {
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        placeItems: "center",
+                        justifyContent: "center",
+                      }
+                    : { display: "none" }
+                }
+              >
+                <Spinner animation="border" style={{ color: "#A1E533" }} />
                 <label>Loading...</label>
-                </div>: success? (
+              </div>
+            ) : success ? (
               <div className="User-List">
                 {coachs?.map((user, i) => (
                   <div
                     className="User-Name"
                     onClick={() => {
-                      setToId(userId)
-                      setSocket(socketInit({user_id : userId, token :token, room :userId}));
+                      setToId(userId);
+                      setSocket(
+                        socketInit({
+                          user_id: userId,
+                          token: token,
+                          room: userId,
+                        })
+                      );
                       setHeader(`${user.firstname} ${user.lastname}`);
-                      setStart(true)
+                      setStart(true);
                     }}
                   >
                     # {user.firstname} {user.lastname}
@@ -176,7 +177,14 @@ const disconnectServer = ()=>{
             <div className="My-Private">
               <div className="img-title">
                 <div className="Private-img">
-                <img src={image&&image}  style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
+                  <img
+                    src={image && image}
+                    style={{
+                      width: "52px",
+                      height: "52px",
+                      borderRadius: "26px",
+                    }}
+                  />
                 </div>
                 <div className="Private-Title">
                   {covertUserInfoToJson.nameUser}
@@ -213,51 +221,134 @@ const disconnectServer = ()=>{
           className="Right-Side"
           style={show ? { width: "75%" } : { width: "100%" }}
         >
-          <div className="Header">{header}</div>
-          {start?<> <div ref={revarse} className="message">
-            {allMessages?.map((ele, i) => (
-                   <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
-                   <img src={`${ele.image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
-                   <div style={{width:"90%"}}>
-                   <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{ele.name}</h6>
-                   <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{ele.message}</div>
-                  
-                   </div>
-               </div>
-            ))}
-          </div>
-          <div className="Input-Button">
-            <div className="Input">
-              <Form.Control
-              onChange={(e)=>{
-                setInputMessage(e.target.value)
+          <div
+            style={
+              header || {
+                color: "#A1E533",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }
+            }
+            className="Header"
+          >
+            <div
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "start",
+                width: "fit-content",
               }}
-                value={inputMessage}
-                type="text"
-                id="inputPassword5"
-                aria-describedby="passwordHelpBlock"
-              />
-            </div>
-            <div className="Buttons">
-              <div className="left">
-                <Button>Image</Button>
-                <Button>Video</Button>
-                <Button>File</Button>
-              </div>
-              <div className="right">
-                <Button
-                onClick={()=>{
-                  if(inputMessage){
-                    setInputMessage("")
-                    sendMessage()
-                  }
-                 
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill=" #A1E553"
+                class="bi bi-arrow-left"
+                viewBox="0 0 16 16"
+                className="show1"
+                onClick={() => {
+                  setshow(!show);
                 }}
-                >Send</Button>
-              </div>
+              >
+                {show ? (
+                  <path
+                    fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                  />
+                ) : (
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                  />
+                )}
+              </svg>
             </div>
-          </div></>:<div style={show?{position:"absolute", left:"26%",top:"8%",color:"#A1E533"}:{position:"absolute", left:"0",top:"8%",color:"#A1E533"}}>Select Coach To Start Chating</div>}
-         
+            {header ? header : <span>Select Coach To Start Chating</span>}
+          </div>
+          {start && (
+            <>
+              {" "}
+              <div ref={revarse} className="message">
+                {allMessages?.map((ele, i) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      marginBottom: "10px",
+                      marginTop: "10px",
+                      gap: "10px",
+                    }}
+                  >
+                    <img
+                      src={`${ele.image}`}
+                      style={{
+                        width: "52px",
+                        height: "52px",
+                        borderRadius: "26px",
+                      }}
+                    />
+                    <div style={{ width: "90%" }}>
+                      <h6
+                        style={{
+                          textAlign: "start",
+                          color: "gray",
+                          fontSize: "small",
+                          paddingLeft: "5px",
+                        }}
+                      >
+                        {ele.name}
+                      </h6>
+                      <div
+                        style={{
+                          backgroundColor: "#202020",
+                          width: "100%",
+                          borderRadius: "4px",
+                          textAlign: "start",
+                          padding: "5px 10px",
+                        }}
+                      >
+                        {ele.message}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="Input-Button">
+                <div className="Input">
+                  <Form.Control
+                    onChange={(e) => {
+                      setInputMessage(e.target.value);
+                    }}
+                    value={inputMessage}
+                    type="text"
+                    id="inputPassword5"
+                    aria-describedby="passwordHelpBlock"
+                  />
+                </div>
+                <div className="Buttons">
+                  <div className="left">
+                    <Button>Image</Button>
+                    <Button>Video</Button>
+                    <Button>File</Button>
+                  </div>
+                  <div className="right">
+                    <Button
+                      onClick={() => {
+                        if (inputMessage) {
+                          setInputMessage("");
+                          sendMessage();
+                        }
+                      }}
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
