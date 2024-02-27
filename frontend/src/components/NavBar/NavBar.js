@@ -3,10 +3,12 @@ import './style.css'
 import { useDispatch, useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import { setLogout } from '../Redux/Reducers/Auth';
+import axios from 'axios';
 function NavBar() {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
+  const [userImage, setUserImage] = useState(localStorage.getItem("userImage") || null);
   const dispatch = useDispatch();
 
   const [onTheme, setOnTheme] = useState(false);
@@ -14,7 +16,10 @@ function NavBar() {
   return{
       isLoggedIn : state.auth.isLoggedIn,
       role:state.auth.role,
-      theme : state.auth.theme
+      theme : state.auth.theme,
+      userId : state.auth.userId,
+      token : state.auth.token,
+      Userimage : state.auth.image
     }
   });
 
@@ -26,6 +31,17 @@ function NavBar() {
     }
   },[state.theme]);
 
+  const config = {
+    headers: { Authorization: `Bearer ${state.token}` }
+  }
+  useEffect(()=>{
+    axios.get(`http://localhost:5000/users/info/${state.userId}`, config).then((result) => {
+      localStorage.setItem("userImage", result.data.info.image);
+      console.log("test NavBar");
+    }).catch((err) => {
+      
+    });
+  },[state.userImage]);
   
   return (
     <div className='nav-bar' style={!onTheme ? {borderBottom:"1px solid #A1E533"} : {borderBottom:"1px solid #e333e5"}}>
@@ -59,7 +75,7 @@ function NavBar() {
           {state.isLoggedIn? 
           <div style={{display:"flex" , gap:"10px"}}>
             <ul style={{listStyle: "none", margin :"0", display:"flex", justifyContent:"center", alignItems:"center", gap:"5px", padding:"0"}}>
-            <img style={{width:"48px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
+            <img style={{width:"48px", borderRadius:"24px"}} src={state.Userimage ? state.Userimage : 'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'}/>
             <div>
               <ul style={{textAlign:"start", listStyle: "none",padding:"0"}}>
                 <li>{covertUserInfoToJson && covertUserInfoToJson.nameUser}</li>

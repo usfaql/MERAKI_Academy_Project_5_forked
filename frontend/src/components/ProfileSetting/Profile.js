@@ -6,12 +6,14 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./Profile.css";
-import Image from 'react-bootstrap/Image';
-import logo from '../assets/user.png'
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { setImageUser } from '../Redux/Reducers/Auth';
+import Spinner from 'react-bootstrap/Spinner';
 const Profile = () => {
-const fileInputRef=useRef(null)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const fileInputRef=useRef(null)
   const [image, setImage] = useState("");
   const [userinfo, setUserInfo] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -23,8 +25,7 @@ const fileInputRef=useRef(null)
   const [goal, setGoal] = useState('');
 
   const [message, setMessage] = useState("");
-
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const state = useSelector((state) => {
     return {
       userId: state.auth.userId,
@@ -65,14 +66,19 @@ const fileInputRef=useRef(null)
       {headers: {
         Authorization: `Bearer ${state.token}`,
       }});
+      localStorage.setItem("userImage", image);
 
       setUserInfo({...userinfo,...result})
+      navigate(-1);
+      dispatch(setImageUser(image));
       console.log(result);
     } catch (error) {
       console.log(error);
     }
   };
+
   const uploadImage = async(e) => {
+    
     const file = e.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
@@ -83,8 +89,10 @@ const fileInputRef=useRef(null)
         body: formData,
       }).then((result)=> result.json()).then((data) => {
           setImage(data.url);
+          setLoading(false);
           console.log("URL Image =>", data.url);
       }).catch((err) => {
+        setLoading(false)
       console.log(err);
       });
   };
@@ -99,7 +107,7 @@ const fileInputRef=useRef(null)
       {userinfo && (
         <div className="profile_form">
               
-          <div className="profile_img">
+          <div className="profile_img" style={{position:"relative"}}>
           <img src={image?image:userinfo.image}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
            onClick={handleImageClick}/>
           <input
@@ -107,8 +115,12 @@ const fileInputRef=useRef(null)
                 accept='image/jpeg, image/jpg'
                 ref={fileInputRef}
                 style={{ display: 'none' }}
-                onChange={uploadImage}
+                onChange={(e)=>{
+                  uploadImage(e)
+                  setLoading(true)}}
             />
+
+            <Spinner animation="border" role="status" style={loading ? {position:"absolute", width:"124px", height:"124px", top:"25%"} : {display: "none"}}></Spinner>
           </div>
            <Form style={{width:"50%"}}>
       <Row className="mb-3">
