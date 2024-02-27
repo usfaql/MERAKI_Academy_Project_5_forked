@@ -1,4 +1,5 @@
 const pool = require("../models/db");
+const messagesModel = require('../models/GymMesseges');
 
 const createGym = (req,res)=>{
     const userId = req.token.userId;
@@ -530,6 +531,23 @@ const deleteCoachInGym = async(req,res)=>{
     });
 }
 
+const getMessageByPlanName = (req,res)=>{
+    const {gym_id, plan_name} = req.params;
+
+    messagesModel.findOne({gymId : gym_id, planName : plan_name}).then((result) => {
+        res.status(200).json({
+            success : true,
+            messages : result.messages
+        });
+    }).catch((err) => {
+        res.status(500).json({
+            success : false,
+            message : `Server Error`,
+            error : err
+        });
+    });
+
+}
 module.exports = {
     createGym,
     addNewCoachInGym,
@@ -550,7 +568,8 @@ module.exports = {
     getGymByGymId,
     updateGym,
     updatePlanById,
-    downCoachToUser
+    downCoachToUser,
+    getMessageByPlanName
 }
 
 

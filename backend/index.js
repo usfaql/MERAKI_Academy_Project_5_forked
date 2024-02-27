@@ -4,6 +4,7 @@ const{Server} = require('socket.io')
 const {auth}=require("./middleware/authentication")
  require("dotenv").config()
 require("./models/db");
+require("./models/dbMongoose");
 const messageHandler = require('./controllers/Messages');
 const app = express();
 const PORT = process.env.PORT;

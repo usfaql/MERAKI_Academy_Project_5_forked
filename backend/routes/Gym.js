@@ -19,7 +19,8 @@ const {createGym,
     getPlanById,
     updateGym,
     updatePlanById,
-    downCoachToUser} = require("../controllers/Gym");
+    downCoachToUser,
+    getMessageByPlanName} = require("../controllers/Gym");
 const {authentication} = require("../middleware/authentication");
 const gymsRouter = express.Router();
 
@@ -43,5 +44,6 @@ gymsRouter.post("/:gymid/room/create", authentication,createRoomInGym);
 gymsRouter.get("/:gymid/room/:roomid", authentication,getRoomByIdRoom);
 gymsRouter.get("/:gymid/room/", authentication,getAllRoomByGymId);
 gymsRouter.post("/coach/down", authentication,downCoachToUser);
+gymsRouter.get('/message/:gym_id/:plan_name', getMessageByPlanName);
 
 module.exports = gymsRouter
