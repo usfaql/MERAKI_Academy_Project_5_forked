@@ -10,6 +10,15 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import chicken from '../assets/chicken.png';
+import chocolate from '../assets/chocolate.png';
+import fish from '../assets/fish.png';
+import mango from '../assets/mango.png';
+import meat  from '../assets/meat.png';
+import rice from '../assets/rice.png';
+import spaghetti from '../assets/spaghetti.png';
+
+
 const Recipe = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
@@ -18,7 +27,7 @@ const Recipe = () => {
   const [calorieRange, setCalorieRange] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedRecipes, setSelectedRecipes] = useState([]);
-  const [visibleItems, setVisibleItems] = useState(4);
+  const [visibleItems, setVisibleItems] = useState(15);
 
   const { token } = useSelector((state) => {
     return {
@@ -30,7 +39,7 @@ const Recipe = () => {
   const fetchRecipes = (query) => {
     axios
       .get(
-        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=24&calories=0-2000&health=alcohol-free`,
+        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=${visibleItems}&calories=0-2000&health=alcohol-free`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,10 +62,10 @@ const Recipe = () => {
 
   useEffect(() => {
     fetchRecipes("");
-  }, []);
+  }, [visibleItems]);
 
   const handleShowMore = () => {
-    setVisibleItems((prevVisibleItems) => prevVisibleItems + 4);
+    setVisibleItems((prevVisibleItems) => prevVisibleItems + 10);
   };
 
   const handleSearchChange = (e) => {
@@ -76,9 +85,109 @@ const Recipe = () => {
     setIsDropdownOpen(false);
   };
 
+  const gen = ()=>{
+    const cardRecipe = [];
+
+    {filteredRecipes?.length ? filteredRecipes.map((recipe, index) => (
+      cardRecipe.push(
+        <Col key={index} style={{ width:"fit-content"}}>
+          <Card 
+            style={{
+              width: "18rem",
+              height: "fit-content",
+              display: "flex",
+              border:"0"
+            }}
+            onClick={() => {
+              const uri = recipe.recipe.uri.split("_");
+              // console.log();
+              navigate(`/recipe/${uri[1]}/ingredients`);
+            }}
+          >
+            <Card.Img
+              variant="top"
+              src={recipe.recipe.image}
+              rounded
+              className="image_card"
+              style={{ height: "256px", objectFit:"fit", borderRadius:"4px 4px 0 0 "}}
+            />
+            <Card.Body
+              style={{ color: "#272727", background: "#e9e9e9" }}
+            >
+              <Card.Title style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}> {recipe.recipe.label}</Card.Title>
+              <Card.Text></Card.Text>
+              
+            </Card.Body>
+            <div style={{ display: "flex", width: "100%" ,borderTop:"1px solid gray", borderBottom:"1px solid gray", marginBottom:"8px"}}>
+                <div style={{ width: "50%", textAlign: "center" , borderRight:"1px solid gray",  margin:"4px" }}>
+                  {
+                    (recipe.recipe.calories = parseInt(recipe.recipe.calories)) + " CALORIES"
+                  }
+                  
+                </div>
+                <div style={{ width: "50%", textAlign: "center" , margin:"4px"}}>
+                  {recipe.recipe.ingredients.length + " INGREDIENTS"}
+                  
+                </div>
+              </div>
+          </Card>
+        </Col>
+      )
+      ))
+      
+    : recipes?.slice(0, visibleItems).map((recipe, index) => (
+      cardRecipe.push(
+        <Col key={index} style={{ width:"fit-content"}}>
+          <Card 
+            style={{
+              width: "18rem",
+              height: "fit-content",
+              display: "flex",
+              border:"0"
+            }}
+            onClick={() => {
+              const uri = recipe.recipe.uri.split("_");
+              // console.log();
+              navigate(`/recipe/${uri[1]}/ingredients`);
+            }}
+          >
+            <Card.Img
+              variant="top"
+              src={recipe.recipe.image}
+              rounded
+              className="image_card"
+              style={{ height: "256px", objectFit:"fit", borderRadius:"4px 4px 0 0 "}}
+            />
+            <Card.Body
+              style={{ color: "#272727", background: "#e9e9e9" }}
+            >
+              <Card.Title style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}> {recipe.recipe.label}</Card.Title>
+              <Card.Text></Card.Text>
+              
+            </Card.Body>
+            <div style={{ display: "flex", width: "100%" ,borderTop:"1px solid gray", borderBottom:"1px solid gray", marginBottom:"8px"}}>
+                <div style={{ width: "50%", textAlign: "center" , borderRight:"1px solid gray",  margin:"4px" }}>
+                  {
+                    (recipe.recipe.calories = parseInt(recipe.recipe.calories)) + " CALORIES"
+                  }
+                  
+                </div>
+                <div style={{ width: "50%", textAlign: "center" , margin:"4px"}}>
+                  {recipe.recipe.ingredients.length + " INGREDIENTS"}
+                  
+                </div>
+              </div>
+          </Card>
+        </Col>
+      )
+      ))}
+      console.log("test");
+      return <Row xs={1} md={10} className="g-2" style={{backgroundColor:"#101010", border:'0', display:"flex", justifyContent:"center"}}>{cardRecipe}</Row>
+  }
+
+
   return (
     <div className="recipe">
-      <div className="recipe_card">
         <div className="search_bar">
           <input
             type="text"
@@ -87,12 +196,20 @@ const Recipe = () => {
             onChange={handleSearchChange}
             className="searchbar"
           />
-          <Dropdown id="dropDown">
-            <Dropdown.Toggle aria-expanded="false" variant="outline-secondary">
-              {calorieRange ? `${calorieRange} Calories` : "Calories"}
+          <Dropdown id="dropDown" >
+            <Dropdown.Toggle  aria-expanded="false" variant="outline-secondary">
+              {calorieRange ? `${calorieRange} Calories` : "Filter"}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  setCalorieRange("");
+                  handleDropdownChange(0, 99999999999);
+                }}
+              >
+                No Filter
+              </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
                   setCalorieRange("0-200");
@@ -136,154 +253,63 @@ const Recipe = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className="recipe_buttons">
-          
-          <Button
-            variant="outline-success"
-            onClick={() => renderRecipes("fish")}
-          >
-            Pescatarians
-          </Button>{" "}
-          <Button
-            variant="outline-success"
-            onClick={() => renderRecipes("chicken","meet")}
-          >
-            Flexitarians
-          </Button>{" "}
-          <Button
-            variant="outline-success"
-            onClick={() => renderRecipes("vegetable")}
-          >
-            vegans
-          </Button>{" "}
-          <Button variant="outline-success" onClick={() => renderRecipes("")}>
-          Omnivores
-          </Button>{" "}
-        </div>
-        <div className="card">
-          <Row xs={1} md={4} className="g-2" style={{ background: "#272727" }}>
-            {filteredRecipes.length
-              ? filteredRecipes.map((recipe, index) => (
-                  <Col key={index}>
-                    <Card
-                      style={{ width: "18rem", height: "30rem" }}
-                      onClick={() => {
-                        const uri = recipe.recipe.uri.split("_");
-                        // console.log();
-                        navigate(`/recipe/${uri[1]}/ingredients`);
-                      }}
-                    >
-                      <Card.Img
-                        variant="top"
-                        src={recipe.recipe.image}
-                        rounded
-                        className="image_card"
-                      />
-                      <Card.Body style={{}}>
-                        <Card.Title> {recipe.recipe.label}</Card.Title>
-                        <Card.Text></Card.Text>
-                        <div style={{ display: "flex", width: "100%" }}>
-                          <div style={{ width: "50%", textAlign: "center" }}>
-                            {
-                              (recipe.recipe.calories = parseInt(
-                                recipe.recipe.calories
-                              ))
-                            }{" "}
-                            calories
-                          </div>
-                          <div style={{ width: "50%", textAlign: "center" }}>
-                            ingrediant
-                          </div>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                    {/* <Card
-                      className="ccard"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Image
-                        src={recipe.recipe.image}
-                        rounded
-                        className="image_card"
-                      />
 
-                      <Card.Body className="cardbody">
-                        <Card.Title style={{ fontWeight: "bold" }}>
-                          {recipe.recipe.label}
-                        </Card.Title>
-                        <Card.Text className="text-card">
-                          <div className="calory">
-                            <div style={{ color: "red" }}>CALORIES</div>{" "}
-                            {recipe.recipe.calories}
-                          </div>
-                        </Card.Text>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button variant="outline-success" onClick={() => {
-                            const uri = recipe.recipe.uri.split("_");
-                            // console.log();
-                            navigate(`/recipe/${uri[1]}/ingredients`);
-                        }}>
-                          {" "}
-                          ingredients
-                        </Button>{" "}
-                      </Card.Footer>
-                    </Card> */}
-                  </Col>
-                ))
-              : recipes.slice(0, visibleItems).map((recipe, index) => (
-                  <Col key={index} style={{ gap: "20px" }}>
-                    <Card
-                      style={{
-                        width: "18rem",
-                        height: "30rem",
-                        display: "flex",
-                        alignSelf: "auto",
-                      }}
-                      onClick={() => {
-                        const uri = recipe.recipe.uri.split("_");
-                        // console.log();
-                        navigate(`/recipe/${uri[1]}/ingredients`);
-                      }}
-                    >
-                      <Card.Img
-                        variant="top"
-                        src={recipe.recipe.image}
-                        rounded
-                        className="image_card"
-                        style={{ height: "20rem" }}
-                      />
-                      <Card.Body
-                        style={{ color: "#272727", background: "beige" }}
-                      >
-                        <Card.Title> {recipe.recipe.label}</Card.Title>
-                        <Card.Text></Card.Text>
-                        <div style={{ display: "flex", width: "100%" }}>
-                          <div style={{ width: "50%", textAlign: "center" }}>
-                            {
-                              (recipe.recipe.calories = parseInt(
-                                recipe.recipe.calories
-                              ))
-                            }{" "}
-                            calories
-                          </div>
-                          <div style={{ width: "50%", textAlign: "center" }}>
-                            ingrediant
-                          </div>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-            {visibleItems < recipes.length && (
-              <p onClick={handleShowMore} className="show">Show More....</p>
-            )}
-          </Row>
+        <div className="recipe_buttons">
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("chicken")
+
+          }}>
+           <img src={chicken} style={{width:"24px"}}/>
+            <span>Chicken</span>
+            </button>
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("mango")
+          }}>
+            <img src={mango} style={{width:"24px"}}/>
+            <span>Mango</span>
+            </button>
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("spaghetti")
+          }}>
+            <img src={spaghetti} style={{width:"24px"}}/>
+            <span>Spaghetti</span>
+            </button>
+
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("chocolate")
+          }}>
+            <img src={chocolate} style={{width:"24px"}}/>
+            <span>Chocolate</span>
+            </button>
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("fish")
+          }}><img src={fish} style={{width:"24px"}}/>
+            <span>Fish</span>
+            </button>
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold" , display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("rice")
+          }}><img src={rice} style={{width:"24px"}}/>
+            <span>Rice</span></button>
+
+          <button style={{border:"0", padding:"10px", borderRadius:"4px", fontWeight:"bold", display:"flex", gap:"4px"}} onClick={()=>{
+            renderRecipes("meat")
+          }}><img src={meat} style={{width:"24px"}}/>
+            <span>Meat</span></button>
+
         </div>
-      </div>
+
+        <div>
+            <div>{gen()}</div>
+            
+        </div>
+
+        {!calorieRange && <p onClick={handleShowMore} className="show">Show More....</p>}
+        
     </div>
   );
 };
