@@ -48,7 +48,17 @@ function GymGroup() {
         userId : state.auth.userId
       }
     });
-  
+    
+    useEffect(()=>{
+        setAllMessages([]);
+        axios.get(`http://localhost:5000/gyms/message/${gymid}/${roomSelected}`).then((result) => {
+            console.log("messages DB =>",result);
+            setAllMessages(result.data.messages)
+        }).catch((err) => {
+            console.log(err);
+        });
+    },[roomSelected]);
+
     useEffect(()=>{
       if(state.theme === "female"){
         setOnTheme(true);
@@ -75,11 +85,11 @@ function GymGroup() {
             setAllMessages(prevMessages => [...prevMessages, data]);
         };
         socket?.on("messageGym", handleNewMessage);
-        
+        console.log(allMessages);
         return()=>{
             socket?.off("messageGym", handleNewMessage);
         }
-    },[socket]);
+    },[allMessages]);
 
 
     const sendMessage = ()=>{
