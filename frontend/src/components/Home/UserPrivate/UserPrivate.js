@@ -36,6 +36,18 @@ const UserPrivate = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const [allMessages, setAllMessages] = useState([]);
+
+  useEffect(()=>{
+    setAllMessages([])
+    axios.get(`http://localhost:5000/coachs/message/${from}/${userId}`,{headers:{
+      Authorization:`Bearer ${token}`
+    }}).then((result)=>{
+      setAllMessages(result.data.messages)
+    }).catch((error)=>{
+      console.log(error);
+    })
+  },[from])
+
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/info/${userId}`, {
@@ -66,7 +78,7 @@ const UserPrivate = () => {
     return () => {
       socket?.off("messagePrivate", reviMessage);
     };
-  }, [socket]);
+  }, [allMessages]);
 
   const reviMessage = (data) => {
     console.log(data);
@@ -75,8 +87,8 @@ const UserPrivate = () => {
 
   const sendMessage = () => {
     socket?.emit("messagePrivate", {
-      room: toId,
-      from: userId,
+      room: userId,
+      from: from,
       message: inputMessage,
       name: covertUserInfoToJson.nameUser,
       image,
@@ -146,6 +158,7 @@ const UserPrivate = () => {
                     className="User-Name"
                     onClick={() => {
                       setToId(userId);
+                      setFrom(user.coach_id)
                       setSocket(
                         socketInit({
                           user_id: userId,
@@ -223,7 +236,16 @@ const UserPrivate = () => {
         >
           <div
             style={
-              header || {
+              header?{
+                paddingLeft: "5px",
+                textAlign:" left",
+                width: "100%",
+                height: "6%",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#3d3939",
+                fontSize: "x-large"
+              }: {
                 color: "#A1E533",
                 display: "flex",
                 alignItems: "center",
@@ -269,7 +291,6 @@ const UserPrivate = () => {
           </div>
           {start && (
             <>
-              {" "}
               <div ref={revarse} className="message">
                 {allMessages?.map((ele, i) => (
                   <div
@@ -282,7 +303,7 @@ const UserPrivate = () => {
                     }}
                   >
                     <img
-                      src={`${ele.image}`}
+                      src={ele.image}
                       style={{
                         width: "52px",
                         height: "52px",
