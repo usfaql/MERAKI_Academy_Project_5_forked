@@ -86,7 +86,7 @@ const reviMessage = (data)=>{
 
 
 const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:covertUserInfoToJson.nameUser,image });
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:covertUserInfoToJson.nameUser,image, created_at : new Date() });
 }
 
 const disconnectServer = ()=>{
@@ -159,38 +159,28 @@ const disconnectServer = ()=>{
       setFiltered(users);
     }
   };
-  // let messages = [
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
-  //   },
-  // ];
+  const timeOfMessage=(end)=>{
+    const endDate = new Date(end);
+    const now = new Date();
+    const difference = now - endDate;
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(difference / (1000 * 60 * 60));
+    const minutes = Math.floor(difference / (1000 * 60));
+    const seconds = Math.floor(difference / 1000);
+    let dateNow = '';
+    if(days){
+        dateNow = `${days} days ago`;
+    }else if(hours){
+        dateNow = `${hours} hour ago`;
+    }else if(minutes){
+        dateNow = `${minutes} minutes ago`;
+    }else if(seconds){
+        dateNow = `just now`;
+    }else{
+        dateNow = `just now`;
+    }
+    return dateNow
+}
   return (
     <>
       {" "}
@@ -342,8 +332,9 @@ const disconnectServer = ()=>{
                <div style={{width:"90%"}}>
                <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{ele.name}</h6>
                <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{ele.message}</div>
-              
+              <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{timeOfMessage(ele.created_at)}</h6>
                </div>
+               
            </div>
             ))}
           </div>
