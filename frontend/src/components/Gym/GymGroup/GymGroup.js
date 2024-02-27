@@ -95,7 +95,7 @@ function GymGroup() {
     const sendMessage = ()=>{
         socket?.emit("messageGym",{
             room : roomSelected, from : 7, message, name  : covertUserInfoToJson?.nameUser , image : infoGym?.image
-        } );
+        , created_at : new Date()} );
     }
 
     const disconnectServer = ()=>{
@@ -116,6 +116,7 @@ function GymGroup() {
             reversChat.current.scrollTop = reversChat.current.scrollHeight;
         };
     }
+
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
@@ -166,12 +167,33 @@ function GymGroup() {
     const generateChatGym = ()=>{
         const chatLite = [];
         for (let i = 0; i < allMessages?.length; i++) {
+            const endDate = new Date(allMessages[i].created_at);
+            const now = new Date();
+            const difference = now - endDate;
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(difference / (1000 * 60 * 60));
+            const minutes = Math.floor(difference / (1000 * 60));
+            const seconds = Math.floor(difference / 1000);
+            let dateNow = '';
+            if(days){
+                dateNow = `${days} days ago`;
+            }else if(hours){
+                dateNow = `${hours} hour ago`;
+            }else if(minutes){
+                dateNow = `${minutes} minutes ago`;
+            }else if(seconds){
+                dateNow = `just now`;
+            }else{
+                dateNow = `just now`;
+            }
+            let name = allMessages[i].name.split(' ')
             chatLite.push(
                 <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
                     <img src={`${allMessages[i].image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
                     <div style={{width:"90%"}}>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{name[0] + " " + name[1][0].toUpperCase()}.</h6>
                     <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{allMessages[i].message}</div>
-                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>Coach : {allMessages[i].name}</h6>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{dateNow}</h6>
                     </div>
                 </div>
             )
@@ -213,7 +235,7 @@ function GymGroup() {
 
             userArr.push(
                         <>
-                        <li style={{padding:"5px 15px 0px"}}>{`${allUsers[i].firstname} ${allUsers[i].lastname}`} <span style={{color:"#808080"}}>(End After {days} Days)</span></li>
+                        <li style={{padding:"5px 15px 0px"}}>{`${allUsers[i].firstname} ${allUsers[i].lastname}`} <span style={{color:"#808080", fontSize:"13px"}}>(End After {days} Days)</span></li>
                         <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
                         </>
             )
@@ -227,7 +249,10 @@ function GymGroup() {
         for(let i = 0; i < rooms?.length; i++){
             roomList.push(
                     <>
-                    <li style={roomSelected === rooms[i].name_plan ? {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",marginRight:"5px", cursor:"pointer", backgroundColor:"#A1E533", color:"#101010", padding:"5px", borderRadius:"4px"} : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",padding:"5px", cursor:"pointer"}} onClick={()=>{
+                    <li style={roomSelected === rooms[i].name_plan ? 
+                    !onTheme ? {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",marginRight:"5px", cursor:"pointer", backgroundColor:"#A1E533", color:"#101010", padding:"5px", borderRadius:"4px"} 
+                    : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",marginRight:"5px", cursor:"pointer", backgroundColor:"#E333E5", color:"#101010", padding:"5px", borderRadius:"4px"} 
+                    : {fontWeight:"bold", marginBottom:"5px", marginTop:"5px",padding:"5px", cursor:"pointer"}} onClick={()=>{
                         setRoomSelected(rooms[i].name_plan);
                         setSocket(socketInit({user_id : state.userId, token : state.token, room : rooms[i].name_plan}));
                     }}># {rooms[i].name_plan}</li>
@@ -320,13 +345,13 @@ function GymGroup() {
                         
                         <div style={{height:"45%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
                         <div style={{display:"flex", gap:"5px"}}>
-                            <button className='btn-gym-chat'>Image</button>
-                            <button className='btn-gym-chat'>Video</button>
-                            <button className='btn-gym-chat' onClick={()=>{
+                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}}>Image</button>
+                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}}>Video</button>
+                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}} onClick={()=>{
                                 disconnectServer()
                             }}>File</button>
                         </div>
-                        <button className='btn-gym-chat' onClick={()=>{
+                        <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}} onClick={()=>{
                             if(message){
                                 sendMessage();
                                 setMessage("");
