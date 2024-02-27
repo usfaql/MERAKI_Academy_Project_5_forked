@@ -18,8 +18,9 @@ const Recipe = () => {
   const [calorieRange, setCalorieRange] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedRecipes, setSelectedRecipes] = useState([]);
+  const [visibleItems, setVisibleItems] = useState(4);
 
-  const { token, userId } = useSelector((state) => {
+  const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
@@ -29,7 +30,7 @@ const Recipe = () => {
   const fetchRecipes = (query) => {
     axios
       .get(
-        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=20&calories=0-2000&health=alcohol-free`,
+        `https://api.edamam.com/search?q=${query}&app_id=8fe04fdd&app_key=71c0b5bf11e8df07b68092d65bde92da&from=0&to=24&calories=0-2000&health=alcohol-free`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,6 +54,10 @@ const Recipe = () => {
   useEffect(() => {
     fetchRecipes("");
   }, []);
+
+  const handleShowMore = () => {
+    setVisibleItems((prevVisibleItems) => prevVisibleItems + 4);
+  };
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -167,10 +172,7 @@ const Recipe = () => {
           >
             Vegetables
           </Button>{" "}
-          <Button
-            variant="outline-success"
-            onClick={() => renderRecipes("")}
-          >
+          <Button variant="outline-success" onClick={() => renderRecipes("")}>
             all
           </Button>{" "}
         </div>
@@ -180,7 +182,7 @@ const Recipe = () => {
               ? filteredRecipes.map((recipe, index) => (
                   <Col key={index}>
                     <Card
-                      style={{ width: "18rem",  height:"30rem", }}
+                      style={{ width: "18rem", height: "30rem" }}
                       onClick={() => {
                         const uri = recipe.recipe.uri.split("_");
                         // console.log();
@@ -193,7 +195,7 @@ const Recipe = () => {
                         rounded
                         className="image_card"
                       />
-                      <Card.Body>
+                      <Card.Body style={{}}>
                         <Card.Title> {recipe.recipe.label}</Card.Title>
                         <Card.Text></Card.Text>
                         <div style={{ display: "flex", width: "100%" }}>
@@ -248,10 +250,15 @@ const Recipe = () => {
                     </Card> */}
                   </Col>
                 ))
-              : recipes.map((recipe, index) => (
-                  <Col key={index}>
-                     <Card
-                      style={{ width: "18rem",  height:"30rem", }}
+              : recipes.slice(0, visibleItems).map((recipe, index) => (
+                  <Col key={index} style={{ gap: "20px" }}>
+                    <Card
+                      style={{
+                        width: "18rem",
+                        height: "30rem",
+                        display: "flex",
+                        alignSelf: "auto",
+                      }}
                       onClick={() => {
                         const uri = recipe.recipe.uri.split("_");
                         // console.log();
@@ -263,9 +270,11 @@ const Recipe = () => {
                         src={recipe.recipe.image}
                         rounded
                         className="image_card"
-                        style={{height:"20rem"}}
+                        style={{ height: "20rem" }}
                       />
-                      <Card.Body>
+                      <Card.Body
+                        style={{ color: "#272727", background: "beige" }}
+                      >
                         <Card.Title> {recipe.recipe.label}</Card.Title>
                         <Card.Text></Card.Text>
                         <div style={{ display: "flex", width: "100%" }}>
@@ -285,6 +294,9 @@ const Recipe = () => {
                     </Card>
                   </Col>
                 ))}
+            {visibleItems < recipes.length && (
+              <p onClick={handleShowMore} className="show">Show More....</p>
+            )}
           </Row>
         </div>
       </div>

@@ -36,7 +36,7 @@ const Ingredients = () => {
 
         <Container className="ingredient_page">
            <Row>
-            <Col>
+        z    <Col>
               <img
                 src="https://cdn-icons-png.flaticon.com/512/93/93634.png"
                 type="submit"
