@@ -92,6 +92,7 @@ const UserPrivate = () => {
       message: inputMessage,
       name: covertUserInfoToJson.nameUser,
       image,
+      created_at : new Date()
     });
   };
 
@@ -127,7 +128,28 @@ const UserPrivate = () => {
   useEffect(() => {
     getAllCoachs();
   }, []);
-
+const timeOfMessage=(end)=>{
+    const endDate = new Date(end);
+    const now = new Date();
+    const difference = now - endDate;
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(difference / (1000 * 60 * 60));
+    const minutes = Math.floor(difference / (1000 * 60));
+    const seconds = Math.floor(difference / 1000);
+    let dateNow = '';
+    if(days){
+        dateNow = `${days} days ago`;
+    }else if(hours){
+        dateNow = `${hours} hour ago`;
+    }else if(minutes){
+        dateNow = `${minutes} minutes ago`;
+    }else if(seconds){
+        dateNow = `just now`;
+    }else{
+        dateNow = `just now`;
+    }
+    return dateNow
+}
   return (
     <>
       {" "}
@@ -293,6 +315,7 @@ const UserPrivate = () => {
             <>
               <div ref={revarse} className="message">
                 {allMessages?.map((ele, i) => (
+
                   <div
                     style={{
                       display: "flex",
@@ -332,6 +355,12 @@ const UserPrivate = () => {
                       >
                         {ele.message}
                       </div>
+                      <h6  style={{
+                          textAlign: "start",
+                          color: "gray",
+                          fontSize: "small",
+                          paddingLeft: "5px",
+                        }}>{timeOfMessage(ele.created_at)}</h6>
                     </div>
                   </div>
                 ))}

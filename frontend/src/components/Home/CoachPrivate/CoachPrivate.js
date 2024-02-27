@@ -86,7 +86,7 @@ const reviMessage = (data)=>{
 
 
 const sendMessage = ()=>{
-  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:covertUserInfoToJson.nameUser,image });
+  socket?.emit("messagePrivate", {room :toId, from : userId, message:inputMessage,name:covertUserInfoToJson.nameUser,image, created_at : new Date() });
 }
 
 const disconnectServer = ()=>{
@@ -159,67 +159,31 @@ const disconnectServer = ()=>{
       setFiltered(users);
     }
   };
-  // let messages = [
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.iterature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  //   },
-  //   {
-  //     name: "Mohammed Odat",
-  //     message:
-  //       "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.111",
-  //   },
-  // ];
+  const timeOfMessage=(end)=>{
+    const endDate = new Date(end);
+    const now = new Date();
+    const difference = now - endDate;
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(difference / (1000 * 60 * 60));
+    const minutes = Math.floor(difference / (1000 * 60));
+    const seconds = Math.floor(difference / 1000);
+    let dateNow = '';
+    if(days){
+        dateNow = `${days} days ago`;
+    }else if(hours){
+        dateNow = `${hours} hour ago`;
+    }else if(minutes){
+        dateNow = `${minutes} minutes ago`;
+    }else if(seconds){
+        dateNow = `just now`;
+    }else{
+        dateNow = `just now`;
+    }
+    return dateNow
+}
   return (
     <>
       {" "}
-      <div style={{ cursor: "pointer" }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          fill="#7aad28"
-          class="bi bi-arrow-left"
-          viewBox="0 0 16 16"
-          className="show"
-          onClick={() => {
-            setshow(!show);
-          }}
-        >
-          {show ? (
-            <path
-              fill-rule="evenodd"
-              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-            />
-          ) : (
-            <path
-              fill-rule="evenodd"
-              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-            />
-          )}
-        </svg>
-      </div>
       <div className="Coach-Private-Page">
         {show && (
           <div className="Left-Side">
@@ -334,7 +298,61 @@ const disconnectServer = ()=>{
           className="Right-Side"
           style={show ? { width: "75%" } : { width: "100%" }}
         >
-          <div className="Header">{header}</div>
+          <div
+            style={
+              header?{
+                paddingLeft: "5px",
+                textAlign:" left",
+                width: "100%",
+                height: "6%",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#3d3939",
+                fontSize: "x-large"
+              }: {
+                color: "#A1E533",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }
+            }
+            className="Header"
+          >
+            <div
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "start",
+                width: "fit-content",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill=" #A1E553"
+                class="bi bi-arrow-left"
+                viewBox="0 0 16 16"
+                className="show1"
+                onClick={() => {
+                  setshow(!show);
+                }}
+              >
+                {show ? (
+                  <path
+                    fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                  />
+                ) : (
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                  />
+                )}
+              </svg>
+            </div>
+            {header ? header : <span>Select Coach To Start Chating</span>}
+          </div>
           {start?<> <div ref={revarse} className="message">
             {allMessages?.map((ele, i) => (
                <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
@@ -342,8 +360,9 @@ const disconnectServer = ()=>{
                <div style={{width:"90%"}}>
                <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{ele.name}</h6>
                <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{ele.message}</div>
-              
+              <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{timeOfMessage(ele.created_at)}</h6>
                </div>
+               
            </div>
             ))}
           </div>
