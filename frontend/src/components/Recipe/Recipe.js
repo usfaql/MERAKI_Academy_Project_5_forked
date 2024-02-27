@@ -76,17 +76,6 @@ const Recipe = () => {
     setIsDropdownOpen(false);
   };
 
-  const addRecipeToSelection = (recipe) => {
-    setSelectedRecipes((prevSelection) => [...prevSelection, recipe]);
-  };
-
-  const calculateTotalCalories = () => {
-    const totalCalories = selectedRecipes.reduce(
-      (sum, recipe) => sum + recipe.recipe.calories,
-      0
-    );
-    return totalCalories;
-  };
   return (
     <div className="recipe">
       <div className="recipe_card">
@@ -148,32 +137,27 @@ const Recipe = () => {
           </Dropdown>
         </div>
         <div className="recipe_buttons">
+          
           <Button
             variant="outline-success"
-            onClick={() => renderRecipes("rice")}
+            onClick={() => renderRecipes("fish")}
           >
-            Rice
+            Pescatarians
           </Button>{" "}
           <Button
             variant="outline-success"
-            onClick={() => renderRecipes("meat")}
+            onClick={() => renderRecipes("chicken","meet")}
           >
-            Meat
-          </Button>{" "}
-          <Button
-            variant="outline-success"
-            onClick={() => renderRecipes("chicken")}
-          >
-            Chicken
+            Flexitarians
           </Button>{" "}
           <Button
             variant="outline-success"
             onClick={() => renderRecipes("vegetable")}
           >
-            Vegetables
+            vegans
           </Button>{" "}
           <Button variant="outline-success" onClick={() => renderRecipes("")}>
-            all
+          Omnivores
           </Button>{" "}
         </div>
         <div className="card">
