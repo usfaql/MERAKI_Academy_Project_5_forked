@@ -33,12 +33,22 @@ const CoachPrivate = () => {
   const [filtered, setFiltered] = useState([]);
 // -----------------------------------------------------
 const [image, setImage] = useState("")
-const [toId , setToId] = useState("");
+const [toId , setToId] = useState(null);
 const [from , setFrom] = useState("");
 const [clearInput, setClearInput] = useState("");
 const [inputMessage , setInputMessage] = useState("");
 const [socket, setSocket] = useState(null);
 const [allMessages, setAllMessages] = useState([]);
+useEffect(()=>{
+  setAllMessages([])
+  axios.get(`http://localhost:5000/coachs/message/${userId}/${toId}`,{headers:{
+    Authorization:`Bearer ${token}`
+  }}).then((result)=>{
+    setAllMessages(result.data.messages)
+  }).catch((error)=>{
+    console.log(error);
+  })
+},[toId])
 useEffect(()=>{
   axios.get(`http://localhost:5000/users/info/${userId}`,{headers:{
     Authorization:`Bearer ${token}`
@@ -65,7 +75,7 @@ useEffect(()=>{
   return()=>{
       socket?.off("messagePrivate", reviMessage)
   }
-},[socket]);
+},[allMessages]);
 
 
 const reviMessage = (data)=>{

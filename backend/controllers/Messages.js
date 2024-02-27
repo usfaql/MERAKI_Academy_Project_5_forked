@@ -1,7 +1,7 @@
 const messagesModel = require('../models/GymMesseges');
+const PrivateMessagesModel=require('../models/PrivateMessage')
 const messageHandler = (socket, io)=>{
     socket.on('messageGym', (data)=>{
-        console.log(data);
         data.success = true;
         data.type = "Gym";
         socket.to("room-"+ data.room).emit("messageGym", data);
@@ -41,6 +41,38 @@ const messageHandler = (socket, io)=>{
         data.type = "Private";
         socket.to("room-"+ data.room).emit("messagePrivate", data);
         socket.emit('messagePrivate', data);
+        const newPrivateMessage = new PrivateMessagesModel({
+            coach_id : data.from,
+            user_id : data.room,
+            messages : [{
+                from : data.from, 
+                room: data.room,
+                name : data.name ,
+                 image : data.image,
+                 message : data.message}]
+        });
+        PrivateMessagesModel.findOne({coach_id: data.from, user_id: data.room}).then((result) => {
+            if(result){
+                PrivateMessagesModel.findOneAndUpdate(
+                    { coach_id: data.from, user_id: data.room }, // Find the document
+                    { $push: { messages: [{
+                        from : data.from, room: data.room,name : data.name ,image : data.image,message : data.message}] } }, // Push data.message into messages array
+                    { new: true, upsert: true } // Options: return the modified document and create if it doesn't exist
+                ).then((result) => {
+                    console.log("data add in database=>", result);
+                }).catch((err) => {
+                    console.log("data error =>", err);
+                });
+            }else{
+                newPrivateMessage.save().then(async(result) => {
+                    console.log("data add in database=>", result);
+                }).catch((err) => {
+                    console.log("data error =>", err);
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
     })
 }
 
