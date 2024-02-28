@@ -3,6 +3,7 @@ import React ,{useState,useEffect} from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import "./PrivatePlan.css"
+import logo from "../assets/user.png"
 const PrivatePlan = () => {
     const navigate = useNavigate();
     const [success, setSuccess] = useState(null)
@@ -58,7 +59,7 @@ const getCoachInfo=()=>{
           <div className='continer-info-coach'>
         <div className='contener-info-coach'>
             <div className='continer-image-coach'>
-                <img className='image-coach' src={coachInfo&&coachInfo.image?coachInfo.image:'https://img.freepik.com/free-vector/cute-man-lifting-barbell-gym-cartoon-vector-icon-illustration-people-sport-icon-concept-isolated_138676-6223.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais'}/>
+                <img className='image-coach' src={coachInfo&&coachInfo.image?coachInfo.image:logo}/>
             </div>
             
             <div className='name-coach'>

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import{useNavigate}from 'react-router-dom'
 import axios from "axios";
 import {setLogin,setUserId, setLogout } from '../../Redux/Reducers/Auth/index'
+import Spinner from "react-bootstrap/Spinner";
+
 import logo from "../../assets/user.png"
 import Button from "react-bootstrap/Button";
 
@@ -17,35 +19,44 @@ const PrivateHome = () => {
   const [coaches, setCoaches] = useState(null);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
+  const [userLoading, setUserLoading] = useState(true);
+  const [coachLoading, setCoachLoading] = useState(true);
   
   useEffect(() => {
     getAllCoaches();
     getAllCoachesByUserId()
   }, []);
 const getAllCoachesByUserId =()=>{
+  setUserLoading(true)
   axios.get(`http://localhost:5000/coachs/coach`, {
     headers: {
       Authorization: `Bearer ${authState.token}`,
     },
   }).then((result)=>{
+    setUserLoading(false)
     console.log(result);
     setMyCoachs(result.data.coachs)
   }).catch((error)=>{
     console.log(error);
+    setUserLoading(false)
+
   })
 }
 
   const getAllCoaches = () => {
+    setCoachLoading(true)
     axios.get("http://localhost:5000/coachs/filter/", {
       headers: {
         Authorization: `Bearer ${authState.token}`,
       },
     })
     .then((response) => {
+      setCoachLoading(false)
       setCoaches(response.data.coachs);
     })
     .catch((error) => {
       console.log(error);
+      setCoachLoading(false)
       setMessage("Error fetching coaches.");
     });
   };
@@ -79,7 +90,25 @@ const getAllCoachesByUserId =()=>{
         />  
         </div>
         <div style={{textAlign:"left",color:"#A1E533"}}><h5>My Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
-        <div className="My-coachs">
+        {userLoading ? (
+              <div
+                style={
+                  userLoading
+                    ? {
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        placeItems: "center",
+                        justifyContent: "center",
+                      }
+                    : { display: "none" }
+                }
+              >
+                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <label>Loading...</label>
+              </div>
+            ) :<div className="My-coachs">
+          
           {myCoachs?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
@@ -111,10 +140,27 @@ const getAllCoachesByUserId =()=>{
              
               </div>
             ))}
-        </div>
-        <div style={{textAlign:"left",color:"#A1E533"}}><h5>All Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
+        </div>}
         
-        <div className="coachs">
+        <div style={{textAlign:"left",color:"#A1E533"}}><h5>All Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
+        {coachLoading ? (
+              <div
+                style={
+                  coachLoading
+                    ? {
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        placeItems: "center",
+                        justifyContent: "center",
+                      }
+                    : { display: "none" }
+                }
+              >
+                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <label>Loading...</label>
+              </div>
+            ):  <div className="coachs">
 
             {filteredData?.map((item) => (
               <div className="coach_bar">
@@ -146,7 +192,8 @@ const getAllCoachesByUserId =()=>{
              
               </div>
             ))}
-          </div>
+          </div>}
+      
       </div>
     );
   };
