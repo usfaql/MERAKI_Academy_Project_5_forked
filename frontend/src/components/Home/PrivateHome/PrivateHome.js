@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import{useNavigate}from 'react-router-dom'
 import axios from "axios";
 import {setLogin,setUserId, setLogout } from '../../Redux/Reducers/Auth/index'
-
+import logo from "../../assets/user.png"
 import Button from "react-bootstrap/Button";
 
 const PrivateHome = () => {
@@ -83,7 +83,7 @@ const getAllCoachesByUserId =()=>{
           {myCoachs?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"}/>
+                <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:logo}/>
                   <div>
                     <span>{item.firstname}  <span>{item.lastname}</span></span>
                    
@@ -119,7 +119,7 @@ const getAllCoachesByUserId =()=>{
             {filteredData?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                  <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"}/>
+                  <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:logo}/>
                   <div>
                     <span>{item.firstname} <span>{item.lastname}</span></span>
                     

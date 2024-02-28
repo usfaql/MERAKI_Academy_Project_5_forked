@@ -48,7 +48,7 @@ const getCoachInfo=()=>{
           Authorization: `Bearer ${token}`,
         },
       }).then((result)=>{
-        setCoachInfo(result.data.info[0])
+        setCoachInfo(result.data.info)
       }).catch((error)=>{
         setSuccess(false);
         setMessage(error.response.data.message);
