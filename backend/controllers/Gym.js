@@ -6,7 +6,7 @@ const createGym = (req,res)=>{
     const {name, description} = req.body;
     const image = "http://res.cloudinary.com/dvztsuedi/image/upload/v1708816631/adpmvtgi7dl1qjh0pgpm.jpg"
     const provider = [name, description,image, userId];
-    pool.query(`SELECT * FROM gyms WHERE owner_id = $1`, [userId]).then((result) => {
+    pool.query(`SELECT * FROM gyms WHERE owner_id = $1 AND is_deleted = 0`, [userId]).then((result) => {
         console.log(result.rows);
         if(result.rows.length > 3){
             res.status(403).json({

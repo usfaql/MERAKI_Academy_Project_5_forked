@@ -56,8 +56,7 @@ const Profile = () => {
   const updateUserInfo = async () => {
     try {
       const result =await axios.put(`http://localhost:5000/users/info/${state.userId}`, {
-        
-        image , 
+        image ,
         weight,
         height,
         goal

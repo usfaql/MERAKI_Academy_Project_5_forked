@@ -8,11 +8,13 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setImageUser } from '../Redux/Reducers/Auth';
 import logo from "../assets/user.png"
 import { useNavigate } from 'react-router-dom';
 const UserInfo  = () => {
-  const navigate=useNavigate()
-  const fileInputRef=useRef(null)
+    const dispatch = useDispatch();
+    const navigate=useNavigate()
+    const fileInputRef=useRef(null)
     const [image, setImage] = useState("");
     const [weight, setWeight] = useState("");
     const [height, setHeight] = useState("");
@@ -61,6 +63,8 @@ const createUserInfo =async()=>{
           Authorization: `Bearer ${state.token}`,
         }});
         navigate('/home')
+        localStorage.setItem("userImage", image);
+        dispatch(setImageUser(image));
       } catch (error) {
         setSuccess(false)
         setMessage(error.response.data.message)

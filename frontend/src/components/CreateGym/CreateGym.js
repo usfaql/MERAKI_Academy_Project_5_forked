@@ -14,9 +14,25 @@ function CreateGym() {
         token : state.auth.token
         }
     })
-    console.log(state.token); 
-    const [nameGym, setNameGym] = useState('');
-    const [descriptionGym , setDiscriptionGym] = useState('');
+
+    const [name, setNameGym] = useState('');
+    const [description , setDiscriptionGym] = useState('');
+
+    const config = {
+        headers: { Authorization: `Bearer ${state.token}` }
+      }
+
+    const createGym = ()=>{
+      if(name && description){
+          axios.post("http://localhost:5000/gyms", {name, description}, config).then((result) => {
+            console.log(result);
+            navigate(-1);
+          }).catch((err) => {
+              console.log(err.message);
+          });
+      }
+    }
+    
   return (
     <div className='create-gym'>
         <h4 style={{padding:"10px", textAlign:"center"}}>Create New Gym</h4>
@@ -45,16 +61,7 @@ function CreateGym() {
         </InputGroup>
 
         <Button variant="dark" style={{backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold"}} onClick={()=>{
-            if(nameGym && descriptionGym){
-                axios.post("http://localhost:5000/gyms/", {name : nameGym, description : descriptionGym}, {
-                    headers: { Authorization: `Bearer ${state.token}` }
-                }).then((result) => {
-                    console.log(result);
-                    navigate(-1);
-                }).catch((err) => {
-                    console.log(err);
-                });
-            }
+            createGym();
         }}>Create Gym</Button>
     </>
     </div>
