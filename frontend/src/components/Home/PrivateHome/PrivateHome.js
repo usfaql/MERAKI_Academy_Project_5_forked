@@ -78,6 +78,7 @@ const getAllCoachesByUserId =()=>{
           className="search_bar-input"
         />  
         </div>
+        <div style={{textAlign:"left",color:"#A1E533"}}><h5>My Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
         <div className="My-coachs">
           {myCoachs?.map((item) => (
               <div className="coach_bar">
@@ -111,6 +112,7 @@ const getAllCoachesByUserId =()=>{
               </div>
             ))}
         </div>
+        <div style={{textAlign:"left",color:"#A1E533"}}><h5>All Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
         
         <div className="coachs">
 
