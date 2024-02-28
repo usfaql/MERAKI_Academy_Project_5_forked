@@ -82,11 +82,15 @@
     border-radius: 4px;
     height: 60px;
     width: 25%;
-    background-color: #A1E533;
+    background-color: #a1e53396;
     color: black;
     text-align: center;
     align-items: center;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+font-weight: bold;
+font-size: 18px;
   }
   
   .ErrorMessage {
@@ -99,4 +103,9 @@
     color: white;
     text-align: center;
     align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+font-size: 18px;
   }
