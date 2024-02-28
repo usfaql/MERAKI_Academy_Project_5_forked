@@ -66,6 +66,7 @@ const getAllCoachesByUserId =()=>{
     const filteredData = coaches?.filter((item) =>
        item.firstname.toLowerCase().includes(search.toLowerCase())
     );
+    console.log(filteredData);
     return (
       <div className="page">
         <div className="ser">
@@ -81,7 +82,7 @@ const getAllCoachesByUserId =()=>{
           {myCoachs?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                  <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
+                <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"}/>
                   <div>
                     <span>{item.firstname}  <span>{item.lastname}</span></span>
                    
@@ -116,7 +117,7 @@ const getAllCoachesByUserId =()=>{
             {filteredData?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                  <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
+                  <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"}/>
                   <div>
                     <span>{item.firstname} <span>{item.lastname}</span></span>
                     
