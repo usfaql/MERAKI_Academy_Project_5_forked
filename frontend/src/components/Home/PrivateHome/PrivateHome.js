@@ -67,7 +67,7 @@ const getAllCoachesByUserId =()=>{
        item.firstname.toLowerCase().includes(search.toLowerCase())
     );
     return (
-      <div>
+      <div className="page">
         <div className="ser">
           <input
           type="text"
@@ -83,8 +83,8 @@ const getAllCoachesByUserId =()=>{
                 <div className="coach_info"> 
                   <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
                   <div>
-                    <span>{item.firstname}</span>
-                    <span>{item.lastname}</span>
+                    <span>{item.firstname}  <span>{item.lastname}</span></span>
+                   
                     
                   </div>
                     
@@ -118,8 +118,8 @@ const getAllCoachesByUserId =()=>{
                 <div className="coach_info"> 
                   <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
                   <div>
-                    <span>{item.firstname}</span>
-                    <span>{item.lastname}</span>
+                    <span>{item.firstname} <span>{item.lastname}</span></span>
+                    
                     
                   </div>
                     
