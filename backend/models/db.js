@@ -131,7 +131,6 @@ const createTable = () => {
       plan_id INT,
       user_id INT,
       coach_id INT,
-      private_room_id INT,
       endSub TIMESTAMP DEFAULT NULL,
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (coach_id) REFERENCES users(id),

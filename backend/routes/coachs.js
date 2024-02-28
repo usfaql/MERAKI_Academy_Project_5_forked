@@ -14,7 +14,8 @@ const {
   updatePlanByName,
   removePlanByName,
   getPlanById,
-  getMessageByPrivate
+  getMessageByPrivate,
+  filterCoachs
 } = require("../controllers/coachs");
 const {authentication} = require("../middleware/authentication");
 coachRouter.post("/plan", authentication, createNewPlane);
@@ -31,4 +32,5 @@ coachRouter.put('/plan',authentication,updatePlanByName)
 coachRouter.put('/remove/plan',authentication,removePlanByName)
 coachRouter.get('/plans/plan/:plan_id',authentication,getPlanById)
 coachRouter.get('/message/:coach_id/:user_id',authentication,getMessageByPrivate)
+coachRouter.get('/filter/',authentication,filterCoachs)
 module.exports = coachRouter;

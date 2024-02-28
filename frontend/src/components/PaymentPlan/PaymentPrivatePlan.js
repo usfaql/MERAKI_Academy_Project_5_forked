@@ -31,11 +31,20 @@ const PaymentPrivatePlan = () => {
             setSuccess(false);
             setMessage(err.response.data.message);
         });
-       
     },[])
+    const AddUserToPrivate=()=>{
+        axios.post(`http://localhost:5000/coachs/user`,{coach_id:coachid,plan_id:planid},config
+        ).then((result)=>{
+             navigate(`/user/private`);
+        }).catch((err)=>{
+            setSuccess(false)
+            setMessage("Something went Wrong Please Try Again")
+            console.log(err);
+        })
+    }
     const handlePay = ()=>{
         if(numberCard && nameOnCard && expirationDate && cVV){
-            navigate(`/user/private`);
+            AddUserToPrivate()
         }else{
             setSuccess(false)
             setMessage("please fill data")
@@ -84,8 +93,6 @@ const PaymentPrivatePlan = () => {
                         setNumberCard(e.target.value);
                     }}/>
                 </div>
-                
-                
                 <div style={{display:"flex", width:"50%", justifyContent:"space-between"}}>
                 <div style={{width:"50%"}}>
                     <p className='text'>Expiration Date</p>
@@ -93,7 +100,6 @@ const PaymentPrivatePlan = () => {
                         setExpirationDate(e.target.value);
                     }}/>
                 </div>
-                    
                 <div style={{width:"50%"}}>
                     <p className='text'>CVV</p>
                     <input className='d' type='number' placeholder='CCV' onChange={(e)=>{

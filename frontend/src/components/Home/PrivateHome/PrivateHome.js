@@ -34,8 +34,9 @@ const getAllCoachesByUserId =()=>{
     console.log(error);
   })
 }
+
   const getAllCoaches = () => {
-    axios.get("http://localhost:5000/coachs/openedprivate", {
+    axios.get("http://localhost:5000/coachs/filter/", {
       headers: {
         Authorization: `Bearer ${authState.token}`,
       },

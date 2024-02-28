@@ -134,7 +134,7 @@ const AddUserToPrivate = (req, res) => {
   const user_id =req.token.userId;
   const value = [plan_id, coach_id, user_id];
   pool.query(`SELECT * FROM coach_plan WHERE id=$1`, [plan_id]).then((result) => {
-    const numOfMonth = result.rows[0].numOfMonth;
+    const numOfMonth = result.rows[0].numofmonth;
     const endSub = `CURRENT_TIMESTAMP + INTERVAL '${numOfMonth} months'`;
     const query = `INSERT INTO room_user (plan_id, coach_id, user_id, endSub) 
     VALUES ($1, $2, $3,${endSub}) 
@@ -263,7 +263,7 @@ const getAllCoachesByUserId=(req,res)=>{
   const value=[user_id]
   const query=`SELECT room_user.* , users.firstname ,users.lastname FROM room_user 
   JOIN users ON room_user.coach_id=users.id
-  WHERE room_user.user_id=$1 AND room_user.is_deleted =0 `
+  WHERE room_user.user_id=$1 AND room_user.is_deleted =0`
   pool.query(query,value).then((result)=>{
     if(result.rows.length){
       res.status(201).json({
@@ -284,6 +284,59 @@ const getAllCoachesByUserId=(req,res)=>{
     err
   });
 });
+}
+
+const filterCoachs = (req,res)=>{
+  const {userId} = req.token;
+  const query1 = `SELECT * FROM users WHERE private = 1`
+  const query2 = `SELECT room_user.* , users.firstname ,users.lastname FROM room_user 
+  JOIN users ON room_user.coach_id=users.id
+  WHERE room_user.user_id=$1 AND room_user.is_deleted =0`;
+  let result1;
+  const coachs=[]
+  let finalCoach
+  pool.query(query1).then((result) => {
+    if(result.rows.length){
+      
+      result1 = result.rows;
+      // result1.map((ele,i)=>{
+      //   coachs.push(ele.id)
+      // })
+
+      pool.query(query2, [userId]).then((result2) => {
+        // result = result2.rows;
+        result2.rows.map((ele,i)=>{
+          console.log(ele);
+             coachs.push(ele.coach_id)})
+             console.log(coachs)
+      finalCoach= result1.filter((ele,i)=>{
+        console.log(ele);
+       return !coachs.includes(ele.id)
+       
+      })
+        res.status(201).json({
+          success:true,
+          message:"All Coachs Opened Private",
+          coachs:finalCoach
+        })
+     
+     
+     console.log(finalCoach);
+      }).catch((err) => {
+        res.status(500).json({
+          success:true,
+          message:"Server Error",
+          error : err.message
+        });
+      });
+    }
+  }).catch((err) => {
+    res.status(500).json({
+      success:true,
+      message:"Server Error",
+      error : err.message
+    })
+  });
 }
 const updatePlanByName=(req,res)=>{
   const {name,description,numOfMonth,price}=req.body
@@ -373,6 +426,6 @@ module.exports = {
   updatePlanByName,
   removePlanByName,
   getPlanById,
-  getMessageByPrivate
-
+  getMessageByPrivate,
+  filterCoachs
 };
