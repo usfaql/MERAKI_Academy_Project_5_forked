@@ -206,7 +206,7 @@ const disconnectServer = ()=>{
                 <option value="All">All Users</option>
                 <option value="Lite">Lite Users</option>
                 <option value="Gold">Gold Users</option>
-                <option value="Premium">Premium Users</option>
+                <option value="Premuim">Premuim Users</option>
               </Form.Select>
             </div>
             {userLoading? <div style={userLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
@@ -230,7 +230,7 @@ const disconnectServer = ()=>{
                       ? "🐱"
                       : user.name === "Gold"
                       ? "🦁"
-                      : user.name === "Premium" && "👑"}
+                      : user.name === "Premuim" && "👑"}
                   </>{" "}
                   {user.firstname} {user.lastname}
                 </div>
