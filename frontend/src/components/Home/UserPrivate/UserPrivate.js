@@ -176,8 +176,10 @@ const timeOfMessage=(end)=>{
             ) : success ? (
               <div className="User-List">
                 {coachs?.map((user, i) => (
-                  <div
+                
+                  <>  <div
                     className="User-Name"
+                    style={header===`${user.firstname} ${user.lastname}`?{backgroundColor:"#A1E553",color:"#101010"}:{backgroundColor:"transparent"}}
                     onClick={() => {
                       setToId(userId);
                       setFrom(user.coach_id)
@@ -194,6 +196,7 @@ const timeOfMessage=(end)=>{
                   >
                     # {user.firstname} {user.lastname}
                   </div>
+                  <hr style={{width:"90%",margin:"10px"}}/></>
                 ))}
               </div>
             ) : (

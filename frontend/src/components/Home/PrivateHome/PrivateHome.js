@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import{useNavigate}from 'react-router-dom'
 import axios from "axios";
 import {setLogin,setUserId, setLogout } from '../../Redux/Reducers/Auth/index'
-
+import logo from "../../assets/user.png"
 import Button from "react-bootstrap/Button";
 
 const PrivateHome = () => {
@@ -66,8 +66,9 @@ const getAllCoachesByUserId =()=>{
     const filteredData = coaches?.filter((item) =>
        item.firstname.toLowerCase().includes(search.toLowerCase())
     );
+    console.log(filteredData);
     return (
-      <div>
+      <div className="page">
         <div className="ser">
           <input
           type="text"
@@ -77,14 +78,15 @@ const getAllCoachesByUserId =()=>{
           className="search_bar-input"
         />  
         </div>
+        <div style={{textAlign:"left",color:"#A1E533"}}><h5>My Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
         <div className="My-coachs">
           {myCoachs?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                  <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
+                <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:logo}/>
                   <div>
-                    <span>{item.firstname}</span>
-                    <span>{item.lastname}</span>
+                    <span>{item.firstname}  <span>{item.lastname}</span></span>
+                   
                     
                   </div>
                     
@@ -110,16 +112,17 @@ const getAllCoachesByUserId =()=>{
               </div>
             ))}
         </div>
+        <div style={{textAlign:"left",color:"#A1E533"}}><h5>All Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
         
         <div className="coachs">
 
             {filteredData?.map((item) => (
               <div className="coach_bar">
                 <div className="coach_info"> 
-                  <img style={{width:"64px", borderRadius:"32px"}} src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"/>
+                  <img style={{width:"64px",height:"64px", borderRadius:"32px"}} src={item.image?item.image:logo}/>
                   <div>
-                    <span>{item.firstname}</span>
-                    <span>{item.lastname}</span>
+                    <span>{item.firstname} <span>{item.lastname}</span></span>
+                    
                     
                   </div>
                     

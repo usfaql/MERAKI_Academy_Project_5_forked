@@ -261,8 +261,9 @@ const getAllUserByCoachId=(req,res)=>{
 const getAllCoachesByUserId=(req,res)=>{
   const user_id=req.token.userId
   const value=[user_id]
-  const query=`SELECT room_user.* , users.firstname ,users.lastname FROM room_user 
-  JOIN users ON room_user.coach_id=users.id
+  const query=`SELECT room_user.* , users.firstname ,users.lastname,user_info.image FROM  users
+  JOIN room_user ON room_user.coach_id=users.id
+  JOIN user_info ON user_info.user_id=users.id
   WHERE room_user.user_id=$1 AND room_user.is_deleted =0`
   pool.query(query,value).then((result)=>{
     if(result.rows.length){
@@ -288,7 +289,10 @@ const getAllCoachesByUserId=(req,res)=>{
 
 const filterCoachs = (req,res)=>{
   const {userId} = req.token;
-  const query1 = `SELECT * FROM users WHERE private = 1`
+  const query1 = `SELECT users.*,user_info.image
+  FROM users
+  JOIN user_info ON user_info.user_id=users.id
+  WHERE private = 1`
   const query2 = `SELECT room_user.* , users.firstname ,users.lastname FROM room_user 
   JOIN users ON room_user.coach_id=users.id
   WHERE room_user.user_id=$1 AND room_user.is_deleted =0`;
