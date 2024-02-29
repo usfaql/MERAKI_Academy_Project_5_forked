@@ -13,12 +13,14 @@ const UserPrivate = () => {
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
-  const { token, userId } = useSelector((state) => {
+  const { token, userId,theme } = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
+      theme : state.auth.theme
     };
   });
+  const [onTheme, setOnTheme] = useState(false);
   const [image, setImage] = useState("");
   const [start, setStart] = useState(false);
   const [show, setshow] = useState(true);
@@ -39,7 +41,13 @@ const UserPrivate = () => {
   const [imageMessage , setImageMessage] = useState(null);
   const [messageLoading,setMessageLoading] = useState(false)
   const fileInputRef = useRef(null);
-
+  useEffect(()=>{
+    if(theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[theme]);
   useEffect(()=>{
     
     if (revarse.current) {
@@ -178,7 +186,6 @@ const file = e.target.files[0];
   }).then((result)=> result.json()).then((data) => {
       setMessageLoading(false);
       setImageMessage(data.url);
-      
   }).catch((err) => {
   console.log(err);
   });
@@ -208,7 +215,8 @@ const handleImageClick = () => {
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ) : success ? (
@@ -217,7 +225,7 @@ const handleImageClick = () => {
                 
                   <>  <div
                     className="User-Name"
-                    style={header===`${user.firstname} ${user.lastname}`?{backgroundColor:"#A1E553",color:"#101010"}:{backgroundColor:"transparent"}}
+                    style={header===`${user.firstname} ${user.lastname}`?!onTheme?{backgroundColor:"#A1E553",color:"#101010"}:{backgroundColor:"#E333E5",color:"#101010"}:{backgroundColor:"transparent"}}
                     onClick={() => {
                       setToId(userId);
                       setFrom(user.coach_id)
@@ -329,7 +337,7 @@ const handleImageClick = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
                 height="30"
-                fill=" #A1E553"
+                fill={!onTheme ? "#A1E553" : "#E333E5"}
                 class="bi bi-arrow-left"
                 viewBox="0 0 16 16"
                 className="show1"
@@ -350,7 +358,8 @@ const handleImageClick = () => {
                 )}
               </svg>
             </div>
-            {header ? header : <span>Select Coach To Start Chating</span>}
+            {header ? header : <span  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}}>Select Coach To Start Chating</span>}
           </div>
           {start && (
             <>
@@ -448,16 +457,25 @@ const handleImageClick = () => {
                       onChange={uploadImage}/>
                   </div>
                   <div className="right">
+                  {!messageLoading ? 
+                    <Button style={!onTheme ? {backgroundColor : "#A1E553"}:{backgroundColor :"#E333E5"}}
+                    onClick={() => {
+                      if (inputMessage) {
+                        setImageMessage("")
+                        setInputMessage("");
+                        sendMessage();
+                      }
+                    }}
+                  >
+                    Send
+                  </Button>
+                    : 
                     <Button
-                      onClick={() => {
-                        if (inputMessage) {
-                          setInputMessage("");
-                          sendMessage();
-                        }
-                      }}
+                      style={!onTheme ? {cursor:"not-allowed",backgroundColor : "#A1E553"} : {backgroundColor :"#E333E5", cursor:"not-allowed"}}
                     >
-                      Send
+                      Loading...
                     </Button>
+                    }
                   </div>
                 </div>
               </div>

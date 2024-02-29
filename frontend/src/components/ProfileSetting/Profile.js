@@ -23,15 +23,23 @@ const Profile = () => {
   const [height, setHeight] = useState("");
   const [status, setStatus] = useState(false);
   const [goal, setGoal] = useState('');
-
+  const [onTheme, setOnTheme] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const state = useSelector((state) => {
     return {
       userId: state.auth.userId,
       token: state.auth.token,
+      theme : state.auth.theme
     };
   });
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
   useEffect(() => {
     console.log("test");
     getUserInfoByUserId();
@@ -166,7 +174,8 @@ const Profile = () => {
 
        
 
-      <Button  style={{backgroundColor :"#A1E533",border:"0", color:"black",fontWeight:"bold"}} type="submit" onClick={(e)=>{
+      <Button style={
+          !onTheme?{backgroundColor:"#A1E335",border:"0", color:"black",fontWeight:"bold"}:{backgroundColor:"#E333E5",border:"0", color:"black",fontWeight:"bold"}}  type="submit" onClick={(e)=>{
         e.preventDefault()
         updateUserInfo()
       }}>

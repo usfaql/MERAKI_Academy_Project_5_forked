@@ -15,8 +15,10 @@ function PaymentPlan() {
     const [cVV, setCVV] = useState(null);
     const [dataPlanForInvoice, setDataPlanForInvoice] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [onTheme, setOnTheme] = useState(false);
     const state = useSelector((state)=>{
         return{
+            theme : state.auth.theme,
         userId : state.auth.userId,
         token : state.auth.token
         }
@@ -24,6 +26,14 @@ function PaymentPlan() {
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
+
+    useEffect(()=>{
+        if(state.theme === "female"){
+          setOnTheme(true);
+        }else{
+          setOnTheme(false);
+        }
+      },[state.theme]);
     useEffect(()=>{
         axios.get(`http://localhost:5000/gyms/plan/${planid}/select`, config).then((result) => {
             setDataPlanForInvoice(result.data.plan);
@@ -108,7 +118,8 @@ function PaymentPlan() {
                     }}/>
                 </div>
                 </div>
-                <button className='pay-btn' onClick={handlePay}>Pay Now</button>
+                <button className='pay-btn' style={
+          !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}} onClick={handlePay}>Pay Now</button>
             </div>
             
         </div>

@@ -406,10 +406,13 @@ function GymGroup() {
                             onChange={uploadImage}/>
                         </div>
                         {messageLoading ? 
-                        <button className='btn-gym-chat' style={{cursor:"not-allowed"}}>Loading...</button>
+                        <button className='btn-gym-chat' style={
+                            !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5",cursor:"not-allowed"}}>Loading...</button>
                         :
-                        <button className='btn-gym-chat' onClick={()=>{
+                        <button className='btn-gym-chat'style={
+                            !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}}  onClick={()=>{
                             if(message){
+                                setImageMessage("")
                                 sendMessage();
                                 setMessage("");
                                 

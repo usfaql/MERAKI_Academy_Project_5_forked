@@ -178,7 +178,6 @@ const Settings = () => {
           <div className="toggle">
             <Form.Check
               className="form-check-input form-switch"
-              // style={{backgroundColor:"green"}}
               checked={activePrivate === "1" ? true : false}
               onChange={(e) => {
                 console.log(e.target.checked);

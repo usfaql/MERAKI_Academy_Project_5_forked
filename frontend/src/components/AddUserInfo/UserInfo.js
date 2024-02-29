@@ -21,12 +21,21 @@ const UserInfo  = () => {
     const [success, setSuccess] = useState(null);
     const [message, setMessage] = useState("")
     const [goal, setGoal] = useState('')
+    const [onTheme, setOnTheme] = useState(false);
   const state = useSelector((state) => {
     return {
       userId: state.auth.userId,
       token: state.auth.token,
+      theme : state.auth.theme
     };
   });
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
   const uploadImage = async(e) => {
     const file = e.target.files[0];
       const formData = new FormData();
@@ -132,7 +141,8 @@ setWeight(e.target.value)
           />
         </div>
         <div className="submit-Btn">
-          <Button onClick={()=>{
+          <Button style={
+          !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}} onClick={()=>{
             createUserInfo()
           }} >Next</Button>
         </div></div>
