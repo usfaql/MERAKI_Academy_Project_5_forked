@@ -3,6 +3,8 @@ import './style.css'
 import { useDispatch, useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import { setLogout } from '../Redux/Reducers/Auth';
+import logo from "../assets/nitri.png"
+import logo2 from "../assets/nitripink.png"
 import axios from 'axios';
 function NavBar() {
   const navigate = useNavigate();
@@ -44,7 +46,10 @@ function NavBar() {
   
   return (
     <div className='nav-bar' style={!onTheme ? {borderBottom:"1px solid #A1E533"} : {borderBottom:"1px solid #e333e5"}}>
-        <div>
+        <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+          <img style={{width:"64px",height:"64px",cursor:"pointer"}} src={!onTheme?logo:logo2} onClick={()=>{
+            navigate('/')
+          }}/>
             <h2 style={{fontWeight:"bold",margin:"0"}}><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <span style={!onTheme?{color:"#A1E533"} : {color:"#e333e5"}}>FIT</span></a></h2>
         </div>
         <div style={{ display:"flex", justifyContent:"center"}}>

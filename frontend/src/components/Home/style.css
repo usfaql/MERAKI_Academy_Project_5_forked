@@ -1,6 +1,6 @@
 .contener-home{
     background-color: #101010;
-    min-height: calc(100vh - 69px);
+    min-height: calc(100vh - 85px);
     user-select: none;
 }
 .contener-navbar-home{
