@@ -6,10 +6,10 @@ function HomeLanding() {
   const navigate=useNavigate()
   return (
 
-    <div className='home-landing'>
+    <div id='home' className='home-landing'>
       <div className='container-title-hone-landing'>
         <p className='title-home-landing'>Build your <a style={{color :"#A1E533"}}>BODY</a> and health with top trainers for ultimate fitness and <a style={{color :"#A1E533"}}>STRENGTH</a>!</p>
-        <p style={{textAlign:"start", fontSize:"16px", marginTop:"0"}}>sport is part of health, so be diligent in exercising so that the body becomes stronger and healthier to improve health and keep away from injury </p>
+        <p style={{textAlign:"start", fontSize:"16px", marginTop:"0"}}>Sport is part of health, So be diligent in exercising so that the body becomes stronger and healthier to improve health and keep away from injury</p>
         <button className='join-now' onClick={()=>{
           navigate("/register")
         }}>Join Now</button>

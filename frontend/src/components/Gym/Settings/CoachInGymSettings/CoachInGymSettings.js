@@ -11,10 +11,13 @@ function CoachInGymSettings() {
 
   console.log(coachsInGym);
   const {gymid} = useParams();
+
+  const [onTheme, setOnTheme] = useState(false);
   const state = useSelector((state)=>{
     return{
     userId : state.auth.userId,
-    token : state.auth.token
+    token : state.auth.token,
+    theme : state.auth.theme,
     }
   })
 
@@ -29,7 +32,13 @@ function CoachInGymSettings() {
       
     });
   },[]);
-
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
   const viewUserInList = () => {
     const userArray = [];
   
@@ -41,7 +50,7 @@ function CoachInGymSettings() {
             <img style={{ width: "52px", height: "52px", borderRadius: "32px" }} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png' alt={`Avatar ${i + 1}`} />
             <h5>{coachsInGym[i].firstname} {coachsInGym[i].lastname}</h5>
           </div>
-         <button className='btn-user' onClick={()=>{
+         <button className='btn-user' style={!onTheme ? {backgroundColor:"#A1E553"} : {backgroundColor:"#E333E5"}} onClick={()=>{
           setIndexUserInArr(i);
           handleShow()
          }}>Down To User</button>

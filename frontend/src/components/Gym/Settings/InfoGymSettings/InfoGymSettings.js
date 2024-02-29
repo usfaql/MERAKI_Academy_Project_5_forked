@@ -36,13 +36,14 @@ function InfoGymSettings() {
     const fileInputRef = useRef(null);
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
-
+    const [onTheme, setOnTheme] = useState(false);
 
 
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
-        token : state.auth.token
+        token : state.auth.token,
+        theme : state.auth.theme
         }
       })
 
@@ -72,7 +73,14 @@ function InfoGymSettings() {
             console.log(err);
         });
     },[])
-
+    
+    useEffect(()=>{
+        if(state.theme === "female"){
+          setOnTheme(true);
+        }else{
+          setOnTheme(false);
+        }
+      },[state.theme]);
     useEffect(() => {
       if (showAlert) {
         setTimeout(() => {
@@ -187,7 +195,7 @@ function InfoGymSettings() {
         </div>
 
         <div style={{height:"5%"}}>
-            <button style={{width:"50%", border:"0", backgroundColor:"#A1E533", borderRadius:"4px", padding:"4px"}} onClick={()=>{
+            <button style={!onTheme ? {width:"50%", border:"0", backgroundColor:"#A1E533", borderRadius:"4px", padding:"4px"} : {width:"50%", border:"0", backgroundColor:"#E333E5", borderRadius:"4px", padding:"4px"}} onClick={()=>{
                 if(nameGym || descriptionGym || imageUrl){
                 axios.put(`http://localhost:5000/gyms/${gymid}`, {name : nameGym, description : descriptionGym, image : imageUrl}, config).then((result) => {
                     setNameGym(null);

@@ -41,10 +41,19 @@ const [socket, setSocket] = useState(null);
 const [allMessages, setAllMessages] = useState([]);
 
 const [imageMessage , setImageMessage] = useState(null);
-
+const [onTheme, setOnTheme] = useState(false);
 const [messageLoading,setMessageLoading] = useState(false)
 const fileInputRef = useRef(null);
 
+const state = useSelector((state)=>{
+  return{
+      token : state.auth.token,
+      isLoggedIn : state.auth.isLoggedIn,
+      role:state.auth.role,
+      theme : state.auth.theme,
+      userId : state.auth.userId
+    }
+  });
 useEffect(()=>{
     
   if (revarse.current) {
@@ -87,6 +96,16 @@ useEffect(()=>{
     console.log(error);
   })
 },[toId])
+
+useEffect(()=>{
+  if(state.theme === "female"){
+    setOnTheme(true);
+  }else{
+    setOnTheme(false);
+  }
+},[state.theme]);
+
+
 useEffect(()=>{
   axios.get(`http://localhost:5000/users/info/${userId}`,{headers:{
     Authorization:`Bearer ${token}`
@@ -248,14 +267,14 @@ const disconnectServer = ()=>{
               </Form.Select>
             </div>
             {userLoading? <div style={userLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
-                <Spinner animation="border" style={{color:"#A1E533"}}  />
+                <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#E333E5"}}   />
                 <label>Loading...</label>
                 </div>: success ? (
               <div className="User-List">
                 {filtered.map((user, i) => (
                   <><div
                   className="User-Name"
-                  style={header===`${user.firstname} ${user.lastname}`?{backgroundColor:"#A1E553",color:"#101010"}:{backgroundColor:"transparent"}}
+                  style={header===`${user.firstname} ${user.lastname}`? !onTheme ? {backgroundColor:"#A1E553",color:"#101010"} : {backgroundColor:"#E333E5",color:"#101010"}:{backgroundColor:"transparent"}}
                   onClick={() => {
                     setToId(user.user_id)
                     setSocket(socketInit({user_id : userId, token :token, room :user.user_id }));
@@ -350,7 +369,7 @@ const disconnectServer = ()=>{
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
                 height="30"
-                fill=" #A1E553"
+                fill={!onTheme ? "#A1E553" : "#E333E5"}
                 class="bi bi-arrow-left"
                 viewBox="0 0 16 16"
                 className="show1"
@@ -371,7 +390,7 @@ const disconnectServer = ()=>{
                 )}
               </svg>
             </div>
-            {header ? header : <span>Select Coach To Start Chating</span>}
+            {header ? header : <span style={!onTheme ? {color:"#A1E553"} : {color:"#E333E5"}}>Select Coach To Start Chating</span>}
           </div>
           {start&&<> <div ref={revarse} className="message">
           {allMessages?.map((ele, i) => (
@@ -391,7 +410,8 @@ const disconnectServer = ()=>{
     marginBottom:"10px",
     borderTop:"1px solid #303030",
     paddingTop:"10px",
-    paddingLeft:"10px"
+    paddingLeft:"10px",
+    gap: "10px",
   }}
 >
   <img
@@ -403,38 +423,33 @@ const disconnectServer = ()=>{
     }}
   />
   <div style={{ width: "90%" }}>
-    <h6
+    <h5
       style={{
         textAlign: "start",
-        color: "gray",
-        fontSize: "small",
-        paddingLeft: "5px",
         margin:"0"
       }}
     >
       {ele.name}
-    </h6>
+    </h5>
+    <h6  style={{
+        textAlign: "start",
+        color: "gray",
+        fontSize: "small",
+        margin:"0"
+      }}>{timeOfMessage(ele.created_at)}</h6>
     <div
       style={{
         width: "90%",
         borderRadius: "4px",
         textAlign: "start",
-        padding: "5px 10px",
-        gap:"10px",
+        padding: "5px 0px",
         display:"flex",
         flexDirection:"column"
       }}
     >
-      <div>{ele.message}</div>
+      <div style={{marginBottom:"5px"}}>{ele.message}</div>
       {ele.image_message && <img style={{width:"50%",borderRadius:"8px", marginTop:"4px"}} src={ele.image_message}/>}
     </div>
-    <h6  style={{
-        textAlign: "start",
-        color: "gray",
-        fontSize: "small",
-        paddingLeft: "5px",
-        margin:"0"
-      }}>{timeOfMessage(ele.created_at)}</h6>
   </div>
 </div>
 ))}
@@ -468,7 +483,7 @@ const disconnectServer = ()=>{
                   </div>
                   <div className="right">
                     {!messageLoading ? 
-                    <Button
+                    <Button style={!onTheme ? {backgroundColor : "#A1E553"}:{backgroundColor :"#E333E5"}}
                     onClick={() => {
                       if (inputMessage) {
                         setInputMessage("");
@@ -480,7 +495,7 @@ const disconnectServer = ()=>{
                   </Button>
                     : 
                     <Button
-                      style={{cursor:"not-allowed"}}
+                      style={!onTheme ? {cursor:"not-allowed",backgroundColor : "#A1E553"} : {backgroundColor :"#E333E5", cursor:"not-allowed"}}
                     >
                       Loading...
                     </Button>
