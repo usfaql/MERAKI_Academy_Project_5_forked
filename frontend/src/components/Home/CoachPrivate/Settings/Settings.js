@@ -13,12 +13,13 @@ import CloseButton from 'react-bootstrap/CloseButton';
 
 const Settings = () => {
   const dispatch = useDispatch();
-  const { token, userId, activePrivate, plans } = useSelector((state) => {
+  const { token, userId, activePrivate, plans , theme} = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
       activePrivate: state.auth.activePrivate,
       plans: state.coachPrivate.plans,
+      theme : state.auth.theme
     };
   });
   const [success, setSuccess] = useState(null);
@@ -29,6 +30,15 @@ const Settings = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
   const [numOfMonth, setNumOfMonth] = useState(null);
+  const [onTheme, setOnTheme] = useState(false);
+  useEffect(()=>{
+    if(theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[theme]);
+
   const getAllPlans = () => {
     axios
       .get(`http://localhost:5000/coachs/plan/${userId}`, {
@@ -246,8 +256,8 @@ const Settings = () => {
                    <p style={{ fontSize: "x-large" }}>$</p>
                  </div>
                </div> 
-               <div className="Save-Btn">
-                   <Button
+               <div className="Save-Btn" >
+                   <Button style={!onTheme ? {backgroundColor:"#A1E335"} : {backgroundColor:"#E333E5"}}
                      disabled={abeled}
                      onClick={() => {
                        createNewPlan("Lite");
@@ -324,8 +334,8 @@ const Settings = () => {
                   <p style={{ fontSize: "x-large" }}>$</p>
                 </div>
               </div> 
-              <div className="Save-Btn">
-                  <Button
+              <div className="Save-Btn" >
+                  <Button style={!onTheme ? {backgroundColor:"#A1E335"} : {backgroundColor:"#E333E5"}}
                     disabled={abeled}
                     onClick={() => {
                       createNewPlan("Gold");
@@ -402,8 +412,8 @@ const Settings = () => {
                   <p style={{ fontSize: "x-large" }}>$</p>
                 </div>
               </div> 
-              <div className="Save-Btn">
-                  <Button
+              <div className="Save-Btn" >
+                  <Button style={!onTheme ? {backgroundColor:"#A1E335"} : {backgroundColor:"#E333E5"}}
                     disabled={abeled}
                     onClick={() => {
                       createNewPlan("Premuim");
@@ -503,7 +513,7 @@ const Settings = () => {
                   </div>
                 </div>
                   <div className="Save-Btn">
-                    <Button
+                    <Button style={!onTheme ? {backgroundColor:"#A1E335"} : {backgroundColor:"#E333E5"}}
                       disabled={(plans[i]?.name===ele ?(description===plans[i].description || numOfMonth===plans[i].numOfMonth || price===plans[i].price):false)}
                       onClick={() => {
                         updatePlan(ele);

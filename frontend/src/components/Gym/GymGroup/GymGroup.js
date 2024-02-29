@@ -216,13 +216,17 @@ function GymGroup() {
                 <div style={ i === 0 ? {display:"flex", width:"100%" , gap:"10px"} : {display:"flex", width:"100%" , gap:"1px",borderTop:"1px solid #202020", marginTop:"10px", paddingTop:"10px"}}>
                     <img src={`${allMessages[i].image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
                     <div style={{width:"90%"}}>
-                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px", margin:"0"}}>{name[0] + " " + name[1][0].toUpperCase()}.</h6>
-                    <div style={{ width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}> 
+                    <div>
+                    <h5 style={{textAlign:"start" , marginBottom:"0"}}>{infoGym.name}</h5>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px", marginBottom:"0"}}>{dateNow}</h6>
+                    </div>
+                    
+                    <div style={{ width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 0px"}}> 
                     <div style={{marginBottom:"5px"}}>{allMessages[i].message}</div>
                     {allMessages[i].image_message && <img style={{width:"50%", borderRadius:"8px", marginTop:"4px"}} src={allMessages[i].image_message}/>}
                     </div>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px", margin:"0"}}>{name[0] + " " + name[1][0].toUpperCase()}.</h6>
                     
-                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{dateNow}</h6>
                     </div>
                 </div>
             )

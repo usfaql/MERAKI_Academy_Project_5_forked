@@ -9,11 +9,12 @@ function UserInGymSettings() {
   const {gymid} = useParams();
   const [userInGym, setUserInGym] = useState(null);
   const [indexUserInArr,setIndexUserInArr] = useState(null);
-
+  const [onTheme, setOnTheme] = useState(false);
   const state = useSelector((state)=>{
     return{
     userId : state.auth.userId,
-    token : state.auth.token
+    token : state.auth.token,
+    theme : state.auth.theme
     }
   })
 
@@ -28,7 +29,13 @@ function UserInGymSettings() {
       console.log(err);
     });
   },[]);
-
+  useEffect(()=>{
+    if(state.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[state.theme]);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -56,7 +63,7 @@ function UserInGymSettings() {
             <span style={{color:"rgb(130,130,130,0.8)"}}>End After {days} Days</span>
           </div>
           <div>
-            <button className='btn-user' onClick={()=>{
+            <button className='btn-user' style={!onTheme ? {backgroundColor:"#A1E553"} : {backgroundColor:"#E333E5"}} onClick={()=>{
               setIndexUserInArr(i);
               handleShow()
             }}>Up to Coach</button>
