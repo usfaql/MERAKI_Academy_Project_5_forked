@@ -67,10 +67,18 @@ function NavBar() {
             </ul>
             :
             <ul className="navbar-lu">
-                <li className='nav-map'>Home</li>
-                <li className='nav-map'>Service</li>
-                <li className='nav-map'>About</li>
-                <li className='nav-map end'>Contact</li>
+                <li className='nav-map' onClick={()=>{
+                  navigate('/')
+                }}>Home</li>
+                <li className='nav-map' onClick={()=>{
+                  navigate('/')
+                }} >Service</li>
+                <li className='nav-map' onClick={()=>{
+                  navigate('/')
+                }}>About</li>
+                <li className='nav-map end'onClick={()=>{
+                  navigate('/')
+                }} >Contact</li>
             </ul>
           }
         </div>
