@@ -82,11 +82,8 @@ Now app ready to use
 - [Express JS](https://expressjs.com/) - Server Framework
 - [React JS](https://https://reactjs.org/) - Web Framework
 - [Node JS](https://nodejs.org/en/) - Server Environment
+- [PostgreSQL](https://www.elephantsql.com/) - Database
 
-## User Story <a name = "#user_story"></a>
-
-Your trello board link
-<a href=''>Trello</a>
 
 ## Data Flow <a name = "#data_flow"></a>
 
