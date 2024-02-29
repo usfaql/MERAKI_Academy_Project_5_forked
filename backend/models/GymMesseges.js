@@ -9,6 +9,7 @@ const messagesModel = new mongoose.Schema({
     name : {type : String},
     image : {type : String},
     message : { type: String },
+    image_message : {type : String, default : null},
     created_at : { type: Date, default: Date.now }
     }]
 })

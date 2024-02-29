@@ -11,12 +11,17 @@ function GymHome() {
     const navigate = useNavigate();
     const [myGym, setMyGym] = useState([]);
     const [ownerGym, setOwnerGym] = useState(null);
+    const userInfo = localStorage.getItem("userInfo");
+    const covertUserInfoToJson = JSON.parse(userInfo);
+    
     const state = useSelector((state)=>{
       return{
       userId : state.auth.userId,
-      token : state.auth.token
+      token : state.auth.token,
+      role : state.auth.role
       }
     })
+
     const config = {
       headers: { Authorization: `Bearer ${state.token}` }
     }
@@ -29,6 +34,7 @@ function GymHome() {
           console.log(result);
           console.log("result", result);
           setOwnerGym(result.data.result); 
+          console.log("State => ", state.role);
         }).catch((err) => {
           console.log(err);
         });
@@ -66,6 +72,7 @@ function GymHome() {
       );
       })
       }
+
       return <Row xs={1} md={5} className="g-2">{gymBoxes}</Row>
     };
 
@@ -106,21 +113,26 @@ function GymHome() {
       );
       }
       }
+
       return <Row xs={1} md={5} className="g-2">{gymOwner}</Row>
     };
 
 
   return (
     <div className='contenier-gyms-g'>
-      <div>
-      <h5 style={{textAlign:"start", fontWeight:"bold", backgroundColor:"#303030", padding:"10px 10px"}}>Gym Created</h5>
-      {generateGymOwner()}
-      </div>
-      <hr/>
+      { covertUserInfoToJson.role === 3 && 
+        <>
+        <div>
+        <h5 style={{textAlign:"start", fontWeight:"bold", backgroundColor:"#303030", padding:"10px 10px"}}>Gym Created</h5>
+        {generateGymOwner()}
+        </div>
+        </>
+      }
+      
+      
       <div>
         <h5 style={{textAlign:"start", fontWeight:"bold", backgroundColor:"#303030", padding:"10px 10px"}}>Gym Joined</h5>
-
-        {generateGymBox()}
+        {myGym.length ?  generateGymBox() : <h6 style={{marginTop:"10px", color:"#808080"}}>You are not joined to any gym, please select all gym and choose one</h6>}
       </div>
       
     </div>
