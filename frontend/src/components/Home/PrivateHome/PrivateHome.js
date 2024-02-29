@@ -21,7 +21,14 @@ const PrivateHome = () => {
   const [message, setMessage] = useState("");
   const [userLoading, setUserLoading] = useState(true);
   const [coachLoading, setCoachLoading] = useState(true);
-  
+  const [onTheme, setOnTheme] = useState(false);
+  useEffect(()=>{
+    if(authState.theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[authState.theme]);
   useEffect(() => {
     getAllCoaches();
     getAllCoachesByUserId()
@@ -89,7 +96,9 @@ const getAllCoachesByUserId =()=>{
           className="search_bar-input"
         />  
         </div>
-        <div style={{textAlign:"left",color:"#A1E533"}}><h5>My Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
+        <div  style={
+          !onTheme?{color:"#A1E335",textAlign:"left"}:{color:"#E333E5",textAlign:"left"}}><h5>My Coachs</h5><hr style={
+            !onTheme?{color:"#A1E335",width:"100%",margin:"0"}:{color:"#E333E5",width:"100%",margin:"0"}}/></div>
         {userLoading ? (
               <div
                 style={
@@ -104,7 +113,8 @@ const getAllCoachesByUserId =()=>{
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ) :<div className="My-coachs">
@@ -127,6 +137,8 @@ const getAllCoachesByUserId =()=>{
                 <div className="coach_btn">
                  
                   <button  
+                   style={
+                    !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}}
                   onClick={()=>{
                     navigate("/user/private")
                   }}
@@ -142,7 +154,9 @@ const getAllCoachesByUserId =()=>{
             ))}
         </div>}
         
-        <div style={{textAlign:"left",color:"#A1E533"}}><h5>All Coachs</h5><hr style={{width:"100%",color:"#A1E533",margin:"0"}}/></div>
+        <div style={
+          !onTheme?{color:"#A1E335",textAlign:"left"}:{color:"#E333E5",textAlign:"left"}}><h5>All Coachs</h5><hr  style={
+            !onTheme?{color:"#A1E335",width:"100%",margin:"0"}:{color:"#E333E5",width:"100%",margin:"0"}} /></div>
         {coachLoading ? (
               <div
                 style={
@@ -157,7 +171,8 @@ const getAllCoachesByUserId =()=>{
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ):  <div className="coachs">
@@ -179,8 +194,11 @@ const getAllCoachesByUserId =()=>{
                 
                 <div className="coach_btn">
                   <button 
+                   style={
+                    !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}}
                   onClick={()=>{
                     navigate(`/${item.id}/private/plan`)
+                    
                   }}
                   className="join-private-btn">
                     JOIN

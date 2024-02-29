@@ -28,14 +28,21 @@ const Recipe = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedRecipes, setSelectedRecipes] = useState([]);
   const [visibleItems, setVisibleItems] = useState(15);
-
-  const { token } = useSelector((state) => {
+  const [onTheme, setOnTheme] = useState(false);
+  const { token,theme } = useSelector((state) => {
     return {
       token: state.auth.token,
       userId: state.auth.userId,
+      theme : state.auth.theme
     };
   });
-
+  useEffect(()=>{
+    if(theme === "female"){
+      setOnTheme(true);
+    }else{
+      setOnTheme(false);
+    }
+  },[theme]);
   const fetchRecipes = (query) => {
     axios
       .get(
@@ -100,7 +107,6 @@ const Recipe = () => {
             }}
             onClick={() => {
               const uri = recipe.recipe.uri.split("_");
-              // console.log();
               navigate(`/recipe/${uri[1]}/ingredients`);
             }}
           >
@@ -147,7 +153,6 @@ const Recipe = () => {
             }}
             onClick={() => {
               const uri = recipe.recipe.uri.split("_");
-              // console.log();
               navigate(`/recipe/${uri[1]}/ingredients`);
             }}
           >
@@ -308,7 +313,8 @@ const Recipe = () => {
             
         </div>
 
-        {!calorieRange && <p onClick={handleShowMore} className="show">Show More....</p>}
+        {!calorieRange && <p onClick={handleShowMore} style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} className="show">Show More....</p>}
         
     </div>
   );

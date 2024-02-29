@@ -486,6 +486,7 @@ const disconnectServer = ()=>{
                     <Button style={!onTheme ? {backgroundColor : "#A1E553"}:{backgroundColor :"#E333E5"}}
                     onClick={() => {
                       if (inputMessage) {
+                        setImageMessage("")
                         setInputMessage("");
                         sendMessage();
                       }

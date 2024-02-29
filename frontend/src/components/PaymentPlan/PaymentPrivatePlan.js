@@ -14,15 +14,24 @@ const PaymentPrivatePlan = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [success, setSuccess] = useState(null)
     const [message, setMessage] = useState("")
+    const [onTheme, setOnTheme] = useState(false);
     const state = useSelector((state)=>{
         return{
         userId : state.auth.userId,
-        token : state.auth.token
+        token : state.auth.token,
+        theme : state.auth.theme
         }
       })
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
+    useEffect(()=>{
+        if(state.theme === "female"){
+          setOnTheme(true);
+        }else{
+          setOnTheme(false);
+        }
+      },[state.theme]);
     useEffect(()=>{
         axios.get(`http://localhost:5000/coachs/plans/plan/${planid}`, config).then((result) => {
             setDataPlanForInvoice(result.data.plan);
@@ -107,7 +116,8 @@ const PaymentPrivatePlan = () => {
                     }}/>
                 </div>
                 </div>
-                <button className='pay-btn' onClick={handlePay}>Pay Now</button>
+                <button className='pay-btn'  style={
+          !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}} onClick={handlePay}>Pay Now</button>
             </div>
             <div
         className={

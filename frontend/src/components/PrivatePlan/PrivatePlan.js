@@ -14,18 +14,26 @@ const PrivatePlan = () => {
     const [planLoader, setPlanLoader] = useState(true)
     const [nameLoader, setNameLoader] = useState(true)
     const [picLoader, setPicLoader] = useState(true)
+    const [onTheme, setOnTheme] = useState(false);
     const{coachid}=useParams()
-    const { token, userId } = useSelector((state) => {
+    const { token, userId,theme } = useSelector((state) => {
         return {
           token: state.auth.token,
           userId: state.auth.userId,
+          theme : state.auth.theme
         };
       });
       useEffect(() => {
         getAllPlans()
         getCoachInfo()
       }, [])
-      
+      useEffect(()=>{
+        if(theme === "female"){
+          setOnTheme(true);
+        }else{
+          setOnTheme(false);
+        }
+      },[theme]);
     const getAllPlans = () => {
       setPlanLoader(true)
         axios
@@ -86,7 +94,8 @@ const getCoachInfo=()=>{
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ): <div className='continer-image-coach'>
@@ -106,7 +115,8 @@ const getCoachInfo=()=>{
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ):<div className='name-coach'>
@@ -130,7 +140,8 @@ const getCoachInfo=()=>{
                     : { display: "none" }
                 }
               >
-                <Spinner animation="border" style={{ color: "#A1E533" }} />
+                <Spinner animation="border"  style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}} />
                 <label>Loading...</label>
               </div>
             ) :<div className='container-plans'>
@@ -138,7 +149,8 @@ const getCoachInfo=()=>{
                <div className='plan'>
                <div className='name-price-month-plan'>
                    <h4 className='name-plan'>{ plan.name}</h4>
-                   <h2 className='price-plan'>${plan.price}</h2>
+                   <h2 className='price-plan' style={
+          !onTheme?{color:"#A1E335"}:{color:"#E333E5"}}>${plan.price}</h2>
                    <h5 className='month-plan'>{`per ${plan.numofmonth} Month`}</h5>
                </div>
    
@@ -146,7 +158,8 @@ const getCoachInfo=()=>{
                    <p>{plan.description}</p>
                </div>
                <div className='select-plan'>
-                   <button className='select-btn' onClick={()=>{
+                   <button className='select-btn'  style={
+          !onTheme?{backgroundColor:"#A1E335"}:{backgroundColor:"#E333E5"}} onClick={()=>{
                        navigate(`/checkout/private/${plan.coach_id}/${plan.id}`)
                    }}>select Plan</button>
                </div>
