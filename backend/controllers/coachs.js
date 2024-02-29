@@ -142,7 +142,6 @@ const AddUserToPrivate = (req, res) => {
     const query_1=`SELECT user_id FROM room_user 
     WHERE user_id=$1 AND plan_id=$2`
     pool.query(query_1,[user_id, plan_id]).then((result)=>{
-      console.log(result.rows.length);
   if(result.rows.length){
     res.status(201).json({
       success : false,
@@ -310,11 +309,8 @@ const filterCoachs = (req,res)=>{
       pool.query(query2, [userId]).then((result2) => {
         // result = result2.rows;
         result2.rows.map((ele,i)=>{
-          console.log(ele);
              coachs.push(ele.coach_id)})
-             console.log(coachs)
       finalCoach= result1.filter((ele,i)=>{
-        console.log(ele);
        return !coachs.includes(ele.id)
        
       })
@@ -323,9 +319,6 @@ const filterCoachs = (req,res)=>{
           message:"All Coachs Opened Private",
           coachs:finalCoach
         })
-     
-     
-     console.log(finalCoach);
       }).catch((err) => {
         res.status(500).json({
           success:true,

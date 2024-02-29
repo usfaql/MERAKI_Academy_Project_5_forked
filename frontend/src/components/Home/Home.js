@@ -72,7 +72,7 @@ useEffect(()=>{
         <ul className='contener-navbar-home'>
             <li className={selected === "gym" ? "nav-home gyms-selected": "nav-home gyms"} style={selected === 'gym' ? !onTheme ? {backgroundColor:"#A1E553"}: {backgroundColor:"#E333E5"} : {backgroundColor:"#404040"}}  onClick={()=>{
               setSelected("gym")
-            }}>Gyms</li>
+            }}>My Gyms</li>
             <li className={selected === "private" ? "nav-home private-selected" : "nav-home private"} style={selected === 'private' ? !onTheme ? {backgroundColor:"#A1E553"}: {backgroundColor:"#E333E5"} : {backgroundColor:"#404040"}} onClick={()=>{
               setSelected("private")
             }}>Private</li>

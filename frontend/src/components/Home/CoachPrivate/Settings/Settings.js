@@ -421,7 +421,7 @@ const Settings = () => {
                 deletePlan(ele)
               }}
               title="Remove"
-              style={{backgroundColor:"white" ,alignSelf:"end"}}
+              style={{backgroundColor:"#464646" ,alignSelf:"end"}}
                />
               <div className="Plan-Title">{ele} Plan</div>
               <div className="inputs">

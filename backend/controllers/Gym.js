@@ -7,7 +7,6 @@ const createGym = (req,res)=>{
     const image = "http://res.cloudinary.com/dvztsuedi/image/upload/v1708816631/adpmvtgi7dl1qjh0pgpm.jpg"
     const provider = [name, description,image, userId];
     pool.query(`SELECT * FROM gyms WHERE owner_id = $1 AND is_deleted = 0`, [userId]).then((result) => {
-        console.log(result.rows);
         if(result.rows.length > 3){
             res.status(403).json({
                 success:false,
@@ -52,19 +51,72 @@ const updateGym = (req,res)=>{
           });
 }
 const getAllGym = (req, res)=>{
+    let finalGym=[];
+    let large=[];
+    let smale=[];
     pool.query(`SELECT * FROM gyms WHERE gyms.owner_id != $1  AND gyms.is_deleted = 0`, [req.token.userId]).then((result) => {
-        res.status(200).json({
+        large=result.rows
+        pool.query(`SELECT * FROM gym_user 
+        INNER JOIN gyms ON gym_user.gym_id = gyms.id 
+        WHERE gym_user.user_id = $1 
+        AND gyms.owner_id != $1 AND gym_user.is_deleted=0`,[req.token.userId]).then((result1)=>{
+            if(result1.rows.length===0){
+
+                pool.query(`SELECT * FROM gym_coach
+                INNER JOIN gyms ON gym_coach.gym_id = gyms.id 
+                WHERE gym_coach.coach_id = $1 
+                AND gym_coach.is_deleted=0 AND gyms.owner_id != $1`,[req.token.userId]).then((result2)=>
+                {
+            result2.rows.map((ele,i)=>{
+                smale.push(ele.gym_id)
+            })
+           finalGym= large.filter((ele,i)=>{
+                return !smale.includes(ele.id)
+            })
+           
+            res.status(200).json({
             success : true,
             message : `All Gym`,
-            gym : result.rows
+            gym : finalGym
+            })
+            }).catch((err)=>{
+                    res.status(500).json({
+                        success : false,
+                        message : "Server error",
+                        error : err.message
+            })
+            })
+
+            }else{
+                result1.rows.map((ele,i)=>{
+                    smale.push(ele.gym_id)
+                })
+               finalGym= large.filter((ele,i)=>{
+                    return !smale.includes(ele.id)
+                })
+               
+                res.status(200).json({
+                success : true,
+                message : `All Gym`,
+                gym : finalGym
+            })
+            }
+       
+       
+        }).catch((err)=>{
+            res.status(500).json({
+                success : false,
+                message : "Server error",
+                error : err.message
         })
+    })
+       
     }).catch((err) => {
         res.status(500).json({
             success : false,
             message : "Server error",
-            error : err.message
+            error : err.message })
         })
-    });
 }
 
 const getGymByGymId = (req,res)=>{
@@ -276,7 +328,6 @@ const downCoachToUser = (req,res)=>{
         const endSub = `CURRENT_TIMESTAMP + INTERVAL '${plan.rows[0].numofmonth_plan} months'`;
         if(plan.rows.length){
             pool.query(`DELETE FROM gym_coach WHERE gym_coach.coach_id = $1 AND gym_coach.gym_id = $2`, [userid, gymid]).then((resultcoach) => {
-                console.log(plan.rows[0].id_plan);
                 pool.query(`INSERT INTO gym_user(user_id, gym_id, plan_id, endSub) VALUES ($1,$2, ${plan.rows[0].id_plan}, ${endSub}) RETURNING *`, [userid, gymid]).then((result) => {
                     res.status(201).json({
                         success : true,
