@@ -14,7 +14,7 @@ function Footer() {
       <div className='mid'>
         <h4>USEFUL LINKS</h4>
       <ul style={{listStyle:"none",textAlign:"start",padding:"0",cursor:"pointer"}}>
-        <li><Link to="/#home">Home</Link> </li>
+        <li>Home</li>
         <li>About Us</li>
         <li onClick={()=>{
           navigate('/login')
