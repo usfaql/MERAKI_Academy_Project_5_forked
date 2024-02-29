@@ -9,13 +9,13 @@ const messageHandler = (socket, io)=>{
         const newMessage = new messagesModel({
             gymId : data.from,
             planName : data.room,
-            messages : [{from : data.from, room: data.room,name : data.name , image : data.image,message : data.message}]
+            messages : [{from : data.from, room: data.room,name : data.name , image : data.image,message : data.message, image_message : data.image_message}]
         });
         messagesModel.findOne({gymId: data.from, planName: data.room}).then((result) => {
             if(result){
                 messagesModel.findOneAndUpdate(
                     { gymId: data.from, planName: data.room }, // Find the document
-                    { $push: { messages: [{from : data.from, room: data.room,name : data.name ,image : data.image,message : data.message}] } }, // Push data.message into messages array
+                    { $push: { messages: [{from : data.from, room: data.room,name : data.name ,image : data.image,message : data.message, image_message : data.image_message}] } }, // Push data.message into messages array
                     { new: true, upsert: true } // Options: return the modified document and create if it doesn't exist
                 ).then((result) => {
                     console.log("data add in database=>", result);
@@ -49,14 +49,15 @@ const messageHandler = (socket, io)=>{
                 room: data.room,
                 name : data.name ,
                  image : data.image,
-                 message : data.message}]
+                 message : data.message,
+                image_message : data.image_message}]
         });
         PrivateMessagesModel.findOne({coach_id: data.from, user_id: data.room}).then((result) => {
             if(result){
                 PrivateMessagesModel.findOneAndUpdate(
                     { coach_id: data.from, user_id: data.room }, // Find the document
                     { $push: { messages: [{
-                        from : data.from, room: data.room,name : data.name ,image : data.image,message : data.message}] } }, // Push data.message into messages array
+                        from : data.from, room: data.room,name : data.name ,image : data.image, message : data.message, image_message : data.image_message}] } }, // Push data.message into messages array
                     { new: true, upsert: true } // Options: return the modified document and create if it doesn't exist
                 ).then((result) => {
                     console.log("data add in database=>", result);

@@ -82,8 +82,6 @@ function InfoGymSettings() {
     }, [showAlert]);
 
 
-
-
     const uploadImage = async(e) => {
 	    const file = e.target.files[0];
         const formData = new FormData();
@@ -101,9 +99,9 @@ function InfoGymSettings() {
         });
     };
 
-const handleImageClick = () => {
-        fileInputRef.current.click();
-};
+    const handleImageClick = () => {
+            fileInputRef.current.click();
+    };
   return (
     <div className='info-body'>
         <div className='contener-info-gym-settings'>

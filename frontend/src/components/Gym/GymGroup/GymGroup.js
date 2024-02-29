@@ -28,7 +28,7 @@ function GymGroup() {
     const [infoGymLoading, setInfoGymLoading] = useState(true);
 
     const [onTheme, setOnTheme] = useState(false);
-
+    const [userFilter, setUserFilter] = useState(null)
     const [room , setRoom] = useState("");
     const [from , setFrom] = useState("");
     const [clearInput, setClearInput] = useState("");
@@ -36,8 +36,35 @@ function GymGroup() {
 
     const [socket, setSocket] = useState(null);
 
+    const [imageMessage , setImageMessage] = useState(null);
+
     const [allMessages, setAllMessages] = useState([]);
 
+    const [messageLoading,setMessageLoading] = useState(false)
+    const fileInputRef = useRef(null);
+    
+    const uploadImage = async(e) => {
+        setMessageLoading(true)
+	    const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'yk50quwt');
+        formData.append("cloud_name", "dorpys3di");
+        await fetch('https://api.cloudinary.com/v1_1/dvztsuedi/image/upload', {
+          method: 'post',
+          body: formData,
+        }).then((result)=> result.json()).then((data) => {
+            setMessageLoading(false);
+            setImageMessage(data.url);
+            
+        }).catch((err) => {
+        console.log(err);
+        });
+    };
+
+    const handleImageClick = () => {
+            fileInputRef.current.click();
+    };
 
     const state = useSelector((state)=>{
     return{
@@ -94,14 +121,13 @@ function GymGroup() {
 
     const sendMessage = ()=>{
         socket?.emit("messageGym",{
-            room : roomSelected, from : 7, message, name  : covertUserInfoToJson?.nameUser , image : infoGym?.image
-        , created_at : new Date()} );
+            room : roomSelected, from : 7, message, name  : covertUserInfoToJson?.nameUser , image_message : imageMessage,image : infoGym?.image
+        ,created_at : new Date()} );
     }
 
     const disconnectServer = ()=>{
         socket?.disconnect();      
     }
-
 
     useEffect(()=>{
         if(roomSelected){
@@ -120,8 +146,6 @@ function GymGroup() {
     const config = {
         headers: { Authorization: `Bearer ${state.token}` }
     }
-
-    
     
     useEffect(() => {
         axios.get(`http://localhost:5000/gyms/${gymid}/coach`, config)
@@ -133,6 +157,7 @@ function GymGroup() {
             .then(userResult => {
                 
                 setAllUsers(userResult.data.users);
+                console.log("userResult.data.users", userResult.data.users);
                 setUserLoading(false);
                 return axios.get(`http://localhost:5000/gyms/${gymid}`, config);
             })
@@ -151,7 +176,6 @@ function GymGroup() {
             });
     }, []);
 
-
     useEffect(()=>{
     if(infoGym?.owner_id === Number(state.userId)){
             setIsCoach(true);
@@ -164,6 +188,7 @@ function GymGroup() {
         }
     }
     },[roomLoading]);
+
     const generateChatGym = ()=>{
         const chatLite = [];
         for (let i = 0; i < allMessages?.length; i++) {
@@ -188,11 +213,15 @@ function GymGroup() {
             }
             let name = allMessages[i].name.split(' ')
             chatLite.push(
-                <div style={{display:"flex", width:"100%" , marginBottom:"10px", marginTop:"10px" , gap:"10px"}}>
+                <div style={ i === 0 ? {display:"flex", width:"100%" , gap:"10px"} : {display:"flex", width:"100%" , gap:"1px",borderTop:"1px solid #202020", marginTop:"10px", paddingTop:"10px"}}>
                     <img src={`${allMessages[i].image}`} style={{width:"52px", height:"52px", borderRadius:"26px"}}/>
                     <div style={{width:"90%"}}>
-                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{name[0] + " " + name[1][0].toUpperCase()}.</h6>
-                    <div style={{backgroundColor:"#202020", width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}>{allMessages[i].message}</div>
+                    <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px", margin:"0"}}>{name[0] + " " + name[1][0].toUpperCase()}.</h6>
+                    <div style={{ width:"100%", borderRadius:"4px", textAlign:"start", padding:"5px 10px"}}> 
+                    <div style={{marginBottom:"5px"}}>{allMessages[i].message}</div>
+                    {allMessages[i].image_message && <img style={{width:"50%", borderRadius:"8px", marginTop:"4px"}} src={allMessages[i].image_message}/>}
+                    </div>
+                    
                     <h6 style={{textAlign:"start", color:"gray", fontSize:"small", paddingLeft:"5px"}}>{dateNow}</h6>
                     </div>
                 </div>
@@ -208,14 +237,14 @@ function GymGroup() {
         if(!allCoachs || allCoachs?.length ===0){
             coachArr.push(
                 <>
-                <li style={{padding:"5px 15px 10px",color:"rgb(170,170,170,0.7)"}}>There is no coach</li>
+                <li style={{padding:"5px 15px 10px",color:"rgb(170,170,170,0.7)", cursor:"default"}}>There is no coach</li>
                 </>
             )
         }
         for(let i = 0; i < allCoachs?.length ; i++){
             coachArr.push(
                         <>
-                        <li style={{padding:"5px 15px 0px"}}> {allCoachs[i].firstname + " " + allCoachs[i].lastname}</li>
+                        <li  style={{padding:"5px 15px 0px", cursor:"default"}}> {allCoachs[i].firstname + " " + allCoachs[i].lastname}</li>
                         <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
                         </>
             )
@@ -223,11 +252,15 @@ function GymGroup() {
         return coachArr;
     }
 
+    useEffect(()=>{
+        const filteredObjects = allUsers?.filter(obj => obj['name_plan'] === roomSelected);
+        setUserFilter(filteredObjects)
+    },[roomSelected])
+
     const listUsers = ()=>{
         const userArr = [];
-
-        for(let i = 0; i < allUsers?.length ; i++){
-            const endDate = new Date(allUsers[i].endsub);
+        for(let i = 0; i < userFilter?.length ; i++){
+            const endDate = new Date(userFilter[i].endsub);
             const now = new Date();
             const difference = endDate - now;
 
@@ -235,7 +268,7 @@ function GymGroup() {
 
             userArr.push(
                         <>
-                        <li style={{padding:"5px 15px 0px"}}>{`${allUsers[i].firstname} ${allUsers[i].lastname}`} <span style={{color:"#808080", fontSize:"13px"}}>(End After {days} Days)</span></li>
+                        <li style={{padding:"5px 15px 0px", cursor:"default"}}>{`${userFilter[i].firstname} ${userFilter[i].lastname}`} <span style={{color:"#808080", fontSize:"13px"}}>(End After {days} Days)</span></li>
                         <div style={{borderBottom:"1px solid #373737", margin:"5px 20px"}}></div>
                         </>
             )
@@ -245,7 +278,6 @@ function GymGroup() {
 
     const listRoom = ()=>{
         const roomList = [];
-
         for(let i = 0; i < rooms?.length; i++){
             roomList.push(
                     <>
@@ -260,24 +292,31 @@ function GymGroup() {
                     </>
             )
         }
-        return roomList;
+    return roomList;
     }
-
-    
     
   return (
     <div className='body-group'>
         <div className='group-contener'>
             <div className='contener-room'>
                 <div style={{height:"100%"}}>
-                <h6 className='head' style={!onTheme?{color:"#A1E553"}:{color:"#e333e5"}}>Room</h6>
+                <h6 className='head' style={!onTheme?{color:"#A1E553", cursor:"pointer"}:{color:"#e333e5", cursor:"pointer"}} onClick={()=> setRoomSelected(null)}>Room</h6>
                 <div style={roomLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
                 <Spinner animation="border" style={!onTheme ? {color:"#A1E533"} : {color:"#e333e5"}} />
                 <label>Loading...</label>
                 </div>
+                {rooms?.length ? 
                 <ul style={roomLoading ? {display:"none"} : {display:"block"}}>
-                    {listRoom()}
+                {listRoom()}
                 </ul>
+                :
+                <div style={{width:"100%", height:"100%", textAlign:"center", display:"flex", justifyContent:"center", placeItems:"center"}} onClick={()=>{
+                    navigate(`/${gymid}/settings`);
+                }}>
+                    <span>click to Create Plan</span>
+                    </div>
+                }
+                
                 </div>
 
                 <div className='control-gym'>
@@ -323,9 +362,12 @@ function GymGroup() {
                 </div>
             </div>
 
-            <div className='contener-chat'>
+            <div className='contener-chat' style={!roomSelected ? {width : "80%", borderRight:"0"} : covertUserInfoToJson.role === 3 ? {width:"60%"} : {width:"80%", border:"0", height:"99%"}}>
                 {!roomSelected ? <>
-                <div style={!onTheme? {backgroundColor:"#303030",color:"#A1E533",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%"} : {backgroundColor:"#303030",fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%" ,color:"#e333e5"}}>Please Select Room To View Chat</div>
+                <div style={!onTheme? {color:"#707070",fontWeight:"bold", alignItems:"center", justifyContent:"center",display:"flex", paddingLeft:"5px", textAlign:"center", padding:"1%", height:"100%"} 
+                : {fontWeight:"bold", alignItems:"center", display:"flex", paddingLeft:"5px", textAlign:"start", padding:"1%" ,color:"#e333e5"}}>
+                    <h6 style={{textAlign:"center"}}>Please Select Room To View Chat</h6>
+                    </div>
                 </> : <>
                     <div style={!onTheme?{ backgroundColor:"#A1E533", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"} : {backgroundColor:"#e333e5", color:"#101010", fontWeight:"bold", alignItems:"center", display:"flex"}}>
                         <h6 style={{textAlign:"start", paddingLeft:"5px",fontWeight:"bold", margin:"0",padding:"1%"}}># {roomSelected}</h6>
@@ -336,22 +378,33 @@ function GymGroup() {
                     {generateChatGym()}
                     </div>
                     {isCoach ? 
-                    <div style={{ backgroundColor:"#202020",height:"20%", alignItems:"center", display:"flex", justifyContent:"center", flexDirection:"column", padding:"10px"}}>
+                    <div style={{ backgroundColor:"#202020",height:"20%", alignItems:"center", display:"flex", justifyContent:"flex-end", flexDirection:"column", padding:"10px"}}>
                        
                         
-                        <textarea style={{width:"95%", height:"50%", borderRadius:"4px"}} value={message} onChange={(e)=>{
+                        <textarea style={{width:"95%", height:"70%", borderRadius:"4px"}} value={message} onChange={(e)=>{
                             setMessage(e.target.value);
                         }}/>
                         
-                        <div style={{height:"45%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
+                        <div style={{height:"30%", display:'flex',justifyContent:"space-between", width:"95%", alignItems:"center"}}>
                         <div style={{display:"flex", gap:"5px"}}>
-                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}}>Image</button>
-                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}}>Video</button>
-                            <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}} onClick={()=>{
-                                disconnectServer()
-                            }}>File</button>
+                            <button onClick={handleImageClick} className='btn-gym-chat' style={{backgroundColor:"#404040", color:"white",paddingBottom:"4px"}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
+                            </svg>
+                            </button>
+                            <input 
+                            className='btn-gym-chat' 
+                            style={{display:"none"}} 
+                            ref={fileInputRef}
+                            type='file'
+                            accept='image/jpeg, image/jpg'
+                            onChange={uploadImage}/>
                         </div>
-                        <button className='btn-gym-chat' style={!onTheme ? {backgroundColor:"#A1E533"} : {backgroundColor :"#E333E5"}} onClick={()=>{
+                        {messageLoading ? 
+                        <button className='btn-gym-chat' style={{cursor:"not-allowed"}}>Loading...</button>
+                        :
+                        <button className='btn-gym-chat' onClick={()=>{
                             if(message){
                                 sendMessage();
                                 setMessage("");
@@ -359,6 +412,8 @@ function GymGroup() {
                             }
                                 
                         }}>Send</button>
+                        }
+                        
                         </div>
                        
                         
@@ -370,8 +425,8 @@ function GymGroup() {
                  }
                 </>}
             </div>
-
-            <div className='contener-member'>
+            
+            <div className='contener-member' style={roomSelected && covertUserInfoToJson.role === 3 ? {display:"block"} :{display:"none"}}>
                 <div style={{height:"50%", display:"flex",flexDirection:"column"}}>
                     <h6 className='head' style={!onTheme?{color:"#A1E553"}:{color:"#e333e5"}}>Coach</h6>
                     <div style={coachLoading ? {height:"100%",display:"flex",flexDirection:"column", placeItems:"center",justifyContent:"center"} : {display:"none"}} >
@@ -399,6 +454,7 @@ function GymGroup() {
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
   )

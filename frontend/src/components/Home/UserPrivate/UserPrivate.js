@@ -9,9 +9,7 @@ import socketInit from "../../Gym/socket.server";
 import Spinner from "react-bootstrap/Spinner";
 const UserPrivate = () => {
   const revarse = useRef(null);
-  if (revarse.current) {
-    revarse.current.scrollTop = revarse.current.scrollHeight;
-  }
+
   const navigate = useNavigate();
   const userInfo = localStorage.getItem("userInfo");
   const covertUserInfoToJson = JSON.parse(userInfo);
@@ -36,6 +34,19 @@ const UserPrivate = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const [allMessages, setAllMessages] = useState([]);
+
+  
+  const [imageMessage , setImageMessage] = useState(null);
+  const [messageLoading,setMessageLoading] = useState(false)
+  const fileInputRef = useRef(null);
+
+  useEffect(()=>{
+    
+    if (revarse.current) {
+      revarse.current.scrollTop = revarse.current.scrollHeight;
+    }
+   },[allMessages?.length]);
+
 
   useEffect(()=>{
     setAllMessages([])
@@ -62,6 +73,7 @@ const UserPrivate = () => {
         console.log(error);
       });
   }, []);
+
   useEffect(() => {
     socket?.on("connect", () => {
       console.log(true);
@@ -92,6 +104,7 @@ const UserPrivate = () => {
       message: inputMessage,
       name: covertUserInfoToJson.nameUser,
       image,
+      image_message : imageMessage,
       created_at : new Date()
     });
   };
@@ -128,6 +141,7 @@ const UserPrivate = () => {
   useEffect(() => {
     getAllCoachs();
   }, []);
+
 const timeOfMessage=(end)=>{
     const endDate = new Date(end);
     const now = new Date();
@@ -150,6 +164,30 @@ const timeOfMessage=(end)=>{
     }
     return dateNow
 }
+
+const uploadImage = async(e) => {
+  setMessageLoading(true)
+const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'yk50quwt');
+  formData.append("cloud_name", "dorpys3di");
+  await fetch('https://api.cloudinary.com/v1_1/dvztsuedi/image/upload', {
+    method: 'post',
+    body: formData,
+  }).then((result)=> result.json()).then((data) => {
+      setMessageLoading(false);
+      setImageMessage(data.url);
+      
+  }).catch((err) => {
+  console.log(err);
+  });
+};
+
+const handleImageClick = () => {
+      fileInputRef.current.click();
+};
+
   return (
     <>
       {" "}
@@ -257,7 +295,7 @@ const timeOfMessage=(end)=>{
 
         <div
           className="Right-Side"
-          style={show ? { width: "75%" } : { width: "100%" }}
+          style={show ? { width: "80%" } : { width: "100%" }}
         >
           <div
             style={
@@ -320,12 +358,21 @@ const timeOfMessage=(end)=>{
                 {allMessages?.map((ele, i) => (
 
                   <div
-                    style={{
+                    style={i === 0 ?{
                       display: "flex",
                       width: "100%",
                       marginBottom: "10px",
                       marginTop: "10px",
+                      paddingLeft:"10px",
                       gap: "10px",
+                    } : {
+                      display: "flex",
+                      width: "100%",
+                      marginTop:"10px",
+                      marginBottom:"10px",
+                      borderTop:"1px solid #303030",
+                      paddingTop:"10px",
+                      paddingLeft:"10px"
                     }}
                   >
                     <img
@@ -343,34 +390,39 @@ const timeOfMessage=(end)=>{
                           color: "gray",
                           fontSize: "small",
                           paddingLeft: "5px",
+                          margin:"0"
                         }}
                       >
                         {ele.name}
                       </h6>
                       <div
                         style={{
-                          backgroundColor: "#202020",
-                          width: "100%",
+                          width: "90%",
                           borderRadius: "4px",
                           textAlign: "start",
                           padding: "5px 10px",
+                          gap:"10px",
+                          display:"flex",
+                          flexDirection:"column"
                         }}
                       >
-                        {ele.message}
+                        <div>{ele.message}</div>
+                        {ele.image_message && <img style={{width:"50%",borderRadius:"8px", marginTop:"4px"}} src={ele.image_message}/>}
                       </div>
                       <h6  style={{
                           textAlign: "start",
                           color: "gray",
                           fontSize: "small",
                           paddingLeft: "5px",
+                          margin:"0"
                         }}>{timeOfMessage(ele.created_at)}</h6>
                     </div>
                   </div>
                 ))}
               </div>
               <div className="Input-Button">
-                <div className="Input">
-                  <Form.Control
+                  <textarea
+                  style={{width:"100%", height:"60%", maxHeight:"70%", minHeight:"60%", borderRadius:"4px"}}
                     onChange={(e) => {
                       setInputMessage(e.target.value);
                     }}
@@ -379,12 +431,21 @@ const timeOfMessage=(end)=>{
                     id="inputPassword5"
                     aria-describedby="passwordHelpBlock"
                   />
-                </div>
                 <div className="Buttons">
                   <div className="left">
-                    <Button>Image</Button>
-                    <Button>Video</Button>
-                    <Button>File</Button>
+                  <button onClick={handleImageClick} className='btn-gym-chat' style={{backgroundColor:"#404040", color:"white",paddingBottom:"4px"}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
+                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                        <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
+                    </svg>
+                  </button>
+                    <input 
+                      className='btn-gym-chat' 
+                      style={{display:"none"}} 
+                      ref={fileInputRef}
+                      type='file'
+                      accept='image/jpeg, image/jpg'
+                      onChange={uploadImage}/>
                   </div>
                   <div className="right">
                     <Button
