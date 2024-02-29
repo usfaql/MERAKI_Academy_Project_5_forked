@@ -191,14 +191,14 @@ const Register = () => {
           </div>
         </div>
         <div className="Register-Btn">
-          <Button style={localStorage.getItem("gender") == "male"  ?{ backgroundColor: "#A1E533" ,cursor:"pointer"} : {backgroundColor: "#e333e5" ,cursor:"pointer"}} onClick={()=>{
+          <Button style={localStorage.getItem("gender") == "female"  ?{ backgroundColor: "#e333e5" ,cursor:"pointer"} : {backgroundColor: "#A1E533" ,cursor:"pointer"}} onClick={()=>{
             createNewAccount()
           }} >Register</Button>
         </div>
         <div className="doYou">
           <span style={{cursor:"default"}}>
             Do you have account?
-            <span style={localStorage.getItem("gender") === "male" ?{ color: "#A1E533" ,cursor:"pointer"} : {color: "#e333e5" ,cursor:"pointer"}} onClick={()=>{
+            <span style={localStorage.getItem("gender") == "female"  ?{ color: "#e333e5" ,cursor:"pointer"} : {color: "#A1E533" ,cursor:"pointer"}} onClick={()=>{
               navigate("/login");
             }}> Login Now</span>
           </span>

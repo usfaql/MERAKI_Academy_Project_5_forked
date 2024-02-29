@@ -56,7 +56,7 @@ function AllGymHome() {
       };
   return (
     <div>
-      {generateGymBox()}
+      {allGym?.length?generateGymBox():<div style={{display:"flex",justifyContent:"center",alignItems:"center",marginTop:"100px",color:"#808080"}}><h6>There Is No Gyms Available</h6></div>}
     </div>
   )
 }

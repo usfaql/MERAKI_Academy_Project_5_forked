@@ -47,7 +47,7 @@ function NavBar() {
   return (
     <div className='nav-bar' style={!onTheme ? {borderBottom:"1px solid #A1E533"} : {borderBottom:"1px solid #e333e5"}}>
         <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
-          <img style={{width:"64px",height:"64px",cursor:"pointer"}} src={!onTheme?logo:logo2} onClick={()=>{
+          <img style={{width:"47px",height:"47px",cursor:"pointer"}} src={!onTheme?logo:logo2} onClick={()=>{
             navigate('/')
           }}/>
             <h2 style={{fontWeight:"bold",margin:"0"}}><a href='/' style={{textDecoration:"none", color:"white"}}>NUTRI <span style={!onTheme?{color:"#A1E533"} : {color:"#e333e5"}}>FIT</span></a></h2>

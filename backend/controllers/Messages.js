@@ -14,9 +14,9 @@ const messageHandler = (socket, io)=>{
         messagesModel.findOne({gymId: data.from, planName: data.room}).then((result) => {
             if(result){
                 messagesModel.findOneAndUpdate(
-                    { gymId: data.from, planName: data.room }, // Find the document
+                    { gymId: data.from, planName: data.room },
                     { $push: { messages: [{from : data.from, room: data.room,name : data.name ,image : data.image,message : data.message, image_message : data.image_message}] } }, // Push data.message into messages array
-                    { new: true, upsert: true } // Options: return the modified document and create if it doesn't exist
+                    { new: true, upsert: true }
                 ).then((result) => {
                     console.log("data add in database=>", result);
                 }).catch((err) => {
@@ -55,10 +55,10 @@ const messageHandler = (socket, io)=>{
         PrivateMessagesModel.findOne({coach_id: data.from, user_id: data.room}).then((result) => {
             if(result){
                 PrivateMessagesModel.findOneAndUpdate(
-                    { coach_id: data.from, user_id: data.room }, // Find the document
+                    { coach_id: data.from, user_id: data.room },
                     { $push: { messages: [{
                         from : data.from, room: data.room,name : data.name ,image : data.image, message : data.message, image_message : data.image_message}] } }, // Push data.message into messages array
-                    { new: true, upsert: true } // Options: return the modified document and create if it doesn't exist
+                    { new: true, upsert: true }
                 ).then((result) => {
                     console.log("data add in database=>", result);
                 }).catch((err) => {

@@ -156,7 +156,6 @@ const getUserInfoByUserId = (req, res) => {
 const updateUserInfo = (req, res) => {
   const user_id = req.token.userId;
   const { height, weight, goal, image } = req.body;
-  console.log(req.body);
   const value = [
     height || null,
     weight || null,
@@ -164,7 +163,6 @@ const updateUserInfo = (req, res) => {
     image || null,
     user_id,
   ];
-  console.log(value);
   const query =
     "UPDATE user_info SET height=COALESCE($1,height) , weight=COALESCE($2,weight) , goal=COALESCE($3,goal), image=COALESCE($4,image) WHERE user_id=$5 RETURNING *";
   pool
@@ -203,7 +201,6 @@ const getAllUsers = (req, res) => {
       }
     })
     .catch((err) => {
-      console.log("Error getting all users");
       res.status(500).json({
         success: false,
         message: "Server Error",
@@ -228,39 +225,18 @@ const getAllCoachs = (req, res) => {
       });
     })
     .catch((error) => {
-      console.log(error);
       res.status(500).json({
         success: false,
         message: "Server error",
       });
     });
 };
-
-/*const getUserInfoById =(req,res)=>{
-    const  id= req.params.id;
-    //console.log('user info by Id ',id);
-    pool.query(`SELECT * FROM user_info WHERE id=$1`,[id]).then((response)=>{
-      res.status(200).json({
-        success : true ,
-        data: response.rows
-      })
-    }).catch((err)=>{
-      console.log(err);
-      res.status(400).json({
-        success: false,
-        err:err
-      })
-    })
-  }
-*/
-
 module.exports = {
   register,
   login,
   getAllUsers,
   getAllCoachs,
   AddUserinfo,
-  //getUserInfoById,
   updateUserInfo,
   getUserInfoByUserId,
 };
