@@ -3,6 +3,7 @@ import './UserInGymSettings.css'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import logo from "../../../assets/user.png"
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 function UserInGymSettings() {
@@ -55,7 +56,7 @@ function UserInGymSettings() {
         <div style={{display:"flex", justifyContent:"space-between", placeItems:"center", width:"100%",padding:"10px"}}>
           <div style={{display:"flex", placeItems:"center", gap:"5px"}}>
             <h6 style={{paddingRight:"10px"}}>{i+1}</h6>
-            <img style={{width:"52px", height:"52px", borderRadius:"32px"}} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png'/>
+            <img style={{width:"52px", height:"52px", borderRadius:"32px"}} src={userInGym[i].image?userInGym[i].image:logo}/>
               
               <h5>{userInGym[i].firstname} ({userInGym[i].name_plan})</h5>
           </div>
@@ -77,7 +78,7 @@ function UserInGymSettings() {
     return userArray;
    }
 
-
+console.log(userInGym);
   return (
     
       <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import logo from "../../../assets/user.png"
 function CoachInGymSettings() {
   const [coachsInGym, setCoachInGym] = useState(null);
   const [indexUserInArr,setIndexUserInArr] = useState(null);
@@ -47,7 +47,7 @@ function CoachInGymSettings() {
         <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "10px" ,height:"fit-content"}}>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
             <h6 style={{ paddingRight: "10px" }}>{i + 1}</h6>
-            <img style={{ width: "52px", height: "52px", borderRadius: "32px" }} src='https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png' alt={`Avatar ${i + 1}`} />
+            <img style={{ width: "52px", height: "52px", borderRadius: "32px" }} src={coachsInGym[i].image?coachsInGym[i].image:logo} alt={`Avatar ${i + 1}`} />
             <h5>{coachsInGym[i].firstname} {coachsInGym[i].lastname}</h5>
           </div>
          <button className='btn-user' style={!onTheme ? {backgroundColor:"#A1E553"} : {backgroundColor:"#E333E5"}} onClick={()=>{

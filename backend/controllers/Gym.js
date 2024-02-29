@@ -370,10 +370,11 @@ const getAllUserInGym = (req,res)=>{
     const {gymId} = req.params;
     const provider = [gymId]
     pool.query(`
-    SELECT * 
+    SELECT users.*, gym_plan.* , gym_user.*, user_info.image
     FROM gym_user 
     INNER JOIN users ON gym_user.user_id = users.id 
     INNER JOIN gym_plan ON gym_plan.id_plan = gym_user.plan_id 
+    INNER JOIN user_info on user_info.user_id = gym_user.user_id
     WHERE gym_user.gym_id = $1 AND gym_user.is_deleted = 0`, provider).then((result) => {
         if(!result.rows.length){
             res.status(200).json({
@@ -546,7 +547,10 @@ const getAllRoomByGymId = (req,res)=>{
 const getAllCoachInGym = (req,res)=>{
     const {gymId} = req.params;
     const provider = [gymId];
-    pool.query(`SELECT * FROM gym_coach INNER JOIN users ON gym_coach.coach_id = users.id WHERE gym_coach.gym_id = $1`, provider).then((result) => {
+    pool.query(`SELECT users.*, user_info.image, gym_coach.* FROM gym_coach 
+    INNER JOIN users ON gym_coach.coach_id = users.id
+    INNER JOIN user_info on user_info.user_id = gym_coach.coach_id
+     WHERE gym_coach.gym_id = $1`, provider).then((result) => {
         res.status(200).json({
             success : true,
             message : `All Coach In Gym`,
