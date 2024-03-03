@@ -48,7 +48,6 @@ const PaymentPrivatePlan = () => {
         }).catch((err)=>{
             setSuccess(false)
             setMessage("Something went Wrong Please Try Again")
-            console.log(err);
         })
     }
     const handlePay = ()=>{

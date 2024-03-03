@@ -203,7 +203,7 @@ const Register = () => {
             }}> Login Now</span>
           </span>
         </div>
-        <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"}  style={{padding: "5px"}}><span style={{visibility:"hidden"}}>:</span>{message}</div>
+        <div  className={success?message && 'SuccessMessage' : message && "ErrorMessage"}  style={{padding: "5px"}}><div style={{visibility:"hidden"}}>:</div>{message}</div>
       </div>
       </div>
       

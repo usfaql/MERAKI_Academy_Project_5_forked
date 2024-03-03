@@ -75,7 +75,6 @@ const Login = () => {
                 navigate('/home')
             })
             .catch((err) => {
-              console.log(err);
               setSuccess(false)
               setMessage(err.response.data);
             });
@@ -109,11 +108,9 @@ const Login = () => {
                 setMessage(err.response.data);
               });
           }
-          console.log(err);
         });
     };
     const errorMessage = (error) => {
-      console.log(error);
     };
 
 
@@ -144,7 +141,6 @@ const Login = () => {
             }).catch((error)=>{
               setSuccess(false)
               setMessage(error.message);
-              console.log(error);
             })
           }
         

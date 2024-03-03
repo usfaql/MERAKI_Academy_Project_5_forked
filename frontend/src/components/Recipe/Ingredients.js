@@ -41,13 +41,10 @@ const Ingredients = () => {
       )
       .then((result) => {
         setIngredient(result.data.recipe);
-        console.log("fdfwffsadf", result.data.recipe);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
-  console.log(ingredient && ingredient);
   return (
     <div className="ingredient-page">
       <div className="name-recipe">

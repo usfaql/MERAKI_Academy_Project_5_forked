@@ -45,17 +45,14 @@ function PaymentPlan() {
     },[])
     const handlePay = ()=>{
         if(numberCard && nameOnCard && expirationDate && cVV){
-            console.log("Success");
             axios.post(`http://localhost:5000/gyms/gym/user`, 
             {gymId : gymid, planId : planid, numOfMonth : dataPlanForInvoice.numofmonth_plan, userId: state.userId},
             config).then((result) => {
                 navigate(`/gym/${gymid}`);
             }).catch((err) => {
-                console.log(err);
             });
             
         }else{
-            console.log("please fill data");
         }
     }
       return (
