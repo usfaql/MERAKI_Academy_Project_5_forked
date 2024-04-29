@@ -57,8 +57,7 @@ function CoachInGymSettings() {
         </div>
         
       );
-  
-      if (i + 1 < 50) {
+      if (i + 1 < 3) {
         userArray.push(
           <div key={`divider-${i}`} style={{ padding: "0 10px", width: "100%", borderBottom: "1px solid #404040" }}></div>
         );
@@ -87,7 +86,7 @@ function CoachInGymSettings() {
         <Modal.Body>you are sure? please choose the plan</Modal.Body>
         <Modal.Footer>
           <Button style={{backgroundColor:"gray", color:"white",fontWeight:"bold", border:"0"}} onClick={()=>{
-            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Lite"}, config).then((result) => {
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].coach_id, name_plan : "Lite"}, config).then((result) => {
               coachsInGym.splice(indexUserInArr, 1);
               handleClose()
             }).catch((err) => {
@@ -97,7 +96,7 @@ function CoachInGymSettings() {
             Lite
           </Button>
           <Button style={{backgroundColor:"gold", color:"#101010",fontWeight:"bold", border:"0"}} onClick={()=>{
-            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Gold"}, config).then((result) => {
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].coach_id, name_plan : "Gold"}, config).then((result) => {
               coachsInGym.splice(indexUserInArr, 1);
               handleClose()
             }).catch((err) => {
@@ -107,7 +106,7 @@ function CoachInGymSettings() {
             Gold
           </Button>
           <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
-            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].id, name_plan : "Premium"}, config).then((result) => {
+            axios.post(`http://localhost:5000/gyms/coach/down`, { gymid , userid : coachsInGym[indexUserInArr].coach_id, name_plan : "Premium"}, config).then((result) => {
               coachsInGym.splice(indexUserInArr, 1);
               handleClose()
             }).catch((err) => {
