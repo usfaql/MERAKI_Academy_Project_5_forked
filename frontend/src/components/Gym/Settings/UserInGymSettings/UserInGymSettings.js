@@ -25,7 +25,6 @@ function UserInGymSettings() {
   useEffect(()=>{
     axios.get(`http://localhost:5000/gyms/${gymid}/user`, config).then((result) => {
       setUserInGym(result.data.users);
-      console.log(result.data.users);
     }).catch((err) => {
       console.log(err);
     });
@@ -78,7 +77,6 @@ function UserInGymSettings() {
     return userArray;
    }
 
-console.log(userInGym);
   return (
     
       <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>
@@ -100,8 +98,9 @@ console.log(userInGym);
             No
           </Button>
           <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
-            axios.post(`http://localhost:5000/gyms/gym/coach`, {gymId : gymid, coachId : userInGym[indexUserInArr].id}, config).then((result) => {
-              userInGym.splice(indexUserInArr, 1);
+            console.log(gymid, userInGym[indexUserInArr].id);
+            axios.post(`http://localhost:5000/gyms/gym/coach`, {gymId : gymid, coachId : userInGym[indexUserInArr].user_id}, config).then((result) => {
+              // userInGym.splice(indexUserInArr, 1);
               handleClose()
             }).catch((err) => {
               

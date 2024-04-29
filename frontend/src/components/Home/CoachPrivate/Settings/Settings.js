@@ -83,7 +83,7 @@ const Settings = () => {
     })
   }
   const deletePlan=(name)=>{
-    axios.put(`http://localhost:5000/coachs/remove/plan`,{name:name}, {
+    axios.put(`http://localhost:5000/coachs/remove/plan`,{name}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -428,6 +428,7 @@ const Settings = () => {
               <CloseButton
               onClick={()=>{
                 deletePlan(ele)
+                console.log(ele);
               }}
               title="Remove"
               style={{backgroundColor:"#464646" ,alignSelf:"end"}}
