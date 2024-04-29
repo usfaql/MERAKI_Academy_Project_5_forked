@@ -9,5 +9,4 @@ const socketInit = ({user_id, token,room})=>{
         },
     })
 }
-
 export default socketInit

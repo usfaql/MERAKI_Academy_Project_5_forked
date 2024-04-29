@@ -11,6 +11,11 @@ function UserInGymSettings() {
   const [userInGym, setUserInGym] = useState(null);
   const [indexUserInArr,setIndexUserInArr] = useState(null);
   const [onTheme, setOnTheme] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [searchText ,setSearchText] = useState(null);
+  const [filterArray, setFillterArray] = useState([]);
+
+
   const state = useSelector((state)=>{
     return{
     userId : state.auth.userId,
@@ -25,6 +30,7 @@ function UserInGymSettings() {
   useEffect(()=>{
     axios.get(`http://localhost:5000/gyms/${gymid}/user`, config).then((result) => {
       setUserInGym(result.data.users);
+      setFillterArray(result.data.users);
     }).catch((err) => {
       console.log(err);
     });
@@ -44,8 +50,8 @@ function UserInGymSettings() {
 
    const viewUserInList = ()=>{
     const userArray = [];
-    for(let i = 0; i < userInGym?.length; i++){
-      const endDate = new Date(userInGym[i].endsub);
+    for(let i = 0; i < filterArray?.length; i++){
+      const endDate = new Date(filterArray[i].endsub);
       const now = new Date();
       const difference = endDate - now;
 
@@ -55,9 +61,9 @@ function UserInGymSettings() {
         <div style={{display:"flex", justifyContent:"space-between", placeItems:"center", width:"100%",padding:"10px"}}>
           <div style={{display:"flex", placeItems:"center", gap:"5px"}}>
             <h6 style={{paddingRight:"10px"}}>{i+1}</h6>
-            <img style={{width:"52px", height:"52px", borderRadius:"32px"}} src={userInGym[i].image?userInGym[i].image:logo}/>
+            <img style={{width:"52px", height:"52px", borderRadius:"32px"}} src={filterArray[i].image?filterArray[i].image:logo}/>
               
-              <h5>{userInGym[i].firstname} ({userInGym[i].name_plan})</h5>
+              <h5>{filterArray[i].firstname} ({filterArray[i].name_plan})</h5>
           </div>
           <div>
             <span style={{color:"rgb(130,130,130,0.8)"}}>End After {days} Days</span>
@@ -76,14 +82,42 @@ function UserInGymSettings() {
     }
     return userArray;
    }
+   
+   const resultSearch = (e)=>{
+      setSearchText(e);
+
+      const filtered = userInGym.filter(user =>{
+        const fullName = user.firstname+" "+user.lastname;
+        return(
+          user.firstname.toLowerCase().includes(e.toLowerCase()) ||
+          user.lastname.toLowerCase().includes(e.toLowerCase()) || 
+          fullName.toLowerCase().includes(e.toLowerCase())
+        )
+      }
+      
+     
+    );
+      setFillterArray(filtered);
+    };
+
+   const showError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+  };
 
   return (
     
       <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>
          <div className='member-in-gym-settings'>
-                <p>{viewUserInList().length}/50 User</p>
+                <p>{viewUserInList().length}{!searchText ? "/50" : ""} User</p>
           </div>
-          <input style={{width:"50%", padding:"5px", borderRadius:"4px", border:"0", color:"white", backgroundColor:"#404040"}} placeholder='Search...'/>
+          <input style={{width:"50%", padding:"5px", borderRadius:"4px", border:"0", color:"white", backgroundColor:"#404040"}} placeholder='Search...' onChange={(e)=>{
+            resultSearch(e.target.value)
+          }}/>
+          {errorMessage && <div style={{ color: "red" , padding:"10px"}}><span style={{ color: "white"}} >Error: </span>{errorMessage}</div>}
+          
         <div style={{width:"100%", height:"80vh", overflowY:"scroll"}}>
           {viewUserInList()}
         </div>
@@ -98,12 +132,15 @@ function UserInGymSettings() {
             No
           </Button>
           <Button style={{backgroundColor:"#A1E533", color:"#101010",fontWeight:"bold",border:"0"}} onClick={()=>{
-            console.log(gymid, userInGym[indexUserInArr].id);
             axios.post(`http://localhost:5000/gyms/gym/coach`, {gymId : gymid, coachId : userInGym[indexUserInArr].user_id}, config).then((result) => {
-              // userInGym.splice(indexUserInArr, 1);
+              userInGym.splice(indexUserInArr, 1);
               handleClose()
             }).catch((err) => {
-              
+              handleClose()
+              console.log(err);
+              if(err.response.status === 405){
+                showError(err.response.data.message);
+              }
             });
           }}>
             Yes
