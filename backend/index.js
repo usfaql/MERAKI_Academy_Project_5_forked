@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const http = require("http")
 const{Server} = require('socket.io')
 const {auth}=require("./middleware/authentication")
  require("dotenv").config()
@@ -24,8 +25,8 @@ app.use("/permissions",permissionRouter)
 app.use("/role_permission",rolePermissionRouter)
 app.use("/coachs",coachRouterRouter)
 
-
-const io= new Server(8080,{cors:{origin:"*"}});
+const server = http.createServer(app);
+const io = new Server(server, {cors:{origin:"*"}});
 const client={}
 
 io.use(auth);
@@ -52,6 +53,6 @@ io.on("connection",(socket)=>{
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });

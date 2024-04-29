@@ -10,6 +10,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setImageUser } from '../Redux/Reducers/Auth';
 import Spinner from 'react-bootstrap/Spinner';
+import logo from '../assets/user.png'
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,7 +42,6 @@ const Profile = () => {
     }
   },[state.theme]);
   useEffect(() => {
-    console.log("test");
     getUserInfoByUserId();
   }, []);
   const getUserInfoByUserId = () => {
@@ -52,7 +52,6 @@ const Profile = () => {
         },
       })
       .then((result) => {
-        console.log(result.data.info);
         setUserInfo(result.data.info);
         setMessage(result.data.message);
       })
@@ -78,9 +77,7 @@ const Profile = () => {
       setUserInfo({...userinfo,...result})
       navigate(-1);
       dispatch(setImageUser(image));
-      console.log(result);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -97,10 +94,8 @@ const Profile = () => {
       }).then((result)=> result.json()).then((data) => {
           setImage(data.url);
           setLoading(false);
-          console.log("URL Image =>", data.url);
       }).catch((err) => {
         setLoading(false)
-      console.log(err);
       });
   };
   const handleImageClick = () => {
@@ -115,7 +110,7 @@ const Profile = () => {
         <div className="profile_form">
               
           <div className="profile_img" style={{position:"relative"}}>
-          <img src={image?image:userinfo.image}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
+          <img src={image?image: userinfo.image ? userinfo.image : logo}   style={{width:"256px",height:"256px",borderRadius:"128px"}}
            onClick={handleImageClick}/>
           <input
                 type='file'
@@ -152,7 +147,6 @@ const Profile = () => {
         <Form.Label style={{color:"white",fontSize:"18px"}}>your goals:</Form.Label>
         <Form.Control defaultValue={userinfo.goal}    onChange={(e)=>{
             setGoal(e.target.value)
-            console.log(e.target.value);
           }}  style={{  border: "0",backgroundColor:"#101010", color: "white"}}/>
       </Form.Group>
 

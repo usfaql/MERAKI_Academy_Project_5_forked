@@ -45,7 +45,6 @@ const PrivatePlan = () => {
           .then((result) => {
             if (result.data.plans) {
               setPlanLoader(false)
-                console.log(result.data.plans);
                 setplans(result.data.plans)
             } else {
               setPlanLoader(false)

@@ -55,7 +55,6 @@ const Recipe = () => {
       )
 
       .then((response) => {
-        console.log("recipes", response);
         setRecipes(response.data.hits);
       })
       .catch((error) => {
@@ -186,7 +185,6 @@ const Recipe = () => {
         </Col>
       )
       ))}
-      console.log("test");
       return <Row xs={1} md={10} className="g-2" style={{backgroundColor:"#101010", border:'0', display:"flex", justifyContent:"center"}}>{cardRecipe}</Row>
   }
 
