@@ -33,7 +33,7 @@ const PaymentPrivatePlan = () => {
         }
       },[state.theme]);
     useEffect(()=>{
-        axios.get(`http://localhost:5000/coachs/plans/plan/${planid}`, config).then((result) => {
+        axios.get(`https://meraki-academy-project-5-qxxn.onrender.com/coachs/plans/plan/${planid}`, config).then((result) => {
             setDataPlanForInvoice(result.data.plan);
             setTotalPrice(Number(result.data.plan.price)+0.48)
         }).catch((err) => {
@@ -42,7 +42,7 @@ const PaymentPrivatePlan = () => {
         });
     },[])
     const AddUserToPrivate=()=>{
-        axios.post(`http://localhost:5000/coachs/user`,{coach_id:coachid,plan_id:planid},config
+        axios.post(`https://meraki-academy-project-5-qxxn.onrender.com/coachs/user`,{coach_id:coachid,plan_id:planid},config
         ).then((result)=>{
              navigate(`/user/private`);
         }).catch((err)=>{
