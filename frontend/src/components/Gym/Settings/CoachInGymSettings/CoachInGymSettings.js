@@ -8,7 +8,8 @@ import logo from "../../../assets/user.png"
 function CoachInGymSettings() {
   const [coachsInGym, setCoachInGym] = useState(null);
   const [indexUserInArr,setIndexUserInArr] = useState(null);
-
+  const [searchText ,setSearchText] = useState("");
+  const [filterArray, setFillterArray] = useState([]);
   console.log(coachsInGym);
   const {gymid} = useParams();
 
@@ -28,6 +29,7 @@ function CoachInGymSettings() {
   useEffect(()=>{
     axios.get(`http://localhost:5000/gyms/${gymid}/coach`, config).then((result) => {
       setCoachInGym(result.data.coachs);
+      setFillterArray(result.data.coachs);
     }).catch((err) => {
       
     });
@@ -42,26 +44,24 @@ function CoachInGymSettings() {
   const viewUserInList = () => {
     const userArray = [];
   
-    for (let i = 0; i < coachsInGym?.length; i++) {
+    for (let i = 0; i < filterArray?.length; i++) {
       userArray.push(
+        <>
         <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "10px" ,height:"fit-content"}}>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
             <h6 style={{ paddingRight: "10px" }}>{i + 1}</h6>
-            <img style={{ width: "52px", height: "52px", borderRadius: "32px" }} src={coachsInGym[i].image?coachsInGym[i].image:logo} alt={`Avatar ${i + 1}`} />
-            <h5>{coachsInGym[i].firstname} {coachsInGym[i].lastname}</h5>
+            <img style={{ width: "52px", height: "52px", borderRadius: "32px" }} src={filterArray[i].image?filterArray[i].image:logo} alt={`Avatar ${i + 1}`} />
+            <h5>{filterArray[i].firstname} {filterArray[i].lastname}</h5>
           </div>
          <button className='btn-user' style={!onTheme ? {backgroundColor:"#A1E553"} : {backgroundColor:"#E333E5"}} onClick={()=>{
           setIndexUserInArr(i);
           handleShow()
          }}>Down To User</button>
         </div>
-        
+        {i+1 < 3 ? <div style={{padding:"0 10px 0 10px", width:"100%",borderBottom:"1px solid #404040"}}></div> : <></>}
+        </>
       );
-      if (i + 1 < 3) {
-        userArray.push(
-          <div key={`divider-${i}`} style={{ padding: "0 10px", width: "100%", borderBottom: "1px solid #404040" }}></div>
-        );
-      }
+      
     }
     return userArray;
   }
@@ -70,13 +70,34 @@ function CoachInGymSettings() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const resultSearch = (e)=>{
+    setSearchText(e);
+
+    const filtered = coachsInGym.filter(user =>{
+      const fullName = user.firstname+" "+user.lastname;
+      return(
+        user.firstname.toLowerCase().includes(e.toLowerCase()) ||
+        user.lastname.toLowerCase().includes(e.toLowerCase()) || 
+        fullName.toLowerCase().includes(e.toLowerCase())
+      )
+    }
+    
+   
+  );
+    setFillterArray(filtered);
+  };
+
+
   return (
     <div style={{display:"flex", justifyContent:"center", flexDirection:"column", width:"100%",placeItems:"center",padding:"10px"}}>
       <div className='member-in-gym-settings'>
         
-        <p>{coachsInGym?.length}/3 Coach</p>
+        <p>{viewUserInList()?.length}{!searchText ? "/3" : ""} Coach</p>
       </div>
-      <input style={{width:"50%", padding:"5px", borderRadius:"4px", border:"0", color:"white", backgroundColor:"#404040"}} placeholder='Search...'/>
+      <input style={{width:"50%", padding:"5px", borderRadius:"4px", border:"0", color:"white", backgroundColor:"#404040"}} placeholder='Search...' onChange={(e)=>{
+         resultSearch(e.target.value);
+      }}/>
       {viewUserInList()}
     
       <Modal show={show} onHide={handleClose}>

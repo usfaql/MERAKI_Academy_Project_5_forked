@@ -464,15 +464,32 @@ const deleteUserInGym = async(req,res)=>{
 const addNewCoachInGym = (req,res) =>{
     const {gymId, coachId} = req.body;
     const provider = [gymId, coachId];
-    pool.query(`DELETE FROM gym_user WHERE gym_user.user_id = $2 AND gym_user.gym_id = $1`,[gymId, coachId]).then((result) => {
-        pool.query(`SELECT * FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then((result) => {
-            if(!result.rows.length){
-                pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
-                    res.status(201).json({
-                        success : true,
-                        message : `Coach Add Successfully In Gym`,
-                        result : result.rows
-                    });
+    pool.query(`SELECT * FROM gym_coach WHERE gym_id = $1`, [gymId]).then((result) => {
+        if(result.rows.length < 3){
+            pool.query(`DELETE FROM gym_user WHERE gym_user.user_id = $2 AND gym_user.gym_id = $1`,[gymId, coachId]).then((result) => {
+
+                pool.query(`SELECT * FROM gym_coach WHERE coach_id = $2 AND gym_id = $1`, provider).then((result) => {
+                    if(!result.rows.length){
+                            pool.query(`INSERT INTO gym_coach (gym_id, coach_id) VALUES ($1,$2) RETURNING *`, provider).then((result) => {
+                                res.status(201).json({
+                                    success : true,
+                                    message : `Coach Add Successfully In Gym`,
+                                    result : result.rows
+                                });
+                            }).catch((err) => {
+                                res.status(500).json({
+                                    success : false,
+                                    message : `Server Error`,
+                                    error : err.message
+                                });
+                            });
+                        
+                    }else{
+                        res.status(200).json({
+                            success: false,
+                            message : 'The User Already in Coach'
+                        })
+                    }
                 }).catch((err) => {
                     res.status(500).json({
                         success : false,
@@ -480,20 +497,21 @@ const addNewCoachInGym = (req,res) =>{
                         error : err.message
                     });
                 });
-            }else{
-                res.status(200).json({
-                    success: false,
-                    message : 'The User Already in Coach'
-                })
-            }
-        }).catch((err) => {
-            res.status(500).json({
-                success : false,
-                message : `Server Error`,
-                error : err.message
-            });
-        });
 
+            }).catch((err) => {
+                res.status(500).json({
+                    success : false,
+                    message : `Server Error`,
+                    error : err.message
+                });
+            });
+
+        }else{
+            res.status(405).json({
+                success : false,
+                message : `Can't add more than 3 Coach`,
+            });
+        }
     }).catch((err) => {
         res.status(500).json({
             success : false,
@@ -501,6 +519,7 @@ const addNewCoachInGym = (req,res) =>{
             error : err.message
         });
     });
+    
 }
 
 const createRoomInGym = (req, res)=>{
