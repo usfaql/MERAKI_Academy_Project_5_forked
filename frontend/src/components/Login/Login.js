@@ -147,6 +147,32 @@ const Login = () => {
        
         }
     
+    const demo = ()=>{
+
+      axios.post("https://meraki-academy-project-5-qxxn.onrender.com/users/login", {
+        email :"nutrifit@gmail.com",
+        password : "1234",
+      }).then((result)=>{
+        dispatch(setLogin(result?.data));
+        dispatch(setUserId(result.data.userId));
+        dispatch(setActivePrivate(result.data.private));
+        setMessage("");
+        localStorage.setItem("token",result.data.token);
+        localStorage.setItem("userId",result.data.userId);
+        localStorage.setItem("userInfo", JSON.stringify({
+            nameUser : result.data.userInfo.firstname + " "+ result.data.userInfo.lastname,
+            email : result.data.userInfo.email,
+            gender : result.data.userInfo.gender,
+            private : result.data.userInfo.private,
+            image : result.data.userInfo.image,
+            role : result.data.userInfo.role_id
+          }));
+        navigate('/home');
+      }).catch((error)=>{
+        setSuccess(false)
+        setMessage(error.message);
+      })
+    }
 
   return (
     <div className='login-Page'>
@@ -175,9 +201,12 @@ const Login = () => {
             style={{ backgroundColor: "#1e1e1e", border: "0", color: "white" }}
           />
         </div>
-        <button className="button-login" style={!onTheme? {backgroundColor:"A1E533"} : {backgroundColor:"#e333e5"}} onClick={()=>{
+        <button className="button-login" style={!onTheme? {backgroundColor:"#A1E533"} : {backgroundColor:"#e333e5"}} onClick={()=>{
         login()
       }} >Login</button>
+              <button className="button-login" style={!onTheme? {backgroundColor:"#404040", color:"white"} : {backgroundColor:"#404040", color:"white"}} onClick={()=>{
+        demo()
+      }} >Demo</button>
       <div style={{ alignSelf: "center" }}>
         <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </div>
