@@ -61,7 +61,6 @@ const createUserInfo =async()=>{
         const result =await axios.post(`https://meraki-academy-project-5-qxxn.onrender.com/users/info/create`, 
 
         {
-
           image , 
           weight,
           height,
